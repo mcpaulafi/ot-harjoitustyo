@@ -1,0 +1,96 @@
+commit 57c07d7fd3a2f92757e806f6d3d5a0b032d71890
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:53:15 2024 +0200
+
+    file muutoksia
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 2de6a367b404e54913cb19fa930c799c72a4efd6
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:49:28 2024 +0200
+
+    tiedostoja hakemisto
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 771438156ada77f9de683615c17709108b599591
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:45:26 2024 +0200
+
+    testattu git add -p
+
+ eka.txt    | 12 ++++++++++--
+ kolmas.txt |  3 ++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+commit dbccc6bdd9faf6c12f283dafb68af368b0ef74e7
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:42:16 2024 +0200
+
+    poistettu toinen.txt ja uudelleennimeäminen
+
+ tiedosto.txt => eka.txt | 0
+ toinen.txt              | 1 -
+ 2 files changed, 1 deletion(-)
+
+commit 31b531d08c1334f01b2b39d320bea039deaee693
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:37:15 2024 +0200
+
+    tekstimuutoksia
+
+ tiedosto.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+commit da7347feb8757762d5fd939b96523dab9e4b093c
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:26:57 2024 +0200
+
+    stuff
+
+ stuff/joku.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit a5c4c701f5a8e2cd48722f49abebe417940988e1
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:26:01 2024 +0200
+
+    muokattu toinen.txt ja kolmas.txt
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 256e6f1cd6cf1f2c03fce23b4e911d5d72fea56d
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:24:54 2024 +0200
+
+    kolmas.txt
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit e5f8abed01589e856395977541b0a3cc01d17d46
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:22:59 2024 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 3036b1c5abd54ff605024a0242ddb5764f68b808
+Author: Paula Meuronen <paula.meuronen@helsinki.fi>
+Date:   Thu Mar 14 10:20:31 2024 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)

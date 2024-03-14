@@ -1,0 +1,17 @@
+mcpaula@melkinpaasi:~$ tree kurssit
+kurssit
+├── ot2023
+│   └── viikko1
+└── viikko1
+    └── unicafe
+        ├── poetry.lock
+        ├── pyproject.toml
+        └── src
+            ├── index.py
+            ├── kassapaate.py
+            ├── maksukortti.py
+            └── tests
+                ├── __init__.py
+                └── maksukortti_test.py
+
+6 directories, 7 files
