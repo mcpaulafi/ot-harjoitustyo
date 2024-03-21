@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "ot-harjoitustyo"
+version = "0.1.0"
+description = ""
+authors = ["Paula Meuronen <paula.meuronen@helsinki.fi>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fmiopendata = "^0.4.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
