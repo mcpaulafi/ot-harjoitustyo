@@ -27,7 +27,7 @@ def create_tables(connection):
     cursor = connection.cursor()
 
     cursor.execute("""
-        create table stations (
+            create table stations (
             station_id integer NOT NULL,
             fmisid text,
             name text,
