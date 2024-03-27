@@ -2,8 +2,10 @@
 
 | date | hours | explanation  |
 | :----:|:-----| :-----|
-| 20.3. | 3    | specifications, reading open data manual |
-| 21.3. | 4    | testing FMI python library and open data |
-| 21.3. | 1    | updating specs, designing database |
-| 21.3. | 2    | coding python database connection |
-| sum   | 10   | | 
+| 20.3. | 3    | Specifications, reading open data manual |
+| 21.3. | 4    | Testing FMI python library and open data |
+| 21.3. | 1    | Updating specs, designing database |
+| 21.3. | 2    | Coding python database connection |
+| 26.3. | 1    | Database connection |
+| 27.3. | 2    | File reading and saving to database |
+| sum   | 13   | | 

@@ -34,7 +34,6 @@ def create_tables(connection):
             nickname text,
             lat text,
             lon text,
-            selected integer,
             PRIMARY KEY (station_id)
         );
     """)

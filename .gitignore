@@ -2,6 +2,7 @@
 .pytest_cache
 htmlcov
 __pycache__
+testarea.py
 
 # data files
 data/database.sqlite

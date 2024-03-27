@@ -8,8 +8,8 @@ try:
 except FileNotFoundError:
     pass
 
-#TODOS_FILENAME = os.getenv("TODOS_FILENAME") or "todos.csv"
-#TODOS_FILE_PATH = os.path.join(dirname, "..", "data", TODOS_FILENAME)
+STATIONS_FILENAME = os.getenv("STATIONS_FILENAME") or "fmi_stations.csv"
+STATIONS_FILE_PATH = os.path.join(dirname, "..", "data", STATIONS_FILENAME)
 
 DATABASE_FILENAME = os.getenv("DATABASE_FILENAME") or "database.sqlite3"
 DATABASE_FILE_PATH = os.path.join(dirname, "..", "data", DATABASE_FILENAME)
