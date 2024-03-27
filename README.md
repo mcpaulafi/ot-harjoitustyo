@@ -10,3 +10,4 @@
 
 ### Viikko 3
 Monopoli [arkkitehtuuri.md](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/laskarit/viikko3/arkkitehtuuri.md)
+[sekvenssikaavio.md](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/laskarit/viikko3/sekvenssikaavio.md)
