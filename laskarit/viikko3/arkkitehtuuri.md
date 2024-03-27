@@ -32,10 +32,11 @@
 
     Sattuma_ja_yhteismaa "*" -- "1" Kortti
 
-%% Miten merkitään vaihtoehto?
+    Katu "*" -- "0..4" Hotelli
+    Katu "*" -- "0..4" Talo
+    Talo .. Hotelli: XOR
+    %% note "Neljän talon jälkeen hotelli"
 
-    Katu "*" -- "0..4" Hotelli: JOKO
-    Katu "*" -- "0..4" Talo: TAI
     Pelaaja "1" --o "*" Katu: Omistaja
 
     class Ruutu {
