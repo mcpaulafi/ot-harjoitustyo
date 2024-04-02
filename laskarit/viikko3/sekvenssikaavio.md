@@ -2,7 +2,7 @@
 
 sequenceDiagram
 
-    main->>laitehallinto: HKLLaitehallinto(init)
+    main->>Laitehallinto: HKLLaitehallinto(init)
     main->>rautatietori: Lataajalaite(init)
     main->>ratikka6: Lukijalaite(init)
     main->>bussi244: Lukijalaite(init)
