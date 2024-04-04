@@ -1,4 +1,4 @@
-from entities.station import Station #TODO: HOW THIS WORKS?
+from entities.station import Station
 from database_connection import get_database_connection
 
 def get_station_by_row(row):
