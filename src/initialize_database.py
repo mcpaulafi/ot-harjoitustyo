@@ -86,26 +86,27 @@ def read_stations_from_file(file_path):
     return stations
 
 
-def upload_stations_to_database(parts, connection):
+def upload_stations_to_database(station_list, connection):
         """ Upload stations from list to the database table stations.
 
         Args:
             parts: list of stations
             connection: Connection-object for the database
         """
-        name = parts[0]
-        nickname = ""
-        fmisid = parts[1]
-        lat = parts[2]
-        lon = parts[3]
-        cursor = connection.cursor()
+        for station_data in station_list:
+            name = station_data[0]
+            nickname = ""
+            fmisid = station_data[1]
+            lat = station_data[2]
+            lon = station_data[3]
+            cursor = connection.cursor()
 
-        cursor.execute(
-             '''insert into stations (name, nickname, fmisid, lon, lat) values (?, ?, ?, ?, ?)''',
-            (str(name), str(nickname), str(fmisid), str(lon), str(lat))
-        )
+            cursor.execute(
+                '''insert into stations (name, nickname, fmisid, lon, lat) values (?, ?, ?, ?, ?)''',
+                (str(name), str(nickname), str(fmisid), str(lon), str(lat))
+            )
 
-        connection.commit()
+            connection.commit()
 
 def initialize_database():
     """Initializes database tables and uploads stations from the file to the database."""
@@ -116,6 +117,8 @@ def initialize_database():
     drop_tables(connection)
     create_tables(connection)
     upload_stations_to_database(read_stations, connection)
+
+    print("Database created.")
 
 
 if __name__ == "__main__":
