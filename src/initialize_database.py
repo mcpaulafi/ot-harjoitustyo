@@ -1,11 +1,27 @@
+import os
 from database_connection import get_database_connection
+from pathlib import Path
+
+"""File which includes list of available stations."""
+# TODO: get file name from global settings
+
+dirname = os.path.dirname(__file__)
+file_path = os.path.join(dirname, "..", "data", "fmi_stations.csv")
+
+def ensure_file_exists():
+    """Checking the file.
+    
+    Args: 
+        file_path: file to be tested
+    """
+    Path(file_path).touch()
 
 
 def drop_tables(connection):
-    """Poistaa tietokantataulut.
+    """Remove databases.
 
     Args:
-        connection: Tietokantayhteyden Connection-olio
+        connection: Connection-object for the database
     """
 
     cursor = connection.cursor()
@@ -18,10 +34,11 @@ def drop_tables(connection):
 
 
 def create_tables(connection):
-    """Luo tietokantataulut.
+    """Create tables on the database.
+        TODO: includes only stations 
 
     Args:
-        connection: Tietokantayhteyden Connection-olio
+        connection: Connection-object for the database
     """
 
     cursor = connection.cursor()
@@ -41,14 +58,67 @@ def create_tables(connection):
     connection.commit()
 
 
+def read_stations_from_file(file_path):
+    """ Read stations from the file to a list. Return list.
+
+    Args: 
+        file_path: file to be read
+    """
+    stations = []
+
+    ensure_file_exists()
+
+    with open(file_path) as file:
+        for row in file:
+            #print("row", row)
+            row = row.replace("\n", "")
+            row = row.replace("\"", "")
+            parts = row.split(",")
+
+            name = parts[0]
+            fmisid = parts[1]
+            lat = parts[2]
+            lon = parts[3]
+
+            stations.append(
+                [name, fmisid, lat, lon]
+            )
+    return stations
+
+
+def upload_stations_to_database(parts, connection):
+        """ Upload stations from list to the database table stations.
+
+        Args:
+            parts: list of stations
+            connection: Connection-object for the database
+        """
+        name = parts[0]
+        nickname = ""
+        fmisid = parts[1]
+        lat = parts[2]
+        lon = parts[3]
+        cursor = connection.cursor()
+
+        cursor.execute(
+             '''insert into stations (name, nickname, fmisid, lon, lat) values (?, ?, ?, ?, ?)''',
+            (str(name), str(nickname), str(fmisid), str(lon), str(lat))
+        )
+
+        connection.commit()
+
 def initialize_database():
-    """Alustaa tietokantataulut."""
+    """Initializes database tables and uploads stations from the file to the database."""
 
     connection = get_database_connection()
 
+    read_stations=read_stations_from_file(file_path)
     drop_tables(connection)
     create_tables(connection)
+    upload_stations_to_database(read_stations, connection)
 
 
 if __name__ == "__main__":
     initialize_database()
+    #Print file content
+    #print(read_stations_from_file(file_path))
