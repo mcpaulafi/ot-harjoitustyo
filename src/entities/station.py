@@ -1,5 +1,4 @@
-#import uuid
-
+import uuid
 
 class Station:
     """Class for a weather station
@@ -13,14 +12,14 @@ class Station:
         lon: String for longtitude of the station location.
     """
 
-    def __init__(self, name=None, nickname=None, fmisid=None, station_id=None, lat=None, lon=None):
+    def __init__(self, station_id=None, fmisid=None, name=None, nickname=None, lat=None, lon=None):
         """Luokan konstruktori, joka luo uuden tehtävän.
 
         Args:
             Same as class attributes.
         """
 
-        self.id = station_id #or str(uuid.uuid4())
+        self.station_id = station_id or str(uuid.uuid4())
         self.fmisid = fmisid
         self.name = name
         self.nickname = nickname
