@@ -13,7 +13,7 @@ class Station:
     """
 
     def __init__(self, station_id=None, fmisid=None, name=None, nickname=None, lat=None, lon=None):
-        """Luokan konstruktori, joka luo uuden tehtävän.
+        """Class constructor, creates a new station.
 
         Args:
             Same as class attributes.

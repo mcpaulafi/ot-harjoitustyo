@@ -2,20 +2,20 @@ from ui.station_view import StationView
 
 
 class UI:
-    """Sovelluksen käyttöliittymästä vastaava luokka."""
+    """User interphase class of the application."""
 
     def __init__(self, root):
-        """Luokan konstruktori. Luo uuden käyttöliittymästä vastaavan luokan.
+        """Class constructor. Creates a new UI class.
 
         Args:
             root:
-                TKinter-elementti, jonka sisään käyttöliittymä alustetaan.
+                TKinter element, in which UI is installed.
         """
         self._root = root
         self._current_view = None
 
     def start(self):
-        """Käynnistää käyttöliittymän."""
+        """Starts the UI."""
         self._show_station_view()
 
     def _hide_current_view(self):
