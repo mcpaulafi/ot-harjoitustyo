@@ -41,7 +41,7 @@ Latest measurement data is retrieved every hour and saved on the database.
         station_id
         name
         nickname
-        fmisid
+        original_id
         lat
         lon
         source
