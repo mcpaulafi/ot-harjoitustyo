@@ -41,7 +41,8 @@ class StationView:
         stations_list = self.station_list()
         print("list", stations_list[3])
 
-        station_label = ttk.Label(master=self._frame, text="Select your stations", font=('Arial',24,'bold'))
+        station_label = ttk.Label(master=self._frame, text="Select your stations", 
+                                  font=('Arial',24,'bold'))
         station_label.grid(padx=5, pady=5, sticky=constants.W)
 
         list_label = Listbox(master=self._frame, selectmode="multiple", 

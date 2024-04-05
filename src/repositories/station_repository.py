@@ -4,7 +4,7 @@ from database_connection import get_database_connection
 def get_station_by_row(row):
     #print("ROW", row["station_id"], row["name"])
     return Station(station_id=row["station_id"], fmisid=row["fmisid"], name=row["name"], 
-                   nickname=row["nickname"], lat=row["lat"], lon=row["lon"]) if row else None
+                   nickname=row["nickname"], lat=row["lat"], lon=row["lon"], source=row["source"]) if row else None
 
 class StationRepository:
     """Class for Weather Station list operations.

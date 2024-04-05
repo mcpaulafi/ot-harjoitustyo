@@ -51,6 +51,7 @@ def create_tables(connection):
             nickname text,
             lat text,
             lon text,
+            source text,
             PRIMARY KEY (station_id)
         );
     """)
@@ -99,11 +100,12 @@ def upload_stations_to_database(station_list, connection):
             fmisid = station_data[1]
             lat = station_data[2]
             lon = station_data[3]
+            source = "FMI"
             cursor = connection.cursor()
 
             cursor.execute(
-                '''insert into stations (name, nickname, fmisid, lon, lat) values (?, ?, ?, ?, ?)''',
-                (str(name), str(nickname), str(fmisid), str(lon), str(lat))
+                '''insert into stations (name, nickname, fmisid, lon, lat, source) values (?, ?, ?, ?, ?)''',
+                (str(name), str(nickname), str(fmisid), str(lon), str(lat), str(source))
             )
 
             connection.commit()

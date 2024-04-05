@@ -44,6 +44,7 @@ Latest measurement data is retrieved every hour and saved on the database.
         fmisid
         lat
         lon
+        source
     }
     class Selected_stations {
         station_id
