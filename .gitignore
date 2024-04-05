@@ -6,4 +6,5 @@ testarea.py
 
 # data files
 data/database.sqlite
+data/database.sqlite3
 data/test-database.sqlite
