@@ -104,7 +104,7 @@ def upload_stations_to_database(station_list, connection):
             cursor = connection.cursor()
 
             cursor.execute(
-                '''insert into stations (name, nickname, fmisid, lon, lat, source) values (?, ?, ?, ?, ?)''',
+                '''insert into stations (name, nickname, fmisid, lon, lat, source) values (?, ?, ?, ?, ?, ?)''',
                 (str(name), str(nickname), str(fmisid), str(lon), str(lat), str(source))
             )
 
@@ -116,6 +116,7 @@ def initialize_database():
     connection = get_database_connection()
 
     read_stations=read_stations_from_file(file_path)
+
     drop_tables(connection)
     create_tables(connection)
     upload_stations_to_database(read_stations, connection)
@@ -124,6 +125,7 @@ def initialize_database():
 
 
 if __name__ == "__main__":
+    pass
     initialize_database()
     #Print file content
     #print(read_stations_from_file(file_path))
