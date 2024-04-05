@@ -9,4 +9,5 @@
 | 26.3. | 1    | Database connection |
 | 27.3. | 2    | File reading and saving to database |
 | 4.4.  | 8    | Stations from file to database and to Tkinter window view |
-| sum   | 21   | | 
+| 5.4.  | 3    | Testing preparations, changelog added|
+| sum   | 24   | | 
