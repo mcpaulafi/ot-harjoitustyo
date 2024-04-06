@@ -10,4 +10,5 @@
 | 27.3. | 2    | File reading and saving to database |
 | 4.4.  | 8    | Stations from file to database and to Tkinter window view |
 | 5.4.  | 3    | Testing preparations, changelog added|
-| sum   | 24   | | 
+| 6.4.  | 1,5    | Readme updates |
+| sum   | 25,5   | | 
