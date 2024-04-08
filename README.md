@@ -5,11 +5,11 @@ This application is made as a course work in the Software engineering course (Ai
 
 ## Documentation
 - [User manual] TBD
-- [Specifications](.dokumentaatio/specifications.md)
+- [Specifications](dokumentaatio/specifications.md)
 - [Architecture] TBD
 - [Testing document] TBD
-- [Time tracking](.dokumentaatio/timetracking.md)
-- [Changelog](.dokumentaatio/changelog.md)
+- [Time tracking](dokumentaatio/timetracking.md)
+- [Changelog](dokumentaatio/changelog.md)
 
 ## Installation
 1. Install dependencies with shell command:
