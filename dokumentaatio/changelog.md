@@ -9,4 +9,4 @@
 - In Entities added Station class, which has all parameters for a weather station
 - In Repositories added StationRepository class, which fetches from database and returns all Stations
 - In Services added StationService class, which includes app logic related to Stations
-- NOT READY: Test that StationService returns all stations
+- Test that StationService returns all 210 stations and a station name mathes its original_id
