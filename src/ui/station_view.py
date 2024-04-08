@@ -1,5 +1,5 @@
 from tkinter import ttk, StringVar, constants, Listbox, Scrollbar
-from services.station_service import station_service, InvalidSelectionError
+from services.station_service import station_service
 from database_connection import get_database_connection
 
 
