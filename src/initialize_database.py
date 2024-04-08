@@ -29,14 +29,20 @@ def drop_tables(connection):
     cursor.execute("""
         drop table if exists stations;
     """)
-
+    cursor.execute("""
+        drop table if exists selected_stations;
+    """)
+    cursor.execute("""
+        drop table if exists settings;
+    """)
+    cursor.execute("""
+        drop table if exists observations;
+    """)
     connection.commit()
 
 
 def create_tables(connection):
     """Create tables on the database.
-        TODO: includes only stations 
-
     Args:
         connection: Connection-object for the database
     """
@@ -54,7 +60,31 @@ def create_tables(connection):
             source text,
             PRIMARY KEY (station_id)
         );
-    """)
+        """)
+    cursor.execute("""
+            create table selected_stations (
+            station_id integer NOT NULL,
+            temperature integer DEFAULT 0 NOT NULL,
+            wind text integer DEFAULT 0 NOT NULL,
+            PRIMARY KEY (station_id)
+        );
+        """)
+    cursor.execute("""
+            create table settings (
+            layout integer DEFAULT 1 NOT NULL
+        );
+        """)
+    cursor.execute("""
+            create table observations (
+            observation_id integer NOT NULL,
+            station_id integer NOT NULL,
+            datetime text,
+            temperature text,
+            wind text,
+            wind_direction text,
+            PRIMARY KEY (observation_id)
+        );
+        """)
 
     connection.commit()
 
