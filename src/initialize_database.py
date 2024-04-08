@@ -46,7 +46,7 @@ def create_tables(connection):
     cursor.execute("""
             create table stations (
             station_id integer NOT NULL,
-            fmisid text,
+            original_id text,
             name text,
             nickname text,
             lat text,
@@ -77,13 +77,13 @@ def read_stations_from_file(file_path):
             parts = row.split(",")
 
             name = parts[0]
-            fmisid = parts[1]
+            original_id = parts[1]
             lat = parts[2]
             lon = parts[3]
-
-            stations.append(
-                [name, fmisid, lat, lon]
-            )
+            if name != "Name" or name=="name":
+                stations.append(
+                    [name, original_id, lat, lon]
+                )
     return stations
 
 
@@ -97,15 +97,15 @@ def upload_stations_to_database(station_list, connection):
         for station_data in station_list:
             name = station_data[0]
             nickname = ""
-            fmisid = station_data[1]
+            original_id = station_data[1]
             lat = station_data[2]
             lon = station_data[3]
             source = "FMI"
             cursor = connection.cursor()
 
             cursor.execute(
-                '''insert into stations (name, nickname, fmisid, lon, lat, source) values (?, ?, ?, ?, ?, ?)''',
-                (str(name), str(nickname), str(fmisid), str(lon), str(lat), str(source))
+                '''insert into stations (name, nickname, original_id, lon, lat, source) values (?, ?, ?, ?, ?, ?)''',
+                (str(name), str(nickname), str(original_id), str(lon), str(lat), str(source))
             )
 
             connection.commit()

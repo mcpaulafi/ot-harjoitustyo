@@ -20,7 +20,7 @@ class Station:
         """
 
         self.station_id = station_id or str(uuid.uuid4())
-        self.fmisid = original_id
+        self.original_id = original_id
         self.name = name
         self.nickname = nickname
         self.lat = lat
