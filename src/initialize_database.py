@@ -124,8 +124,7 @@ def initialize_database():
     print("Database created.")
 
 
-if __name__ == "__main__":
-    pass
-    initialize_database()
+#if __name__ == "__main__":
+#    initialize_database()
     #Print file content
     #print(read_stations_from_file(file_path))
