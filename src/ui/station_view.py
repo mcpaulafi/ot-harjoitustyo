@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, constants, Listbox, Scrollbar
+from tkinter import ttk, StringVar, constants, Listbox, Scrollbar, Text
 from services.station_service import station_service
 from database_connection import get_database_connection
 
@@ -7,7 +7,7 @@ class StationView:
     """Station list view."""
 
     def __init__(self, root, handle_show_weather_view):
-        """Class constructor. Creates new view for stations.
+        """Class constructoimport Tkinter as tkr. Creates new view for stations.
 
         Args:
             root:
@@ -23,6 +23,7 @@ class StationView:
         self._button_select = None
         self._error_variable = None
         self._error_label = None
+        self.textbox = None
         self._label_selection = []
 
         self._initialize()
@@ -37,7 +38,6 @@ class StationView:
 
     def _show_error(self, message):
         self._error_variable.set(message)
-        self._error_label.grid()
 
     def _handle_button_click(self):
         selected_values = []
@@ -69,28 +69,35 @@ class StationView:
         """Creates a view with stations in a listbox"""
         stations_list = self.station_list()
 
-        station_label = ttk.Label(master=self._frame, text="Settings", 
-                                  font=('Arial',24,'bold'))
-        station_label.grid(padx=5, pady=5, sticky=constants.W)
-
         note_label = ttk.Label(master=self._frame, text="Select 1 station", 
                                   font=('Arial',12,'normal'))
-        note_label.grid(padx=5, pady=5, sticky=constants.W)
+        note_label.grid(column=0, row=3, padx=5, pady=5, sticky=constants.W)
 
         # TODO: Make multiple selection available
         # TODO: Show selected stations
         self._list_label = Listbox(master=self._frame, selectmode="single", 
-        height=10, width=30
+        height=10, width=38
         )
 
         for s in stations_list:
             self._list_label.insert(s[0], s[1])
 
-        self._list_label.grid(padx=5, pady=5, sticky=constants.W)
+        self._list_label.grid(column=0, row=4, padx=5, pady=5, sticky=constants.W)
+
+        #Scrollbar
+        vertscroll = Scrollbar(master=self._frame)
+        vertscroll.config(command=self._list_label.yview)
+        self._list_label.config(yscrollcommand=vertscroll.set)
+        vertscroll.grid(column=0, row=4, sticky=constants.NS)
+
 
     def _initialize(self):
         """Initializes the frame view"""
         self._frame = ttk.Frame(master=self._root)
+
+        station_label = ttk.Label(master=self._frame, text="Station settings", 
+                                  font=('Arial',24,'bold'))
+        station_label.grid(column=0, row=1, padx=5, pady=5, sticky=constants.W)
 
         self._error_label = ttk.Label(
             master=self._frame,
@@ -98,7 +105,7 @@ class StationView:
             foreground="red"
         )
 
-        self._error_label.grid(padx=5, pady=5)
+        self._error_label.grid(column=0, row=2, padx=5, pady=5)
 
         self._initialize_station_list_field()
 
@@ -109,11 +116,11 @@ class StationView:
             command=self._handle_button_click
         )
 
-        select_button.grid(padx=5, pady=5, sticky=constants.EW)
+        select_button.grid(column=0, row=5, padx=5, pady=5, sticky=constants.EW)
 
         selection_label = ttk.Label(master=self._frame, text=self._label_selection, 
                                   font=('Arial',12,'normal'))
-        selection_label.grid(padx=5, pady=5, sticky=constants.W)
+        selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
 
         self._frame.grid_columnconfigure(0, weight=1, minsize=400)
 
