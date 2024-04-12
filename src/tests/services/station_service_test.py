@@ -28,7 +28,7 @@ class FakeStationRepository:
 
         cursor = self._connection.cursor()
 
-        cursor.execute("select * from stations ORDER BY name ASC")
+        cursor.execute("select * from stations")
 
         rows = cursor.fetchall()
 
