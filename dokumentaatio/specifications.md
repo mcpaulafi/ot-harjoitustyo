@@ -30,39 +30,14 @@ Latest measurement data is retrieved every hour and saved on the database.
 
 ### Database
 
-```mermaid
- classDiagram
-    Stations "*" --> "1..5" Selected_stations
-    Selected_stations "1" -- "*" Observations
-    class Settings {
-        layout
-    }
-    class Stations {
-        station_id
-        name
-        nickname
-        original_id
-        lat
-        lon
-        source
-    }
-    class Selected_stations {
-        station_id
-        temperature
-        wind
-    }
-    class Observations {
-        observation_id
-        station_id
-        datetime
-        temperature
-        wind
-        wind_direction
-    }
+SQLite database contains 4 tables
+- Stations
+- Settings
+- Selected_stations
+- Observations
 
-```
 ### Station list
-Stations are uploaded to the database from a csv-file because their data is not available from FMI Open Data.
+Stations are uploaded to the database from a csv-file.
 
 ## Development ideas / todos
 - Split database table Observations per measurement

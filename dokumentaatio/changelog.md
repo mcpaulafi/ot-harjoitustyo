@@ -11,3 +11,8 @@
 - In Repositories added StationRepository class, which fetches from database and returns all Stations
 - In Services added StationService class, which includes app logic related to Stations
 - Test that StationService returns all 210 stations and a station name mathes its original_id
+
+## Week 4
+
+- User can select one station from station view
+- Application architecture file created and documentation started

@@ -2,12 +2,11 @@ import os
 from pathlib import Path
 from database_connection import get_database_connection
 
-# """File which includes list of available stations."""
+#"""File which includes list of available stations."""
 # TODO: get file name from global settings
 
 dirname = os.path.dirname(__file__)
 file_path = os.path.join(dirname, "..", "data", "fmi_stations.csv")
-
 
 def ensure_file_exists():
     """Checking the file.
@@ -89,8 +88,8 @@ def create_tables(connection):
 
     connection.commit()
 
-
 def read_stations_from_file(file_path2):
+    jaka = 1
     """ Read stations from the file to a list. Return list.
 
     Args: 
@@ -102,7 +101,7 @@ def read_stations_from_file(file_path2):
 
     with open(file_path2, encoding="utf-8") as file:
         for row in file:
-            # print("row", row)
+            #print("row", row)
             row = row.replace("\n", "")
             row = row.replace("\"", "")
             parts = row.split(",")
@@ -111,7 +110,7 @@ def read_stations_from_file(file_path2):
             original_id = parts[1]
             lat = parts[2]
             lon = parts[3]
-            if name != "Name" or name == "name":
+            if name != "Name" or name=="name":
                 stations.append(
                     [name, original_id, lat, lon]
                 )
@@ -135,19 +134,17 @@ def upload_stations_to_database(station_list, connection):
         cursor.execute(
             '''insert into stations (name, nickname, original_id, lon, lat, source) 
             values (?, ?, ?, ?, ?, ?)''',
-            (str(name), str(nickname), str(original_id),
-             str(lon), str(lat), str(source))
+            (str(name), str(nickname), str(original_id), str(lon), str(lat), str(source))
         )
 
         connection.commit()
-
 
 def initialize_database():
     """Initializes database tables and uploads stations from the file to the database."""
 
     connection = get_database_connection()
 
-    read_stations = read_stations_from_file(file_path)
+    read_stations=read_stations_from_file(file_path)
 
     drop_tables(connection)
     create_tables(connection)
@@ -155,7 +152,7 @@ def initialize_database():
 
     print("Database created.")
 
-# if __name__ == "__main__":
+#if __name__ == "__main__":
 #    initialize_database()
-    # Print file content
-    # print(read_stations_from_file(file_path))
+    #Print file content
+    #print(read_stations_from_file(file_path))
