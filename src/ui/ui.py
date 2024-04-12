@@ -1,6 +1,7 @@
 from ui.station_view import StationView
 from ui.weather_view import WeatherView
 
+
 class UI:
     """User interphase class of the application."""
 
@@ -44,5 +45,6 @@ class UI:
         )
 
         self._current_view.pack()
+
 
 print("UI\n")

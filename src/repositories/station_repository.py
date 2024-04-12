@@ -1,15 +1,18 @@
 from entities.station import Station
 from database_connection import get_database_connection
 
+
 def get_station_by_row(row):
-    #print("ROW", row["station_id"], row["name"])
+    # print("ROW", row["station_id"], row["name"])
     return Station(station_id=row["station_id"], original_id=row["original_id"],
-            name=row["name"], nickname=row["nickname"], lat=row["lat"],
-            lon=row["lon"], source=row["source"]) if row else None
+                   name=row["name"], nickname=row["nickname"], lat=row["lat"],
+                   lon=row["lon"], source=row["source"]) if row else None
+
 
 class StationRepository:
     """Class for Weather Station list operations.
     """
+
     def __init__(self, connection):
         """Class constructor.
 
@@ -40,7 +43,6 @@ class StationRepository:
 
         rows = cursor.fetchall()
 
-
         return list(map(get_station_by_row, rows))
 
 # TODO: Find by name? Find by id? Create new?
@@ -54,5 +56,6 @@ class StationRepository:
         cursor.execute("delete from stations")
 
         self._connection.commit()
+
 
 station_repository = StationRepository(get_database_connection())

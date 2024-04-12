@@ -41,18 +41,17 @@ class WeatherView:
 
         self._error_label.grid(padx=5, pady=5)
 
-
-        weather_label = ttk.Label(master=self._frame, text="Weather at the station", 
-                                  font=('Arial',24,'bold'))
+        weather_label = ttk.Label(master=self._frame, text="Weather at the station",
+                                  font=('Arial', 24, 'bold'))
         weather_label.grid(padx=5, pady=5, sticky=constants.W)
 
         # TODO
-        station_name_label = ttk.Label(master=self._frame, text="Station name here", 
-                                  font=('Arial',12,'bold'))
+        station_name_label = ttk.Label(master=self._frame, text="Station name here",
+                                       font=('Arial', 12, 'bold'))
         station_name_label.grid(padx=5, pady=5, sticky=constants.W)
 
-        station_weather_label = ttk.Label(master=self._frame, text="Temperature here", 
-                                  font=('Arial',42,'bold'))
+        station_weather_label = ttk.Label(master=self._frame, text="Temperature here",
+                                          font=('Arial', 42, 'bold'))
         station_weather_label.grid(padx=5, pady=5, sticky=constants.W)
 
         select_button = ttk.Button(

@@ -1,6 +1,7 @@
 from tkinter import Tk
 from ui.ui import UI
 
+
 def main():
     window = Tk()
     window.geometry("640x480")
@@ -10,6 +11,7 @@ def main():
     ui_view.start()
 
     window.mainloop()
+
 
 print("MAIN\n")
 

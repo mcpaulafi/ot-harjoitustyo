@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, constants, Listbox, Scrollbar, Text
+from tkinter import ttk, constants, Listbox, Scrollbar
 from services.station_service import station_service
 from database_connection import get_database_connection
 
@@ -36,14 +36,14 @@ class StationView:
         """"Destroys the view."""
         self._frame.destroy()
 
-    def _show_error(self, message):
-        self._error_variable.set(message)
+#    def _show_error(self, message):
+#        self._error_variable.set(message)
 
     def _handle_button_click(self):
         selected_values = []
 
         # TODO: How to handle this error correctly?
-        if len(self._list_label.curselection())>2:
+        if len(self._list_label.curselection()) > 2:
             self._error_variable = "Select at maximum 2 stations"
         # TODO For testing now set to 8. Later add this to error handling "Select at least 1"
         if len(self._list_label.curselection()) == 0:
@@ -61,41 +61,43 @@ class StationView:
             if s1.station_id == selected_values[0]:
                 station_name = s1.name
 
-        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {selected_values[0]} : {station_name}                             ", 
-                                  font=('Arial',12,'normal'))
-        selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
-        
+        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {selected_values[0]} : {station_name}                             ",
+                                    font=('Arial', 12, 'normal'))
+        selection_label.grid(column=0, row=6, padx=5,
+                             pady=5, sticky=constants.W)
+
     def station_list(self):
         """Gets stations from the database and returns them as a list."""
         stations_list = []
         for s in self.stations:
-#            nimi = str(s.station_id) +" "+ s.name
+            #            nimi = str(s.station_id) +" "+ s.name
             nimi = s.name
             stations_list.append((s.station_id, nimi))
-        print("Stations list", stations_list) #OK
+        print("Stations list", stations_list)  # OK
         return stations_list
 
     def _initialize_station_list_field(self):
         """Creates a view with stations in a listbox"""
         stations_list = self.station_list()
 
-        note_label = ttk.Label(master=self._frame, text="Select 1 station", 
-                                  font=('Arial',12,'normal'))
+        note_label = ttk.Label(master=self._frame, text="Select 1 station",
+                               font=('Arial', 12, 'normal'))
         note_label.grid(column=0, row=3, padx=5, pady=5, sticky=constants.W)
 
         # TODO: Make multiple selection available
         # TODO: Show selected stations
-        self._list_label = Listbox(master=self._frame, selectmode="single", 
-        height=10, width=38
-        )
+        self._list_label = Listbox(master=self._frame, selectmode="single",
+                                   height=10, width=38
+                                   )
 
         # TODO without this line selected id:s are off +1 - WHY?
-        self._list_label.insert(0,"")
+        self._list_label.insert(0, "")
 
         for s in stations_list:
             self._list_label.insert(s[0], s[1])
 
-        self._list_label.grid(column=0, row=4, padx=5, pady=5, sticky=constants.W)
+        self._list_label.grid(column=0, row=4, padx=5,
+                              pady=5, sticky=constants.W)
 
         # Scrollbar
         # Instructions from https://stackoverflow.com/questions/23584325/cannot-use-geometry-manager-pack-inside
@@ -104,13 +106,12 @@ class StationView:
         self._list_label.config(yscrollcommand=vertscroll.set)
         vertscroll.grid(column=0, row=4, sticky=constants.NS)
 
-
     def _initialize(self):
         """Initializes the frame view"""
         self._frame = ttk.Frame(master=self._root)
 
-        station_label = ttk.Label(master=self._frame, text="Station settings", 
-                                  font=('Arial',24,'bold'))
+        station_label = ttk.Label(master=self._frame, text="Station settings",
+                                  font=('Arial', 24, 'bold'))
         station_label.grid(column=0, row=1, padx=5, pady=5, sticky=constants.W)
 
         self._error_label = ttk.Label(
@@ -130,12 +131,15 @@ class StationView:
             command=self._handle_button_click
         )
 
-        select_button.grid(column=0, row=5, padx=5, pady=5, rowspan=1, sticky=constants.EW)
+        select_button.grid(column=0, row=5, padx=5, pady=5,
+                           rowspan=1, sticky=constants.EW)
 
         if self._label_selection == "none":
-            selection_label = ttk.Label(master=self._frame, text=f"Selected station is NOT SELECTED", 
-                                  font=('Arial',12,'normal'))
-            selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
+            selection_label = ttk.Label(master=self._frame,
+                                        text="Selected station is NOT SELECTED",
+                                        font=('Arial', 12, 'normal'))
+            selection_label.grid(column=0, row=6, padx=5,
+                                 pady=5, sticky=constants.W)
 
         self._frame.grid_columnconfigure(0, weight=1, minsize=400)
         select_button = ttk.Button(
@@ -144,9 +148,10 @@ class StationView:
             command=self._handle_show_weather_view
         )
 
-        select_button.grid(column=0, row=7, padx=5, pady=5, rowspan=1, sticky=constants.EW)
-
+        select_button.grid(column=0, row=7, padx=5, pady=5,
+                           rowspan=1, sticky=constants.EW)
 
         self._frame.grid_columnconfigure(0, weight=1, minsize=400)
+
 
 print("STATIONVIEW\n")

@@ -2,9 +2,11 @@ import unittest
 from entities.station import Station
 from database_connection import get_database_connection
 
+
 def get_station_by_row(row):
-    return Station(station_id=row["station_id"], original_id=row["original_id"], name=row["name"], 
+    return Station(station_id=row["station_id"], original_id=row["original_id"], name=row["name"],
                    nickname=row["nickname"], lat=row["lat"], lon=row["lon"], source=row["source"]) if row else None
+
 
 class FakeStationRepository:
     def __init__(self, connection=get_database_connection()):
@@ -56,8 +58,7 @@ class TestStationService(unittest.TestCase):
         for s in find_all:
             if s.original_id == "100996":
                 test_name = s.name
-        
-        return self.assertEqual(test_name, "Helsinki Harmaja")
 
+        return self.assertEqual(test_name, "Helsinki Harmaja")
 
         self.assertEqual(count_all, 210)
