@@ -23,8 +23,8 @@ class StationView:
         self._button_select = None
         self._error_variable = None
         self._error_label = None
-        self.textbox = None
-        self._label_selection = []
+        self._label_selection = "none"
+        self.stations = station_service.get_stations()
 
         self._initialize()
 
@@ -52,17 +52,27 @@ class StationView:
         for i in self._list_label.curselection():
             for i in self._list_label.curselection():
                 selected_values.append(i)
-        print(f"Value of entry is: {selected_values[0]}")
+        print(f"Value of entry is: {selected_values[0]}", selected_values)
+        self._label_selection = selected_values[0]
 
-        self._handle_show_weather_view()
+        station_name = "none"
+
+        for s1 in self.stations:
+            if s1.station_id == selected_values[0]:
+                station_name = s1.name
+
+        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {selected_values[0]} : {station_name}                             ", 
+                                  font=('Arial',12,'normal'))
+        selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
         
     def station_list(self):
         """Gets stations from the database and returns them as a list."""
-        stations = station_service.get_stations()
         stations_list = []
-        for s in stations:
-            if s.name != "Name":
-                stations_list.append((s.station_id, s.name))
+        for s in self.stations:
+#            nimi = str(s.station_id) +" "+ s.name
+            nimi = s.name
+            stations_list.append((s.station_id, nimi))
+        print("Stations list", stations_list) #OK
         return stations_list
 
     def _initialize_station_list_field(self):
@@ -79,12 +89,16 @@ class StationView:
         height=10, width=38
         )
 
+        # TODO without this line selected id:s are off +1 - WHY?
+        self._list_label.insert(0,"")
+
         for s in stations_list:
             self._list_label.insert(s[0], s[1])
 
         self._list_label.grid(column=0, row=4, padx=5, pady=5, sticky=constants.W)
 
-        #Scrollbar
+        # Scrollbar
+        # Instructions from https://stackoverflow.com/questions/23584325/cannot-use-geometry-manager-pack-inside
         vertscroll = Scrollbar(master=self._frame)
         vertscroll.config(command=self._list_label.yview)
         self._list_label.config(yscrollcommand=vertscroll.set)
@@ -109,20 +123,30 @@ class StationView:
 
         self._initialize_station_list_field()
 
+        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
         select_button = ttk.Button(
             master=self._frame,
             text="Select",
-#            command=self._handle_button_click
             command=self._handle_button_click
         )
 
-        select_button.grid(column=0, row=5, padx=5, pady=5, sticky=constants.EW)
+        select_button.grid(column=0, row=5, padx=5, pady=5, rowspan=1, sticky=constants.EW)
 
-        selection_label = ttk.Label(master=self._frame, text=self._label_selection, 
+        if self._label_selection == "none":
+            selection_label = ttk.Label(master=self._frame, text=f"Selected station is NOT SELECTED", 
                                   font=('Arial',12,'normal'))
-        selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
+            selection_label.grid(column=0, row=6, padx=5, pady=5, sticky=constants.W)
 
         self._frame.grid_columnconfigure(0, weight=1, minsize=400)
+        select_button = ttk.Button(
+            master=self._frame,
+            text="View weather",
+            command=self._handle_show_weather_view
+        )
 
+        select_button.grid(column=0, row=7, padx=5, pady=5, rowspan=1, sticky=constants.EW)
+
+
+        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
 
 print("STATIONVIEW\n")
