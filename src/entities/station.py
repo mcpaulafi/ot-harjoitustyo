@@ -11,8 +11,9 @@ class Station:
         lat: String for latitude of the station location.
         lon: String for longtitude of the station location.
     """
-
-    def __init__(self, station_id=None, original_id=None, name=None, nickname=None, lat=None, lon=None, source=None):
+    # TODO set nickname later not init
+    def __init__(self, station_id=None, original_id=None, name=None, nickname=None,
+        lat=None, lon=None, source=None):
         """Class constructor, creates a new station.
 
         Args:

@@ -1,5 +1,3 @@
-from entities.station import Station
-
 from repositories.station_repository import (
     station_repository as default_station_repository
 )
@@ -25,5 +23,5 @@ class StationService:
             List of Station objects.
         """
         return self._station_repository.find_all()
-    
+
 station_service = StationService()

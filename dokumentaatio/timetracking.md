@@ -10,6 +10,7 @@
 | 27.3. | 2    | File reading and saving to database |
 | 4.4.  | 8    | Stations from file to database and to Tkinter window view, Stations View |
 | 5.4.  | 3    | Testing preparations, changelog added|
-| 6.4.  | 1,5    | Readme updates |
-| 8.4. | 4 | Tests for stations in database, config, Weather View |
+| 6.4.  | 1,5  | Readme updates |
+| 8.4.  | 4    | Tests for stations in database, config, Weather View |
+| 12.4 | 10:15 | Station view error |
 | sum   | 29,5   | | 
