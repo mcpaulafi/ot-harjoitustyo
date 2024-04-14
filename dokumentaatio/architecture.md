@@ -74,7 +74,7 @@ SQLite database tables are following
     class Settings {
         layout
     }
-    class Stations {
+    class stations {
         station_id
         name
         nickname
@@ -83,12 +83,13 @@ SQLite database tables are following
         lon
         source
     }
-    class Selected_stations {
+    class selected_stations {
         station_id
         temperature
         wind
+        datetime
     }
-    class Observations {
+    class observations {
         observation_id
         station_id
         datetime
