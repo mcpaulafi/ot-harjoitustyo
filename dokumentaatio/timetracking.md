@@ -12,5 +12,6 @@
 | 5.4.  | 3    | Testing preparations, changelog added|
 | 6.4.  | 1,5  | Readme updates |
 | 8.4.  | 4    | Tests for stations in database, config, Weather View |
-| 12.4 | 10:15 | Station view error |
-| sum   | 29,5   | | 
+| 12.4  | 0,5  | Station view error |
+| 14.4. | 2    | Save selected station to the database, station_view for next step |
+| sum   | 32   |   | 

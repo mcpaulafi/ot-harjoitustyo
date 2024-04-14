@@ -3,7 +3,7 @@
 
 - User can view list of available stations
 - index.py starts Tkinter window
-- In UI, ui.py creates user interphase and station_view.py requests and shows station list
+- In UI, ui.py creates user interphase and stationlist_view.py requests and shows station list
 - In UI, weather_view.py (will show selected station)
 - Database initialization creates SQLite3 database and adds stations to it from the file
 - Build runs initialize_database.py
@@ -16,3 +16,6 @@
 
 - User can select one station from station view
 - Application architecture file created and documentation started
+- In UI, changed station_view.py to stationlist_view.py and created new station_view.py
+- In UI, station_view.py shows selected station and there will be options for selecting measurement data
+- Selected station is saved on the database and all previous data is removed from there
