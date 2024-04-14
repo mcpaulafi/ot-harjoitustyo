@@ -1,3 +1,4 @@
+from ui.stationlist_view import StationListView
 from ui.station_view import StationView
 from ui.weather_view import WeatherView
 
@@ -17,7 +18,7 @@ class UI:
 
     def start(self):
         """Starts the UI."""
-        self._show_station_view()
+        self._show_stationlist_view()
 # TODO remove after ready
 #        self._show_weather_view()
 
@@ -27,21 +28,32 @@ class UI:
 
         self._current_view = None
 
-    def _show_station_view(self):
+    def _show_stationlist_view(self):
         """Shows station selection view"""
         self._hide_current_view()
 
-        self._current_view = StationView(
-            self._root, self._show_weather_view
+        self._current_view = StationListView(
+            self._root, self._show_station_view
         )
         self._current_view.pack()
 
+
+    def _show_station_view(self):
+        """Shows selected station"""
+        self._hide_current_view()
+
+        self._current_view = StationView(
+        self._root, self._show_weather_view
+        )
+
+        self._current_view.pack()
+
     def _show_weather_view(self):
-        """Shows weather on selected station"""
+        """Shows weather on selected station(s)"""
         self._hide_current_view()
 
         self._current_view = WeatherView(
-            self._root, self._show_station_view
+            self._root, self._show_stationlist_view
         )
 
         self._current_view.pack()

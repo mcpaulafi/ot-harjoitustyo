@@ -6,7 +6,7 @@ from database_connection import get_database_connection
 class WeatherView:
     """Weather from the station view."""
 
-    def __init__(self, root, show_station_view):
+    def __init__(self, root, show_stationlist_view):
         """Class constructor. Creates new view for weather data from station.
 
         Args:
@@ -16,7 +16,7 @@ class WeatherView:
 
         self._root = root
         self._frame = None
-        self._show_station_view = show_station_view
+        self._show_stationlist_view = show_stationlist_view
         self._error_variable = None
 
         self._initialize()
@@ -56,8 +56,8 @@ class WeatherView:
 
         select_button = ttk.Button(
             master=self._frame,
-            text="Settings",
-            command=self._show_station_view
+            text="Select station",
+            command=self._show_stationlist_view
         )
 
         select_button.grid(padx=5, pady=5, sticky=constants.EW)
