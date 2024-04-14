@@ -66,6 +66,7 @@ def create_tables(connection):
         station_id integer NOT NULL,
         temperature integer DEFAULT 0 NOT NULL,
         wind text integer DEFAULT 0 NOT NULL,
+        datetime text,
         PRIMARY KEY (station_id)
     );
     """)
@@ -89,7 +90,6 @@ def create_tables(connection):
     connection.commit()
 
 def read_stations_from_file(file_path2):
-    jaka = 1
     """ Read stations from the file to a list. Return list.
 
     Args: 
