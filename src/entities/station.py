@@ -18,7 +18,7 @@ class Station:
             Same as class attributes.
         """
 
-        self.station_id = station_id 
+        self.station_id = station_id
         self.original_id = original_id
         self.name = name
         self.nickname = nickname

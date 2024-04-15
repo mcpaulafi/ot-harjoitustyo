@@ -1,5 +1,6 @@
 from tkinter import ttk, constants
 from services.station_service import station_service
+from services.observation_service import observation_service
 
 class StationView:
     """Station list view."""
@@ -39,6 +40,8 @@ class StationView:
 
     def _handle_button_click(self):
         """"Changes the view."""
+        observation_service.update_observation(self.station_id)
+
         self._handle_show_weather_view()
 
     def _initialize(self):
