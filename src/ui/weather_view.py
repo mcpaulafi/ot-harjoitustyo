@@ -1,6 +1,6 @@
-from tkinter import ttk, StringVar, constants
+from tkinter import ttk, constants
 from services.station_service import station_service
-
+from services.observation_service import observation_service
 
 class WeatherView:
     """Weather from the station view."""
@@ -18,8 +18,15 @@ class WeatherView:
         self._show_stationlist_view = show_stationlist_view
         self._error_variable = None
         self.station_id = station_service.get_selected()[0][0]
-        self.station_temp = station_service.get_selected()[0][1]
-        self.station_wind = station_service.get_selected()[0][2]
+        self.station_temp = 0
+        self.station_wind = 0
+        self.station_wind_direction = 0
+        self.station_date = ""
+        for o in observation_service.get_observation(self.station_id):
+            self.station_temp = o.temperature
+            self.station_wind = o.wind
+            self.station_wind_direction = o.wind_direction
+            self.station_date = o.datetime
         self.stations = station_service.get_stations()
 
         self._initialize()
@@ -53,12 +60,21 @@ class WeatherView:
             station_name = s.name
 
         station_name_label = ttk.Label(master=self._frame, text=station_name,
-                                       font=('Arial', 12, 'bold'))
+                                       font=('Arial', 24, 'bold'))
         station_name_label.grid(padx=5, pady=5, sticky=constants.W)
 
-        station_weather_label = ttk.Label(master=self._frame, text="Temperature here",
+        station_weather_label = ttk.Label(master=self._frame, text=f"{self.station_temp}°C",
                                           font=('Arial', 42, 'bold'))
         station_weather_label.grid(padx=5, pady=5, sticky=constants.W)
+
+        station_wind_label = ttk.Label(master=self._frame, text=f"Wind: {self.station_wind} m/s Direction: {self.station_wind_direction}°",
+                                          font=('Arial', 12, 'bold'))
+        station_wind_label.grid(padx=5, pady=5, sticky=constants.W)
+
+
+        station_date_label = ttk.Label(master=self._frame, text=f"Date: {self.station_date}",
+                                          font=('Arial', 12, 'bold'))
+        station_date_label.grid(padx=5, pady=5, sticky=constants.W)
 
         select_button = ttk.Button(
             master=self._frame,
