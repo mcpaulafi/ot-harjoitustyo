@@ -1,6 +1,3 @@
-import uuid
-
-
 class Station:
     """Class for a weather station
 
@@ -12,7 +9,6 @@ class Station:
         lat: String for latitude of the station location.
         lon: String for longtitude of the station location.
     """
-    # TODO set nickname later not init
 
     def __init__(self, station_id=None, original_id=None, name=None, nickname=None,
                  lat=None, lon=None, source=None):
@@ -22,10 +18,13 @@ class Station:
             Same as class attributes.
         """
 
-        self.station_id = station_id or str(uuid.uuid4())
+        self.station_id = station_id 
         self.original_id = original_id
         self.name = name
         self.nickname = nickname
         self.lat = lat
         self.lon = lon
         self.source = source
+
+    def set_nickname(self, nickname):
+        self.nickname = nickname
