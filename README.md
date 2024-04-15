@@ -21,8 +21,6 @@ This application is made as a course work in the Software engineering course (Ai
 poetry install --no-root
 ```
 
-If
-
 2. Run required initialization operations with shell command:
 
 ```bash
