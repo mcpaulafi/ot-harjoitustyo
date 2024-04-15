@@ -14,4 +14,5 @@
 | 8.4.  | 4    | Tests for stations in database, config, Weather View |
 | 12.4  | 0,5  | Station view error |
 | 14.4. | 2    | Save selected station to the database, station_view for next step |
-| sum   | 32   |   | 
+| 15.4. | 4    | Find a station, Documentation update |
+| sum   | 36   | (15.4.: 4)   | 

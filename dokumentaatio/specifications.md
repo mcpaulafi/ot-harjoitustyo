@@ -10,15 +10,21 @@ Application has only one user role.
 
 ## User interface
 
-TBD:
-- On a slider one weather station at a time /or stations side by side.
+- User can choose weather stations which data is retrieved and shown (TEHTY)
+- Stations data side by side
 - User can choose which layout to use
 
 ## Main functionalities
 
-### Settings
+### Select stations view (TEHTY: 1 station)
 
-User selects 1-5 weather stations and their measurement data (temperature, wind). User can rename selected stations. User can select layout for weather view. Settings are saved to the database. Settings can be changed anytime.
+User selects 1-5 weather stations from a list of available stations. 
+
+### Station settings view
+
+User defines what measurement data (temperature, wind) is retrieved from the selected stations. User can rename selected stations. User can select layout for weather view. 
+
+Settings are saved to the database. Settings can be changed anytime. (TEHTY)
 
 ### Weather view
 
@@ -28,16 +34,16 @@ Selected information is displayed on the view.
 
 Latest measurement data is retrieved every hour and saved on the database.
 
-### Database
+### Database (TEHTY)
 
-SQLite database contains 4 tables
+SQLite database contains 4 tables 
 - Stations
 - Settings
 - Selected_stations
 - Observations
 
-### Station list
-Stations are uploaded to the database from a csv-file.
+### Station list (TEHTY)
+Stations are uploaded to the database from a csv-file. 
 
 ## Development ideas / todos
 - Split database table Observations per measurement

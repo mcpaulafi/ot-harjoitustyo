@@ -17,5 +17,6 @@
 - User can select one station from station view
 - Application architecture file created and documentation started
 - In UI, changed station_view.py to stationlist_view.py and created new station_view.py
-- In UI, station_view.py shows selected station and there will be options for selecting measurement data
+- In UI, station_view.py shows selected station (there will be options for selecting measurement data)
 - Selected station is saved on the database and all previous data is removed from there
+- Name of the selected station is retrieved from database and returned as object

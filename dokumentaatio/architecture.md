@@ -1,5 +1,5 @@
 # Architecture
-## Construction
+## Structure
 
 Application has 3 level hierarchy, as follows
 
@@ -19,11 +19,12 @@ flowchart LR
 
 ## User interphase
 
-User interphase contains 2 views:
+User interphase contains 3 views:
+- Select stations
 - Settings
 - Weather
 
-Both are implemented as classes. Only one view is visible at the time to the user. Views are managed by UI class. User interphase is meant to be independent from the application logic and it utilizes methods from Service classes.
+Views are implemented as classes. Only one view is visible at the time to the user. Views are managed by UI class. User interphase is meant to be independent from the application logic and it utilizes methods from Service classes.
 
 ## Application logic
 
@@ -35,6 +36,9 @@ Functions are in the Service classes StationService and ObservationService.
 
 **StationService** class provides following methods
 - get_stations()
+- get_station()
+- save_selected()
+- get_selected()
 
 StationService has access to station data through StationRepository which is responsible of saving and retrieving data from the database.
 
@@ -71,10 +75,7 @@ SQLite database tables are following
  classDiagram
     Stations "*" --> "1..5" Selected_stations
     Selected_stations "1" -- "*" Observations
-    class Settings {
-        layout
-    }
-    class stations {
+    class Stations {
         station_id
         name
         nickname
@@ -83,13 +84,13 @@ SQLite database tables are following
         lon
         source
     }
-    class selected_stations {
+    class Selected_stations {
         station_id
         temperature
         wind
         datetime
     }
-    class observations {
+    class Observations {
         observation_id
         station_id
         datetime
@@ -97,7 +98,9 @@ SQLite database tables are following
         wind
         wind_direction
     }
-
+    class Settings {
+        layout
+    }
 ```
 
 ## Main functions
@@ -105,47 +108,93 @@ SQLite database tables are following
 Next the basic application logic is described on the sequence diagrams.
 
 ### Selecting stations
-On Settings view the user first selects a weather station from the listbox and then clicks the _Select_ button. 
+On Stationslist_view the user first selects a weather station from the listbox and then clicks the _Select_ button. Selection is saved on the database and view is switched to Station_view, which shows options for the selected station. 
 
 ```mermaid
 sequenceDiagram
+    actor User
+    participant UI
+    participant StationService
+    participant StationRepository
+
     User->> UI: click "Select" button
-    UI->>UI: Show_selection
+    UI->>StationService: save_selected(station_id)
+    StationService->>StationRepository: delete_selected_stations_from_database()
+    StationService->>StationRepository: save_selected_stations_to_database(station_id)
 
+    UI->>UI: switch view (station_view)
+
+    UI->>StationService: get_selected()
+    StationService->>StationRepository: find_selected()
+    StationRepository-->>StationService: station_id, temperature, wind
+    StationService-->>UI: station_id, temperature, wind
+
+    UI->>StationService: get_name(station_id)
+    StationService->>StationRepository: find_name(station_id)
+    StationRepository-->>StationService: Station
+    StationService-->>UI: Station
+    UI->>UI: Station.name
 ```
 
-On Settings after selecting a station user can rename the station and select observations for it. Then user clicks the _Save and view_ button. 
-
-```mermaid
-sequenceDiagram
-    User->> UI: click "View" button
-    UI->>StationService: save_selected()
-    StationService->>StationRepository: save_selected()
-    StationRepository-->>StationService: station_id
-    StationService-->>UI: station_id
-    UI->>UI: View_weather()
-
-```
-
-
-## Renaming station
+### Settings for selected station
 
 After the selection user can rename the station (give a nickname such as "Summer cabin"). TBD
 
-## Selecting observations
-
 After the selection user can also select which observation data (temperature, wind) is retrieved from the station. TBD
-
-## Selecting layout
 
 User can also select the layout for the weather view from some options. TBD
 
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI
+    participant StationService
+    participant StationRepository
+
+    User->> UI: click "View" button
+    UI->>StationService: save_selected(station_id)
+    StationService->>StationRepository: delete_selected_stations_from_database()
+    StationService->>StationRepository: save_selected_stations_to_database(station_id, nickname)
+    StationService->>StationRepository: save_layout(layout_id)
+
+    UI->>UI: switch view (weather_view)
+
+
+```
+
+
 ### Weather view
 
-Weather view shows the latest observation data from the selected station. TBD
+On station_view when user clicks the _Save and view_ button application swithes to weather_view and gets measurement data for the selected station(s). 
+
+```mermaid
+sequenceDiagram
+    participant UI
+    participant StationService
+    participant StationRepository
+    participant ObservationService
+    participant ObservationRepository
+
+    UI->>StationService: get_selected()
+    StationService->>StationRepository: find_selected()
+    StationRepository-->>StationService: station_id, temperature, wind
+    StationService-->>UI: station_id, temperature, wind
+
+    UI->>StationService: get_name(station_id)
+    StationService->>StationRepository: find_name(station_id)
+    StationRepository-->>StationService: Station
+    StationService-->>UI: Station
+    UI->UI: Station.name
+    UI->>ObservationService: get_data(station_id)
+    ObservationService->>ObservationRepository: find_data(station_id)
+    ObservationRepository->>ObservationRepository: update_database()
+    ObservationRepository-->>ObservationService: temperature, wind, wind_direction, datetime
+    ObservationService-->>UI: temperature, wind, wind_direction, datetime
+    UI->>UI: temperature, wind, wind_direction, datetime
+
+```
 
 
-User can return to settings.
 
 
 ## Data update from FMI
