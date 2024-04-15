@@ -1,7 +1,5 @@
 from tkinter import ttk, constants
 from services.station_service import station_service
-from database_connection import get_database_connection
-
 
 class StationView:
     """Station list view."""
@@ -12,7 +10,7 @@ class StationView:
         Args:
             root:
                 TKinter element, in which view is installed.
-            handle_ TODO
+            handle_button_click
                 Change to another view
         """
 
@@ -40,12 +38,12 @@ class StationView:
         self._frame.destroy()
 
     def _handle_button_click(self):
-
-#        for i in self._list_label.curselection():
+        """"Changes the view."""
         self._handle_show_weather_view()
 
     def _initialize(self):
         """Initializes the frame view"""
+
         self._frame = ttk.Frame(master=self._root)
 
         station_label = ttk.Label(master=self._frame, text="Station settings",
@@ -62,24 +60,20 @@ class StationView:
 
         station_name = "none"
 
-        for s1 in self.stations:
-            if s1.station_id == self.station_id:
-                station_name = s1.name
+        for s in station_service.get_name(self.station_id):
+            station_name = s.name
 
-
-        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {self.station_id} {station_name}",
+        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {self.station_id}, name: {station_name}",
                                     font=('Arial', 12, 'normal'))
         selection_label.grid(column=0, row=3, padx=5,
                              pady=5, sticky=constants.W)
 
-        if self.station_temp == 1:
-            temperature = "SELECTED"
-        else:
+        temperature = "SELECTED"
+        if self.station_temp == 0:
             temperature = "NOT SELECTED"
 
-        if self.station_wind == 1:
-            wind = "SELECTED"
-        else:
+        wind = "SELECTED"
+        if self.station_wind == 0:
             wind = "NOT SELECTED"
 
         temp_label = ttk.Label(master=self._frame, text=f"Temperature {temperature}",

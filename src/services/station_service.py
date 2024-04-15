@@ -38,12 +38,12 @@ class StationService:
         return self._station_repository.find_selected()
 
     def get_name(self, station_id):
-        """Returns name of station.
+        """Returns Station object.
 
         Returns:
-            Name of the station.
+            Station object.
         """
-        return self._station_repository.find_name(station_id)
+        return self._station_repository.find_station(station_id)
 
 
 station_service = StationService()

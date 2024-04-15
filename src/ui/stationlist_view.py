@@ -38,6 +38,12 @@ class StationListView:
 #        self._error_variable.set(message)
 
     def _handle_button_click(self):
+        """Handles actions after button click.
+        Actions:
+            Saves selected station to the database.
+            Switches view to station settings.
+        """
+
         selected_values = []
 
         # TODO: How to handle this error correctly?
@@ -49,9 +55,7 @@ class StationListView:
                 selected_values.append(i)
         print(f"Value of entry is: {selected_values[0]}", selected_values)
 
-        tallenna = station_service.save_selected(selected_values[0])
-
-        print("t", tallenna)
+        station_service.save_selected(selected_values[0])
 
         self._handle_show_station_view()
 

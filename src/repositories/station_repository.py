@@ -86,7 +86,7 @@ class StationRepository:
         """ Returns selected station from the database.
         Returns:
             station_id, temperature and wind values in a tuple."""
-        
+
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT station_id, temperature, wind from selected_stations")
@@ -96,18 +96,18 @@ class StationRepository:
         return list(map(get_selected_by_row, row))
 
 
-    def find_name(self, station_id):
-        """ Returns the name of the station.
+    def find_station(self, station_id):
+        """ Returns the object of the station.
         Args:
-        station_id: id of the selected station"""
+        station_id: id of the station"""
 
         cursor = self._connection.cursor()
 
-        cursor.execute("SELECT name from stations where station_id=?", (str(station_id),))
+        cursor.execute("SELECT * from stations where station_id=?", (str(station_id),))
 
-        row = cursor.fetchone()
+        row = cursor.fetchall()
 
-        return row[0]
+        return list(map(get_station_by_row, row))
 
 
     def delete_all(self):

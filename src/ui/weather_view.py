@@ -1,6 +1,5 @@
-from tkinter import ttk, StringVar, constants, Listbox, Scrollbar
+from tkinter import ttk, StringVar, constants
 from services.station_service import station_service
-from database_connection import get_database_connection
 
 
 class WeatherView:
@@ -18,6 +17,10 @@ class WeatherView:
         self._frame = None
         self._show_stationlist_view = show_stationlist_view
         self._error_variable = None
+        self.station_id = station_service.get_selected()[0][0]
+        self.station_temp = station_service.get_selected()[0][1]
+        self.station_wind = station_service.get_selected()[0][2]
+        self.stations = station_service.get_stations()
 
         self._initialize()
 
@@ -45,8 +48,11 @@ class WeatherView:
                                   font=('Arial', 24, 'bold'))
         weather_label.grid(padx=5, pady=5, sticky=constants.W)
 
-        # TODO
-        station_name_label = ttk.Label(master=self._frame, text="Station name here",
+        station_name= "Station not selected"
+        for s in station_service.get_name(self.station_id):
+            station_name = s.name
+
+        station_name_label = ttk.Label(master=self._frame, text=station_name,
                                        font=('Arial', 12, 'bold'))
         station_name_label.grid(padx=5, pady=5, sticky=constants.W)
 
