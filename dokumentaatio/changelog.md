@@ -20,3 +20,4 @@
 - In UI, station_view.py shows selected station (there will be options for selecting measurement data)
 - Selected station is saved on the database and all previous data is removed from there
 - Name of the selected station is retrieved from database and returned as object
+- Observations class created and retrieving data from FMI

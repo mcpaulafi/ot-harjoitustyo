@@ -26,7 +26,7 @@ User defines what measurement data (temperature, wind) is retrieved from the sel
 
 Settings are saved to the database. Settings can be changed anytime. (TEHTY)
 
-### Weather view
+### Weather view (TEHTY: 1 station)
 
 Selected information is displayed on the view.
 
@@ -44,6 +44,10 @@ SQLite database contains 4 tables
 
 ### Station list (TEHTY)
 Stations are uploaded to the database from a csv-file. 
+
+## Known bugs
+- Not much error handling yet
+- Listbox mixes some station ID:s
 
 ## Development ideas / todos
 - Split database table Observations per measurement

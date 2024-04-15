@@ -1,5 +1,5 @@
 # My Weather Window application
-With this application the user can view latest measurements from selected weather stations. Measurement data is retrieved from the open data provided by The Finnish Meteorological Institute.
+With this application the user can view latest measurements from selected weather stations. Measurement data is retrieved from the open data provided by The Finnish Meteorological Institute (FMI).
 
 This application is made as a course work in the Software engineering course (Aineopintojen harjoitustyö: Ohjelmistotekniikka) as part of Computer Science studies in the University of Helsinki.
 
@@ -12,19 +12,25 @@ This application is made as a course work in the Software engineering course (Ai
 - [Changelog](dokumentaatio/changelog.md)
 
 ## Installation
-1. Install dependencies with shell command:
+1. Install Python interphase for FMI open data
+
+- [opendata](https://github.com/pnuu/fmiopendata)
+
+2. Start Poetry. Install dependencies with shell command:
 
 ```bash
-poetry install
+poetry install --no-root
 ```
 
-2. Run required initialization operations with shell command:
+If
+
+3. Run required initialization operations with shell command:
 
 ```bash
 poetry run invoke build
 ```
 
-3. Start application with shell command:
+4. Start application with shell command:
 
 ```bash
 poetry run invoke start
