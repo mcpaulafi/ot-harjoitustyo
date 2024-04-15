@@ -37,5 +37,13 @@ class StationService:
         """
         return self._station_repository.find_selected()
 
+    def get_name(self, station_id):
+        """Returns name of station.
+
+        Returns:
+            Name of the station.
+        """
+        return self._station_repository.find_name(station_id)
+
 
 station_service = StationService()

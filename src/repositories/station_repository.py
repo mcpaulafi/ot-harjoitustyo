@@ -26,6 +26,11 @@ class StationRepository:
         self._connection = connection
 
     def count_all(self):
+        """ Counts how many stations are in the database.
+        Returns: 
+            Amount of stations
+        """
+
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT count(*) from stations")
@@ -50,6 +55,8 @@ class StationRepository:
         return list(map(get_station_by_row, rows))
 
     def delete_selected_stations_from_database(self):
+        """ Removes content from the selected_stations table."""
+
         cursor = self._connection.cursor()
 
         cursor.execute("delete from selected_stations")
@@ -76,6 +83,10 @@ class StationRepository:
 
 
     def find_selected(self):
+        """ Returns selected station from the database.
+        Returns:
+            station_id, temperature and wind values in a tuple."""
+        
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT station_id, temperature, wind from selected_stations")
@@ -84,10 +95,23 @@ class StationRepository:
 
         return list(map(get_selected_by_row, row))
 
-# TODO: Find by name? Find by id? Create new?
+
+    def find_name(self, station_id):
+        """ Returns the name of the station.
+        Args:
+        station_id: id of the selected station"""
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("SELECT name from stations where station_id=?", (str(station_id),))
+
+        row = cursor.fetchone()
+
+        return row[0]
+
 
     def delete_all(self):
-        """Removes all stations.
+        """Removes all stations from stations table.
         """
 
         cursor = self._connection.cursor()

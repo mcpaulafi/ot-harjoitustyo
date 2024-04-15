@@ -36,10 +36,18 @@ class FakeStationRepository:
 
         return list(map(get_station_by_row, rows))
 
-    # def delete_all(self):
-    #     cursor = self._connection.cursor()
-    #     cursor.execute("delete from stations")
-    #     self._connection.commit()
+    def find_name(self, station_id):
+        """ Returns the name of the station.
+        Args:
+        station_id: id of the selected station"""
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("SELECT name from stations where station_id=?", (str(station_id),))
+
+        row = cursor.fetchone()
+
+        return row[0]
 
 
 class TestStationService(unittest.TestCase):
@@ -61,4 +69,11 @@ class TestStationService(unittest.TestCase):
 
         return self.assertEqual(test_name, "Helsinki Harmaja")
 
-        self.assertEqual(count_all, 210)
+    def test_get_name(self):
+        """Check if name is retrieved from database"""
+        get_name = self._station_repository.find_name(20)
+        test_name = get_name
+
+        return self.assertEqual(test_name, "Hattula Lepaa")
+
+
