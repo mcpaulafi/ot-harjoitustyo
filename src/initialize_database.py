@@ -121,7 +121,6 @@ def upload_stations_to_database(station_list, connection):
     connection: Connection-object for the database"""
     for station_data in station_list:
         name = station_data[0]
-        nickname = ""
         original_id = station_data[1]
         lat = station_data[2]
         lon = station_data[3]
@@ -129,9 +128,9 @@ def upload_stations_to_database(station_list, connection):
         cursor = connection.cursor()
 
         cursor.execute(
-            '''insert into stations (name, nickname, original_id, lon, lat, source) 
-            values (?, ?, ?, ?, ?, ?)''',
-            (str(name), str(nickname), str(original_id), str(lon), str(lat), str(source))
+            '''insert into stations (name, original_id, lon, lat, source) 
+            values (?, ?, ?, ?, ?)''',
+            (str(name), str(original_id), str(lon), str(lat), str(source))
         )
 
         connection.commit()
