@@ -1,12 +1,9 @@
-import os
 from pathlib import Path
+from config import STATIONS_FILE_PATH
 from database_connection import get_database_connection
 
-#"""File which includes list of available stations."""
-# TODO: get file name from global settings
-
-dirname = os.path.dirname(__file__)
-file_path = os.path.join(dirname, "..", "data", "fmi_stations.csv")
+#File which includes list of available stations from FMI.
+file_path = STATIONS_FILE_PATH
 
 def ensure_file_exists():
     """Checking the file.
