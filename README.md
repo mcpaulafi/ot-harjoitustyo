@@ -13,6 +13,10 @@ This application is made as a course work in the Software engineering course (Ai
 - [Time tracking](dokumentaatio/timetracking.md)
 - [Changelog](dokumentaatio/changelog.md)
 
+## Releases
+
+- [Viikko5](/releases/tag/viikko5) 22.4.2024
+
 ## Installation
 
 1. Start Poetry. Install dependencies with shell command:
