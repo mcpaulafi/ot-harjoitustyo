@@ -39,7 +39,7 @@ class ObservationRepository:
             station_lon = s.lon
             station_name = s.name
         extra = 0.2
-        #ERROR Inari Seitalaassa
+        #ERROR Inari Seitalaassa, muitakin
 
 
         # At FMI data is stored in a coordinate squares = bounding boxes.
@@ -126,6 +126,17 @@ class ObservationRepository:
         rows = cursor.fetchall()
 
         return list(map(get_observation_by_row, rows))
+
+    def delete_all(self):
+        """Removes all observations from observations table.
+        """
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("delete from observations")
+
+        self._connection.commit()
+
 
 observation_repository = ObservationRepository(get_database_connection())
 
