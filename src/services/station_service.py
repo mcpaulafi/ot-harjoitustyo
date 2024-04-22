@@ -26,8 +26,14 @@ class StationService:
         return self._station_repository.find_all()
 
     def save_selected(self, station_id):
-        self._station_repository.delete_selected_stations_from_database()
         self._station_repository.save_selected_station_to_database(station_id)
+
+    def delete_selected(self):
+        self._station_repository.delete_selected_stations_from_database()
+#        observation_service.delete_observations_from_database()
+
+    def count_selected(self):
+        return self._station_repository.count_selected_stations()
 
     def get_selected(self):
         """Returns selected station(s).
@@ -36,6 +42,14 @@ class StationService:
             List of Station objects.
         """
         return self._station_repository.find_selected()
+
+    def get_selected_obs(self, station_id):
+        """Returns measurement settings for selected station.
+
+        Returns:
+            Duple.
+        """
+        return self._station_repository.find_selected_obs(station_id)
 
     def get_name(self, station_id):
         """Returns Station object.
