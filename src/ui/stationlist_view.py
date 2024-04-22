@@ -20,10 +20,13 @@ class StationListView:
         self._frame = None
         self._list_label = None
         self._button_select = None
-        self._error_variable = None
-        self._error_label = None
+        self._error_variable = " "
         self.stations = station_service.get_stations()
-
+        self._error_label = ttk.Label(master=self._frame)
+        self.selected_label = ttk.Label(master=self._frame)
+        self._list_label = Listbox(master=self._frame)
+        self._vertscroll = Scrollbar(master=self._frame)
+        self.continue_button = ttk.Button(master=self._frame)
         self._initialize()
 
     def pack(self):
@@ -34,32 +37,127 @@ class StationListView:
         """"Destroys the view."""
         self._frame.destroy()
 
-#    def _show_error(self, message):
-#        self._error_variable.set(message)
 
-    def _handle_button_click(self):
+    # Initialize fields and buttons
+
+    def _initialize_error_msg(self):
+        """"Field for error message."""
+        self._error_label.destroy()
+        self._error_label = ttk.Label(
+            master=self._frame,
+            textvariable=self._error_variable,
+            foreground="red"
+        )
+        self._error_label.grid(column=0, row=1, columnspan=3)
+
+    def _initialize_stations_list(self):
+        """"Listbox for stations to select."""
+        self._list_label.destroy()
+        stations_list = self.stations
+
+        self._list_label = Listbox(master=self._frame, selectmode="single", width=28)
+
+        # TODO without this line selected id:s are off +1 - WHY?
+        self._list_label.insert(0, "")
+
+        for s in stations_list:
+            self._list_label.insert(s.station_id, s.name)
+
+        self._list_label.grid(column=0, row=3, columnspan=2, rowspan=2,
+                              padx=10, pady=10, sticky=constants.W)
+
+        # Scrollbar
+        self._vertscroll.destroy()
+        self._vertscroll = Scrollbar(master=self._frame)
+        self._vertscroll.config(command=self._list_label.yview)
+        self._list_label.config(yscrollcommand=self._vertscroll.set)
+        self._vertscroll.grid(column=1, row=3, columnspan=1, rowspan=2,
+                        sticky=constants.NS)
+
+
+    def _initialize_selected(self):
+        self.selected_label.destroy()
+        list_of_selected = self._get_selected_list()
+        self.selected_label = ttk.Label(master=self._frame, text=list_of_selected, 
+                                        font=('Arial', 12, 'normal'))
+        self.selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
+                                 padx=10, pady=10, sticky=constants.NW)
+
+        if station_service.count_selected()>5:
+            self._error_variable = "At maximum 5 stations can be selected."
+            self._initialize_error_msg()
+            self.select_button.config(state="disabled")
+        else:
+            self.select_button.config(state="normal")
+
+    def _initialize_continue_to_settings(self):
+        """"Field for continue button."""
+        self.continue_button.destroy()
+        self.continue_button = ttk.Button(
+            master=self._frame,
+            text="Continue",
+            command=self._handle_continue_click
+            )
+        self.continue_button.grid(column=3, row=5,
+                                  padx=10, pady=10, sticky=constants.N)
+
+        if station_service.count_selected()<1:
+            self.continue_button.config(state="disabled")
+        else:
+            self.continue_button.config(state="normal")
+
+
+    # Handle button clicks
+
+    def _handle_select_click(self):
+        """Handles actions after button click: Add to selected >.
+        Actions:
+            Checks for errors.
+            Saves selected station to the database.
+            Clears selected list.
+            Prints new selected list.
+        """
+
+        selected_values = []
+
+        for i in self._list_label.curselection():
+            for i in self._list_label.curselection():
+                selected_values.append(i)
+
+        station_service.save_selected(selected_values[0])
+
+        self._initialize_selected()
+        self._initialize_continue_to_settings()
+
+    def _handle_clear_click(self):
+        station_service.delete_selected()
+        self._error_variable = None
+        self._initialize_error_msg()
+        self.select_button.config(state="normal")
+        self._initialize_selected()
+        self.continue_button.config(state="disabled")
+
+    def _handle_continue_click(self):
         """Handles actions after button click.
         Actions:
             Saves selected station to the database.
             Switches view to station settings.
         """
 
-        selected_values = []
-
-        # TODO: How to handle this error correctly?
-        if len(self._list_label.curselection()) > 2:
-            self._error_variable = "Select at maximum 2 stations"
-
-        for i in self._list_label.curselection():
-            for i in self._list_label.curselection():
-                selected_values.append(i)
-        print(f"Value of entry is: {selected_values[0]}", selected_values)
-
-        station_service.save_selected(selected_values[0])
-
         self._handle_show_station_view()
 
-    def station_list(self):
+
+    # Get stations from database and return as lists
+
+    def _get_selected_list(self):
+        """Gets selected stations from the database and returns them as a list."""
+        selected_list = ""
+        for s in station_service.get_selected():
+            #print(f"Selected {str(s.name)}")
+            selected_list += str(s.name) + "\n"
+        return selected_list
+
+    def _get_station_list(self):
         """Gets stations from the database and returns them as a list."""
         stations_list = []
         for s in self.stations:
@@ -68,65 +166,68 @@ class StationListView:
             stations_list.append((s.station_id, nimi))
         return stations_list
 
-    def _initialize_station_list_field(self):
-        """Creates a view with stations in a listbox"""
-        stations_list = self.station_list()
 
-        note_label = ttk.Label(master=self._frame, text="Select 1 station",
-                               font=('Arial', 12, 'normal'))
-        note_label.grid(column=0, row=3, padx=5, pady=5, sticky=constants.W)
-
-        # TODO: Make multiple selection available
-        # TODO: Show selected stations
-        self._list_label = Listbox(master=self._frame, selectmode="single",
-                                   height=10, width=38
-                                   )
-
-        # TODO without this line selected id:s are off +1 - WHY?
-        self._list_label.insert(0, "")
-
-        for s in stations_list:
-            self._list_label.insert(s[0], s[1])
-
-        self._list_label.grid(column=0, row=4, padx=5,
-                              pady=5, sticky=constants.W)
-
-        # Scrollbar
-        # Instructions from https://stackoverflow.com/questions/23584325/cannot-use-geometry-manager-pack-inside
-        vertscroll = Scrollbar(master=self._frame)
-        vertscroll.config(command=self._list_label.yview)
-        self._list_label.config(yscrollcommand=vertscroll.set)
-        vertscroll.grid(column=0, row=4, sticky=constants.NS)
+    # View
 
     def _initialize(self):
         """Initializes the frame view"""
+
         self._frame = ttk.Frame(master=self._root)
 
-        station_label = ttk.Label(master=self._frame, text="Select station",
+        # Title of the window
+        self.station_label = ttk.Label(master=self._frame, text="Select station",
                                   font=('Arial', 24, 'bold'))
-        station_label.grid(column=0, row=1, padx=5, pady=5, sticky=constants.W)
+        self.station_label.grid(column=0, row=0, columnspan=5,
+                                padx=10, pady=10, sticky=constants.NW)
+        # Error message
+        self._initialize_error_msg()
 
-        self._error_label = ttk.Label(
+        # Title of left field
+        self.note1_label = ttk.Label(master=self._frame, text="Select 1 station",
+                               font=('Arial', 12, 'bold'))
+        self.note1_label.grid(column=0, row=2, columnspan=2,
+                             padx=10, pady=10, sticky=constants.W)
+
+        # Title of right field
+        self.note2_label = ttk.Label(master=self._frame, text="Selected stations",
+                               font=('Arial', 12, 'bold'))
+        self.note2_label.grid(column=3, row=2, columnspan=2,
+                             padx=10, pady=10, sticky=constants.W)
+
+        # List of stations
+        self._initialize_stations_list()
+
+        # Button select
+        self.select_button = ttk.Button(
             master=self._frame,
-            textvariable=self._error_variable,
-            foreground="red"
+            text="Add to selected >",
+            state="normal",
+            command=self._handle_select_click
         )
+        self.select_button.grid(column=2, row=3,
+                                padx=10, pady=10, sticky=constants.S)
 
-        self._error_label.grid(column=0, row=2, padx=5, pady=5)
-
-        self._initialize_station_list_field()
-
-        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
-        select_button1 = ttk.Button(
+        # Button clear all
+        self.clear_button = ttk.Button(
             master=self._frame,
-            text="Select",
-            command=self._handle_button_click
+            text="< Clear all",
+            command=self._handle_clear_click
         )
+        self.clear_button.grid(column=2, row=4, 
+                               padx=10, pady=10, sticky=constants.N)
 
-        select_button1.grid(column=0, row=5, padx=5, pady=5,
-                           rowspan=1, sticky=constants.EW)
+        # Selected list
+        self._initialize_selected()
 
-        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
+        # Button Continue to settings
+        self._initialize_continue_to_settings()
 
+
+        self._frame.grid_columnconfigure(0, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(1, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(2, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(3, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(4, weight=1, minsize=100)
+        self._frame.grid_rowconfigure(0, weight=1, minsize=20)
 
 print("STATIONLIST VIEW\n")
