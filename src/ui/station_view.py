@@ -1,11 +1,12 @@
-from tkinter import ttk, constants
+from tkinter import ttk, constants, StringVar
 from services.station_service import station_service
 from services.observation_service import observation_service
 
+# rename this to settings
 class StationView:
-    """Station list view."""
+    """Settings view."""
 
-    def __init__(self, root, handle_show_weather_view):
+    def __init__(self, root, handle_show_weather_view, handle_show_stationlist_view):
         """Class constructoimport Tkinter as tkr. Creates new view for stations.
 
         Args:
@@ -17,15 +18,24 @@ class StationView:
 
         self._root = root
         self._handle_show_weather_view = handle_show_weather_view
+        self._handle_show_stationlist_view = handle_show_stationlist_view
         self._frame = None
         self._list_label = None
         self._button_select = None
         self._error_variable = None
         self._error_label = None
         self._label_selection = "none"
-        self.station_id = station_service.get_selected()[0][0]
-        self.station_temp = station_service.get_selected()[0][1]
-        self.station_wind = station_service.get_selected()[0][2]
+#        self.station_id = station_service.get_selected()[0][0]
+        self.station_id = None
+        self.station_temp = None
+        self.station_wind = None
+        self.row = 0
+        self._error_label = ttk.Label(master=self._frame)
+        self.selected_label = ttk.Label(master=self._frame)
+        self.nick_label = ttk.Label(master=self._frame)
+        self.nick_entry = ttk.Entry(master=self._frame)
+        self.temperature_cb = ttk.Checkbutton(master=self._frame)
+        self.wind_cb = ttk.Checkbutton(master=self._frame)
         self.stations = station_service.get_stations()
 
         self._initialize()
@@ -38,70 +48,116 @@ class StationView:
         """"Destroys the view."""
         self._frame.destroy()
 
-    def _handle_button_click(self):
+    def _initialize_error_msg(self):
+        """"Field for error message."""
+        self._error_label.destroy()
+        self._error_label = ttk.Label(
+            master=self._frame,
+            textvariable=self._error_variable,
+            foreground="red"
+        )
+        self._error_label.grid(column=0, row=1, padx=10, pady=10, columnspan=2)
+
+    def _initialize_stations(self):
+
+        for s in station_service.get_selected():
+
+            self.selected_label = ttk.Label(master=self._frame, text=s.name,
+                                            font=('Arial', 10, 'bold'))
+            self.selected_label.grid(column=0, row=self.row, columnspan=2,
+                                      padx=10, pady=2, sticky=constants.NW)
+            self.row +=1
+
+            self.nick_label = ttk.Label(master=self._frame, text="Nickname",
+                                            font=('Arial', 10, 'normal'))
+            self.nick_label.grid(column=0, row=self.row, columnspan=1,
+                                      padx=10, pady=0, sticky=constants.NW)
+
+            name_var= StringVar()
+            name_var.set("")
+
+            self.nick_entry = ttk.Entry(master=self._frame, textvariable=name_var,
+                                            font=('Arial', 10, 'normal'))
+            self.nick_entry.grid(column=1, row=self.row, columnspan=1,
+                                      padx=10, pady=0, sticky=constants.NW)
+
+            self.row +=1
+
+            self.temperature_cb = ttk.Checkbutton(master=self._frame, text = "Temperature",
+                      variable = 1, onvalue = 1, offvalue = 0)
+
+            self.temperature_cb.grid(column=0, row=self.row, padx=10, pady=0, sticky=constants.NW)
+
+            self.wind_cb = ttk.Checkbutton(master=self._frame, text = "Wind",
+                      variable = 1, onvalue = 1, offvalue = 0)
+
+            self.wind_cb.grid(column=1, row=self.row, padx=10, pady=0, sticky=constants.NW)
+
+            self.row+=1
+
+
+    def _handle_save_click(self):
         """"Changes the view."""
-        observation_service.update_observation(self.station_id)
+        #Fix later
+        self._error_variable = "Loading weather information..."
+        self._initialize_error_msg()
+
+        for s1 in station_service.get_selected():
+            observation_service.update_observation(s1.station_id)
+            print("Observations updated", s1.name)
 
         self._handle_show_weather_view()
+
+    def _handle_back_click(self):
+        """"Changes the view back to station selection."""
+        self._handle_show_stationlist_view()
 
     def _initialize(self):
         """Initializes the frame view"""
 
         self._frame = ttk.Frame(master=self._root)
 
-        station_label = ttk.Label(master=self._frame, text="Station settings",
+        station_label = ttk.Label(master=self._frame, text="Settings",
                                   font=('Arial', 24, 'bold'))
-        station_label.grid(column=0, row=1, padx=5, pady=5, sticky=constants.W)
+        station_label.grid(column=0, row=0, columnspan=2,
+                           padx=10, pady=5, sticky=constants.W)
 
-        self._error_label = ttk.Label(
-            master=self._frame,
-            textvariable=self._error_variable,
-            foreground="red"
-        )
+        self._error_variable = "Functions for station options are not ready yet. Click buttons."
+        self._initialize_error_msg()
 
-        self._error_label.grid(column=0, row=2, padx=5, pady=5)
+        self.row = 2
 
-        station_name = "none"
+        self._initialize_stations()
 
-        for s in station_service.get_name(self.station_id):
-            station_name = s.name
-
-        selection_label = ttk.Label(master=self._frame, text=f"Selected station is {self.station_id}, name: {station_name}",
-                                    font=('Arial', 12, 'normal'))
-        selection_label.grid(column=0, row=3, padx=5,
-                             pady=5, sticky=constants.W)
-
-        temperature = "SELECTED"
-        if self.station_temp == 0:
-            temperature = "NOT SELECTED"
-
-        wind = "SELECTED"
-        if self.station_wind == 0:
-            wind = "NOT SELECTED"
-
-        temp_label = ttk.Label(master=self._frame, text=f"Temperature {temperature}",
-                                    font=('Arial', 12, 'normal'))
-        temp_label.grid(column=0, row=4, padx=5,
-                             pady=5, sticky=constants.W)
-
-        wind_label = ttk.Label(master=self._frame, text=f"Wind {temperature}",
-                                    font=('Arial', 12, 'normal'))
-        wind_label.grid(column=0, row=5, padx=5,
-                             pady=5, sticky=constants.W)
-
-
-        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
         select_button1 = ttk.Button(
             master=self._frame,
             text="Save and view",
-            command=self._handle_button_click
+            command=self._handle_save_click
         )
 
-        select_button1.grid(column=0, row=6, padx=5, pady=5,
+        select_button1.grid(column=1, row=self.row+1, padx=10, pady=2,
                            rowspan=1, sticky=constants.EW)
 
+        select_button1 = ttk.Button(
+            master=self._frame,
+            text="Select stations",
+            command=self._handle_back_click
+        )
 
-        self._frame.grid_columnconfigure(0, weight=1, minsize=400)
+        select_button1.grid(column=1, row=self.row+2, padx=10, pady=2,
+                           rowspan=1, sticky=constants.EW)
+
+# Note to testers
+        note_label = ttk.Label(
+            master=self._frame,
+            text="Wait! Loading observation data takes a while.",
+            foreground="red"
+        )
+        note_label.grid(column=0, row=self.row+3, columnspan=2)
+
+
+        self._frame.grid_columnconfigure(0, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(1, weight=1, minsize=100)
 
 
 print("STATION VIEW\n")
