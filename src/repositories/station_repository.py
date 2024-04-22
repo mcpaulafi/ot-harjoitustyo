@@ -9,7 +9,7 @@ def get_station_by_row(row):
                    name=row["name"], nickname=row["nickname"], lat=row["lat"],
                    lon=row["lon"], source=row["source"]) if row else None
 
-def get_selected_by_row(row):
+def get_selected_obs_by_row(row):
     return (row["station_id"], row["temperature"], row["wind"])
 
 
@@ -54,6 +54,21 @@ class StationRepository:
 
         return list(map(get_station_by_row, rows))
 
+
+    def count_selected_stations(self):
+        """ Counts how many selected stations are in the database.
+        Returns: 
+            Amount of stations
+        """
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("SELECT count(*) from selected_stations")
+
+        row = cursor.fetchone()
+
+        return row[0]
+
     def delete_selected_stations_from_database(self):
         """ Removes content from the selected_stations table."""
 
@@ -69,31 +84,58 @@ class StationRepository:
         station_id: id of the selected station
         connection: Connection-object for the database"""
 
+        cursor1 = self._connection.cursor()
+
+        # Check if station is already saved
+        try:
+            cursor1.execute("SELECT station_id from selected_stations where station_id=?", (str(station_id),))
+            row1 = cursor1.fetchone()
+            self._connection.commit()
+            if row1[0] == station_id:
+                return
+        except TypeError:
+            pass
         cursor = self._connection.cursor()
         date = datetime.now()
         date_str = date.strftime('%d.%m.%Y %H:%M:%S')
-
         cursor.execute(
             '''insert into selected_stations (station_id, temperature, wind, datetime) 
                 values (?, ?, ?, ?)''',
                 (str(station_id), 1, 1, str(date_str))
             )
-
         self._connection.commit()
 
 
     def find_selected(self):
         """ Returns selected station from the database.
         Returns:
+            list of Stations objects."""
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("SELECT s1.station_id, s1.original_id, s1.name,\
+                       s1.nickname, s1.lat, s1.lon, s1.source \
+                       from selected_stations as s2, stations as s1 \
+                       where s1.station_id=s2.station_id")
+
+        row = cursor.fetchall()
+
+        return list(map(get_station_by_row, row))
+
+    def find_selected_obs(self, station_id):
+        """ Returns observation settings for a station from the database.
+        Returns:
             station_id, temperature and wind values in a tuple."""
 
         cursor = self._connection.cursor()
 
-        cursor.execute("SELECT station_id, temperature, wind from selected_stations")
+        cursor.execute("SELECT station_id, temperature, wind \
+                       from selected_stations \
+                       where station_id=?", (str(station_id),))
 
         row = cursor.fetchall()
 
-        return list(map(get_selected_by_row, row))
+        return list(map(get_selected_obs_by_row, row))
 
 
     def find_station(self, station_id):
