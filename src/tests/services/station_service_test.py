@@ -5,7 +5,8 @@ from database_connection import get_database_connection
 
 def get_station_by_row(row):
     return Station(station_id=row["station_id"], original_id=row["original_id"], name=row["name"],
-                   nickname=row["nickname"], lat=row["lat"], lon=row["lon"], source=row["source"]) if row else None
+                   nickname=row["nickname"], lat=row["lat"], lon=row["lon"], 
+                   source=row["source"]) if row else None
 
 
 class FakeStationRepository:
