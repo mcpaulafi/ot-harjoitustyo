@@ -46,6 +46,12 @@ poetry run invoke start
 poetry run invoke test
 ```
 
+### Run Pylint
+
+```bash
+poetry run invoke lint
+```
+
 ### Generate the test coverage report 
 
 

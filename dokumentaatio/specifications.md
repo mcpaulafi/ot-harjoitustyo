@@ -11,12 +11,12 @@ Application has only one user role.
 ## User interface
 
 - User can choose weather stations which data is retrieved and shown (TEHTY)
-- Stations data side by side
+- Data of selected stations in a loop (TEHTY) OR side by side
 - User can choose which layout to use
 
 ## Main functionalities
 
-### Select stations view (TEHTY: 1 station)
+### Select stations view (TEHTY)
 
 User selects 1-5 weather stations from a list of available stations. 
 
@@ -24,15 +24,15 @@ User selects 1-5 weather stations from a list of available stations.
 
 User defines what measurement data (temperature, wind) is retrieved from the selected stations. User can rename selected stations. User can select layout for weather view. 
 
-Settings are saved to the database. Settings can be changed anytime. (TEHTY)
+Settings are saved to the database. Settings can be changed anytime. 
 
-### Weather view (TEHTY: 1 station)
+### Weather view (TEHTY)
 
 Selected information is displayed on the view.
 
 ### Data updates 
 
-Latest measurement data is retrieved every hour and saved on the database.
+Latest measurement data is retrieved every hour and saved on the database. 
 
 ### Database (TEHTY)
 
@@ -48,6 +48,7 @@ Stations are uploaded to the database from a csv-file.
 ## Known bugs
 - Not much error handling yet
 - Listbox mixes some station ID:s
+- Some CSV station names have errors
 
 ## Development ideas / todos
 - Split database table Observations per measurement

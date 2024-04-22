@@ -14,5 +14,8 @@
 | 8.4.  | 4    | Tests for stations in database, config, Weather View |
 | 12.4  | 0,5  | Station view error |
 | 14.4. | 2    | Save selected station to the database, station_view for next step |
-| 15.4. | 8    | Find a station, documentation, Observations class, repo and service, Weather view |
-| Total   | 40   |   | 
+| 15.4. | 8    | Find a station, documentation, Observations class, repo. and service, Weather view |
+| 20.4  | 0,5  | Planning |
+| 21.4  | 5,5  | Learning tkinter on youtube, working on multiselect of weather stations|
+| 22.4. | 5    | Enabling multiple selected stations, loop for their observations, grid setup (51) |
+| Total| 51    |     |

@@ -14,10 +14,18 @@
 
 ## Week 4
 
-- User can select one station from station view
+- User can select one station from station list view
 - Application architecture file created and documentation started
 - In UI, changed station_view.py to stationlist_view.py and created new station_view.py
 - In UI, station_view.py shows selected station (there will be options for selecting measurement data)
 - Selected station is saved on the database and all previous data is removed from there
 - Name of the selected station is retrieved from database and returned as object
 - Observations class created and retrieving data from FMI
+
+# Week 5 
+- User can select up to 5 stations from station list view
+- Fixed grid settings
+- All previous functions updated to support multiple selections
+- Plans for the layout of settings and its operation not ready
+- Weather data of the selected stations is looped on the Weather view
+- Observation service test added
