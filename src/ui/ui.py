@@ -43,7 +43,8 @@ class UI:
         self._hide_current_view()
 
         self._current_view = StationView(
-        self._root, self._show_weather_view, self._show_stationlist_view
+        self._root, self._show_weather_view, 
+        self._show_stationlist_view
         )
 
         self._current_view.pack()
