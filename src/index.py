@@ -4,7 +4,7 @@ from ui.ui import UI
 
 def main():
     window = Tk()
-    window.geometry("640x480")
+    window.wm_geometry("640x480")
     window.title("My Weather Window")
 
     ui_view = UI(window)
