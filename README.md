@@ -15,7 +15,7 @@ This application is made as a course work in the Software engineering course (Ai
 
 ## Releases
 
-- [Viikko5](/releases/tag/viikko5) 22.4.2024
+- [Viikko5](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko5) 22.4.2024
 
 ## Installation
 
