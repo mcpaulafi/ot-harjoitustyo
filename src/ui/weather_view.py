@@ -129,7 +129,7 @@ class WeatherView:
 
         select_button = ttk.Button(
             master=self._frame,
-            text="Select station",
+            text="Select stations",
             command=self._show_stationlist_view
         )
 

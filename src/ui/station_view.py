@@ -34,8 +34,6 @@ class StationView:
         self.selected_label = ttk.Label(master=self._frame)
         self.nick_label = ttk.Label(master=self._frame)
         self.nick_entry = ttk.Entry(master=self._frame)
-        self.temperature_cb = ttk.Checkbutton(master=self._frame)
-        self.wind_cb = ttk.Checkbutton(master=self._frame)
         self.stations = station_service.get_stations()
 
         self._initialize()
@@ -63,13 +61,13 @@ class StationView:
         for s in station_service.get_selected():
 
             self.selected_label = ttk.Label(master=self._frame, text=s.name,
-                                            font=('Arial', 10, 'bold'))
+                                            font=('Arial', 12, 'bold'))
             self.selected_label.grid(column=0, row=self.row, columnspan=2,
                                       padx=10, pady=2, sticky=constants.NW)
             self.row +=1
 
             self.nick_label = ttk.Label(master=self._frame, text="Nickname",
-                                            font=('Arial', 10, 'normal'))
+                                            font=('Arial', 12, 'normal'))
             self.nick_label.grid(column=0, row=self.row, columnspan=1,
                                       padx=10, pady=0, sticky=constants.NW)
 
@@ -77,21 +75,9 @@ class StationView:
             name_var.set("")
 
             self.nick_entry = ttk.Entry(master=self._frame, textvariable=name_var,
-                                            font=('Arial', 10, 'normal'))
+                                            font=('Arial', 12, 'normal'))
             self.nick_entry.grid(column=1, row=self.row, columnspan=1,
                                       padx=10, pady=0, sticky=constants.NW)
-
-            self.row +=1
-
-            self.temperature_cb = ttk.Checkbutton(master=self._frame, text = "Temperature",
-                      variable = 1, onvalue = 1, offvalue = 0)
-
-            self.temperature_cb.grid(column=0, row=self.row, padx=10, pady=0, sticky=constants.NW)
-
-            self.wind_cb = ttk.Checkbutton(master=self._frame, text = "Wind",
-                      variable = 1, onvalue = 1, offvalue = 0)
-
-            self.wind_cb.grid(column=1, row=self.row, padx=10, pady=0, sticky=constants.NW)
 
             self.row+=1
 
@@ -131,20 +117,11 @@ class StationView:
 
         select_button1 = ttk.Button(
             master=self._frame,
-            text="Save and view",
+            text="Save and view>",
             command=self._handle_save_click
         )
 
-        select_button1.grid(column=1, row=self.row+1, padx=10, pady=2,
-                           rowspan=1, sticky=constants.EW)
-
-        select_button1 = ttk.Button(
-            master=self._frame,
-            text="Select stations",
-            command=self._handle_back_click
-        )
-
-        select_button1.grid(column=1, row=self.row+2, padx=10, pady=2,
+        select_button1.grid(column=1, row=self.row+1, padx=10, pady=20,
                            rowspan=1, sticky=constants.EW)
 
 # Note to testers
@@ -153,7 +130,17 @@ class StationView:
             text="Wait! Loading observation data takes a while.",
             foreground="red"
         )
-        note_label.grid(column=0, row=self.row+3, columnspan=2)
+        note_label.grid(column=1, row=self.row+2, columnspan=2)
+
+
+        select_button1 = ttk.Button(
+            master=self._frame,
+            text="<Select stations",
+            command=self._handle_back_click
+        )
+
+        select_button1.grid(column=0, row=self.row+1, padx=10, pady=20,
+                           rowspan=1, sticky=constants.EW)
 
 
         self._frame.grid_columnconfigure(0, weight=1, minsize=100)

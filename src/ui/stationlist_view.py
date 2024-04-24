@@ -20,7 +20,7 @@ class StationListView:
         self._frame = None
         self._list_label = None
         self._button_select = None
-        self._error_variable = " "
+        self._error_variable = " Place holder for error messages "
         self.stations = station_service.get_stations()
         self._error_label = ttk.Label(master=self._frame)
         self.selected_label = ttk.Label(master=self._frame)
@@ -45,7 +45,7 @@ class StationListView:
         self._error_label.destroy()
         self._error_label = ttk.Label(
             master=self._frame,
-            textvariable=self._error_variable,
+            text=self._error_variable,
             foreground="red"
         )
         self._error_label.grid(column=0, row=1, columnspan=3)
@@ -71,14 +71,14 @@ class StationListView:
         self._vertscroll = Scrollbar(master=self._frame)
         self._vertscroll.config(command=self._list_label.yview)
         self._list_label.config(yscrollcommand=self._vertscroll.set)
-        self._vertscroll.grid(column=1, row=3, columnspan=1, rowspan=2,
+        self._vertscroll.grid(column=1, row=3, columnspan=2, rowspan=2,
                         sticky=constants.NS)
 
 
     def _initialize_selected(self):
         self.selected_label.destroy()
         list_of_selected = self._get_selected_list()
-        self.selected_label = ttk.Label(master=self._frame, text=list_of_selected, 
+        self.selected_label = ttk.Label(master=self._frame, text=list_of_selected,
                                         font=('Arial', 12, 'normal'))
         self.selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
                                  padx=10, pady=10, sticky=constants.NW)
@@ -95,11 +95,11 @@ class StationListView:
         self.continue_button.destroy()
         self.continue_button = ttk.Button(
             master=self._frame,
-            text="Continue",
+            text="Continue >",
             command=self._handle_continue_click
             )
-        self.continue_button.grid(column=3, row=5,
-                                  padx=10, pady=10, sticky=constants.N)
+        self.continue_button.grid(column=4, row=5,
+                                  padx=10, pady=20, sticky=constants.N)
 
         if station_service.count_selected()<1:
             self.continue_button.config(state="disabled")
@@ -121,9 +121,9 @@ class StationListView:
         selected_values = []
 
         for i in self._list_label.curselection():
-            for i in self._list_label.curselection():
-                selected_values.append(i)
-
+            if i == 0:
+                return
+            selected_values.append(i)
         station_service.save_selected(selected_values[0])
 
         self._initialize_selected()
@@ -184,13 +184,13 @@ class StationListView:
         self._initialize_error_msg()
 
         # Title of left field
-        self.note1_label = ttk.Label(master=self._frame, text="Select 1 station",
+        self.note1_label = ttk.Label(master=self._frame, text="Select 1 station at the time",
                                font=('Arial', 12, 'bold'))
         self.note1_label.grid(column=0, row=2, columnspan=2,
                              padx=10, pady=10, sticky=constants.W)
 
         # Title of right field
-        self.note2_label = ttk.Label(master=self._frame, text="Selected stations",
+        self.note2_label = ttk.Label(master=self._frame, text="Selected stations (max 5)                    ",
                                font=('Arial', 12, 'bold'))
         self.note2_label.grid(column=3, row=2, columnspan=2,
                              padx=10, pady=10, sticky=constants.W)
@@ -201,7 +201,7 @@ class StationListView:
         # Button select
         self.select_button = ttk.Button(
             master=self._frame,
-            text="Add to selected >",
+            text="Add to >",
             state="normal",
             command=self._handle_select_click
         )

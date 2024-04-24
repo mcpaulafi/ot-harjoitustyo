@@ -19,8 +19,6 @@ class UI:
     def start(self):
         """Starts the UI."""
         self._show_stationlist_view()
-# TODO remove after ready
-#        self._show_weather_view()
 
     def _hide_current_view(self):
         if self._current_view:
