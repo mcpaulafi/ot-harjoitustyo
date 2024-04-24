@@ -51,7 +51,6 @@ def create_tables(connection):
         station_id integer NOT NULL,
         original_id text,
         name text,
-        nickname text,
         lat text,
         lon text,
         source text,
@@ -61,6 +60,7 @@ def create_tables(connection):
     cursor.execute("""
         create table selected_stations (
         station_id integer NOT NULL,
+        nickname text,
         temperature integer DEFAULT 0 NOT NULL,
         wind text integer DEFAULT 0 NOT NULL,
         datetime text,

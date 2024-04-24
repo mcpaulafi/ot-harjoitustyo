@@ -1,8 +1,9 @@
 from tkinter import ttk, constants, StringVar
 from services.station_service import station_service
 from services.observation_service import observation_service
+import re
 
-# rename this to settings
+# rename this to settings?
 class StationView:
     """Settings view."""
 
@@ -24,16 +25,16 @@ class StationView:
         self._button_select = None
         self._error_variable = None
         self._error_label = None
-        self._label_selection = "none"
-#        self.station_id = station_service.get_selected()[0][0]
+
         self.station_id = None
         self.station_temp = None
         self.station_wind = None
         self.row = 0
         self._error_label = ttk.Label(master=self._frame)
         self.selected_label = ttk.Label(master=self._frame)
-        self.nick_label = ttk.Label(master=self._frame)
-        self.nick_entry = ttk.Entry(master=self._frame)
+        self.nick_label = None
+        self.nick_entry = None
+        self.nick_entry_list = {}
         self.stations = station_service.get_stations()
 
         self._initialize()
@@ -51,10 +52,10 @@ class StationView:
         self._error_label.destroy()
         self._error_label = ttk.Label(
             master=self._frame,
-            textvariable=self._error_variable,
+            text=self._error_variable,
             foreground="red"
         )
-        self._error_label.grid(column=0, row=1, padx=10, pady=10, columnspan=2)
+        self._error_label.grid(column=0, row=1, padx=10, pady=5, columnspan=2)
 
     def _initialize_stations(self):
 
@@ -71,22 +72,43 @@ class StationView:
             self.nick_label.grid(column=0, row=self.row, columnspan=1,
                                       padx=10, pady=0, sticky=constants.NW)
 
-            name_var= StringVar()
-            name_var.set("")
+            nick = StringVar()
+            nick = station_service.get_nickname(s.station_id).nickname
 
-            self.nick_entry = ttk.Entry(master=self._frame, textvariable=name_var,
+            self.nick_entry = ttk.Entry(master=self._frame,
                                             font=('Arial', 12, 'normal'))
+            if nick is not None:
+                self.nick_entry.insert(0, nick)
             self.nick_entry.grid(column=1, row=self.row, columnspan=1,
                                       padx=10, pady=0, sticky=constants.NW)
+
+            self.nick_entry_list[s.station_id] = self.nick_entry
 
             self.row+=1
 
 
     def _handle_save_click(self):
         """"Changes the view."""
-        #Fix later
-        self._error_variable = "Loading weather information..."
-        self._initialize_error_msg()
+        for key, nick in self.nick_entry_list.items():
+            #print("station", key, "nickname", nick.get(),len(nick.get()))
+            nick_input = nick.get()
+            error = 0
+            if len(nick_input) == 0:
+                station_service.save_selected_nickname(key, nick_input)
+                continue
+            elif re.match(r"^[åäöa-zÅÄÖA-Z0-9\s]+$", nick_input) and len(nick_input)<21:
+#                    print("Entry is valid!")
+                station_service.save_selected_nickname(key, nick_input)
+            else:
+                error = 1
+                self._error_variable = "Too long nickname or has unallowed characters."
+
+            if error>0:
+                self._initialize_error_msg()
+                return
+
+            self._error_variable = "Wait! Loading weather information..."
+            self._initialize_error_msg()
 
         for s1 in station_service.get_selected():
             observation_service.update_observation(s1.station_id)
@@ -108,10 +130,15 @@ class StationView:
         station_label.grid(column=0, row=0, columnspan=2,
                            padx=10, pady=5, sticky=constants.W)
 
-        self._error_variable = "Functions for station options are not ready yet. Click buttons."
+        self._error_variable = ""
         self._initialize_error_msg()
 
-        self.row = 2
+        note_label = ttk.Label(master=self._frame, text="You can rename stations. Nickname can contain max 20 characters.",
+                                  font=('Arial', 12, 'normal'))
+        note_label.grid(column=0, row=2, columnspan=2,
+                           padx=5, pady=10, sticky=constants.W)
+
+        self.row = 3
 
         self._initialize_stations()
 
@@ -123,15 +150,6 @@ class StationView:
 
         select_button1.grid(column=1, row=self.row+1, padx=10, pady=20,
                            rowspan=1, sticky=constants.EW)
-
-# Note to testers
-        note_label = ttk.Label(
-            master=self._frame,
-            text="Wait! Loading observation data takes a while.",
-            foreground="red"
-        )
-        note_label.grid(column=1, row=self.row+2, columnspan=2)
-
 
         select_button1 = ttk.Button(
             master=self._frame,

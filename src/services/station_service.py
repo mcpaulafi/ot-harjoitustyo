@@ -28,6 +28,12 @@ class StationService:
     def save_selected(self, station_id):
         self._station_repository.save_selected_station_to_database(station_id)
 
+    def save_selected_nickname(self, station_id, nickname):
+        self._station_repository.save_nickname_to_database(station_id, nickname)
+
+    def get_nickname(self, station_id):
+        return self._station_repository.find_nickname(station_id)
+
     def delete_selected(self):
         # TODO remove obs
         self._station_repository.delete_selected_stations_from_database()

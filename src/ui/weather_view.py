@@ -45,8 +45,13 @@ class WeatherView:
 
     def _initialize_name(self):
         self.station_name_label.destroy()
+        nick_var = station_service.get_nickname(self.station_id).get_nickname()
+        name_var = station_service.get_name(self.station_id)[0].name
+        if len(nick_var)>0:
+            name_var = nick_var
+
         self.station_name_label = ttk.Label(master=self._frame,
-                            text=station_service.get_name(self.station_id)[0].name,
+                            text=name_var,
                             font=('Arial', 24, 'bold'))
         self.station_name_label.grid(column=0, row=2, padx=10, pady=20, sticky=constants.W)
 
@@ -89,9 +94,9 @@ class WeatherView:
         
         # Find unviewed (False) station
         counter = 0
-        for k, v in self.station_loop.items():
-            if v is False:
-                self.station_id = k
+        for key_id, status in self.station_loop.items():
+            if status is False:
+                self.station_id = key_id
                 break
             else:
                 counter +=1

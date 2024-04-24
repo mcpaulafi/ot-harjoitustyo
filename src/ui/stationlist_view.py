@@ -74,6 +74,21 @@ class StationListView:
         self._vertscroll.grid(column=1, row=3, columnspan=2, rowspan=2,
                         sticky=constants.NS)
 
+    def _check_selected_count(self):
+        if station_service.count_selected()>5:
+            self._error_variable = "At maximum 5 stations can be selected."
+            self._initialize_error_msg()
+            self.select_button.config(state="disabled")
+            self.continue_button.config(state="disabled")
+            return False
+        elif station_service.count_selected()<1:
+            self._error_variable = "Select at least 1."
+            self._initialize_error_msg()
+            self.continue_button.config(state="disabled")
+            return False
+        else:
+            self.select_button.config(state="normal")
+            return True
 
     def _initialize_selected(self):
         self.selected_label.destroy()
@@ -83,12 +98,7 @@ class StationListView:
         self.selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
                                  padx=10, pady=10, sticky=constants.NW)
 
-        if station_service.count_selected()>5:
-            self._error_variable = "At maximum 5 stations can be selected."
-            self._initialize_error_msg()
-            self.select_button.config(state="disabled")
-        else:
-            self.select_button.config(state="normal")
+        self._check_selected_count()
 
     def _initialize_continue_to_settings(self):
         """"Field for continue button."""
@@ -100,11 +110,7 @@ class StationListView:
             )
         self.continue_button.grid(column=4, row=5,
                                   padx=10, pady=20, sticky=constants.N)
-
-        if station_service.count_selected()<1:
-            self.continue_button.config(state="disabled")
-        else:
-            self.continue_button.config(state="normal")
+        self._check_selected_count()
 
 
     # Handle button clicks
@@ -132,7 +138,6 @@ class StationListView:
     def _handle_clear_click(self):
 
         station_service.delete_selected()
-        self._error_variable = None
         self._initialize_error_msg()
         self.select_button.config(state="normal")
         self._initialize_selected()
@@ -144,9 +149,10 @@ class StationListView:
             Saves selected station to the database.
             Switches view to station settings.
         """
-
-        self._handle_show_station_view()
-
+        if self._check_selected_count():
+            self._handle_show_station_view()
+        else:
+            return
 
     # Get stations from database and return as lists
 
@@ -172,8 +178,9 @@ class StationListView:
 
     def _initialize(self):
         """Initializes the frame view"""
-
         self._frame = ttk.Frame(master=self._root)
+        style = ttk.Style(self._frame)
+        style.theme_use("clam")
 
         # Title of the window
         self.station_label = ttk.Label(master=self._frame, text="Select station",
