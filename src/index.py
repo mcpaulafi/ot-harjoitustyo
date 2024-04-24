@@ -6,6 +6,7 @@ def main():
     window = Tk()
     window.wm_geometry("640x480")
     window.title("My Weather Window")
+    window.configure(background="LightBlue1")
 
     ui_view = UI(window)
     ui_view.start()
