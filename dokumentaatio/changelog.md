@@ -29,3 +29,10 @@
 - Plans for the layout of settings and its operation not ready
 - Weather data of the selected stations is looped on the Weather view
 - Observation service test added
+
+# Week 6
+- Removed the plan to give user choice to select which observations are included, not enough time in this course to make it work
+- Fixed station names on CSV show they match the search
+- Added error handling if station is not found from FMI
+- Stationlist view: handling of the first 0 row, layout fixing
+- Station view: User can save nicknames to selected stations, additions to service, repository, db, weather_view

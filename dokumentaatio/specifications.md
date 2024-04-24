@@ -22,7 +22,9 @@ User selects 1-5 weather stations from a list of available stations.
 
 ### Station settings view
 
-User defines what measurement data (temperature, wind) is retrieved from the selected stations. User can rename selected stations. User can select layout for weather view. 
+User can rename selected stations. (TEHTY)
+
+User can select layout for weather view. 
 
 Settings are saved to the database. Settings can be changed anytime. 
 
@@ -32,7 +34,7 @@ Selected information is displayed on the view.
 
 ### Data updates 
 
-Latest measurement data is retrieved every hour and saved on the database. 
+Latest measurement data is retrieved every hour (or 15min?) and saved on the database. 
 
 ### Database (TEHTY)
 
@@ -51,6 +53,7 @@ Stations are uploaded to the database from a csv-file.
 - Some CSV station names have errors
 
 ## Development ideas / todos
+- User defines what measurement data (temperature, wind) is retrieved from the selected stations. (Not enough time to finnish in the course schedule)
 - Split database table Observations per measurement
 - More measurement data eg. rain
 - Adding a Ruuvi tag from a private database as one option for a weather station

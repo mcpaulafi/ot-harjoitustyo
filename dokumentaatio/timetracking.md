@@ -18,4 +18,5 @@
 | 20.4  | 0,5  | Planning |
 | 21.4  | 5,5  | Learning tkinter on youtube, working on multiselect of weather stations|
 | 22.4. | 5    | Enabling multiple selected stations, loop for their observations, grid setup (51) |
-| Total| 51    |     |
+| 24.4. | 8    | Nickname functions (59)|
+| Total| 59    |     |
