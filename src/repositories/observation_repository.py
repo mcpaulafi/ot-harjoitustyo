@@ -9,7 +9,7 @@ from database_connection import get_database_connection
 def get_observation_by_row(row):
     return Observation(station_id=row["station_id"], temperature=row["temperature"],
                    wind=row["wind"], wind_direction=row["wind_direction"],
-                   datetime=row["datetime"]) if row else None
+                   datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
 
 class ObservationRepository:
     """Class for Observation  oPperations.
@@ -66,24 +66,36 @@ class ObservationRepository:
         # print(sorted(obs2.data.keys()))
 
         # The times are as a list of datetime objects, printing latest obs
-        utc_datetime = str(obs2.data[station_name]['times'][-1])
+        # KeyError: Station name is not found
+        get_error = 0
 
-        utc_format = "%Y-%m-%d %H:%M:%S"
-        local_tz = pytz.timezone('Europe/Helsinki')
+        try:
+            utc_datetime = str(obs2.data[station_name]['times'][-1])
+            utc_format = "%Y-%m-%d %H:%M:%S"
+            local_tz = pytz.timezone('Europe/Helsinki')
 
-        utc_dt = dt.datetime.strptime(utc_datetime, utc_format)
-        local_dt = str(utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz))[:-6]
+            utc_dt = dt.datetime.strptime(utc_datetime, utc_format)
+            local_dt = str(utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz))[:-6]
+            #print("UTC", utc_datetime, "Local", local_dt)
+        except KeyError:
+            print("Following station not found. No data retrieved.")
+            utc_datetime = None
+            local_dt = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            get_error = 1
 
-        #print("UTC", utc_datetime, "Local", local_dt)
+        if utc_datetime is not None:
+            temperature = obs2.data[station_name]['Air temperature']['values'][-1]
+            #print("Temperature:", temperature)
 
-        temperature = obs2.data[station_name]['Air temperature']['values'][-1]
-        #print("Temperature:", temperature)
+            wind = obs2.data[station_name]['Wind speed']['values'][-1]
+            wind_direction = obs2.data[station_name]['Wind direction']['values'][-1]
+            #print("Wind:", wind, "m/s direction:", wind_direction)
+        else:
+            temperature = None
+            wind = None
+            wind_direction = None
 
-        wind = obs2.data[station_name]['Wind speed']['values'][-1]
-        wind_direction = obs2.data[station_name]['Wind direction']['values'][-1]
-        #print("Wind:", wind, "m/s direction:", wind_direction)
-
-        return (temperature, wind, wind_direction, local_dt)
+        return (temperature, wind, wind_direction, local_dt, get_error)
 
     def save_observation(self, station_id):
         """ Saves observation to the database.
@@ -101,11 +113,16 @@ class ObservationRepository:
         wind = obs[1]
         wind_direction = obs[2]
         date_str = obs[3]
+        error_msg = obs[4]
+        if error_msg:
+            error_msg = 1
+        else:
+            error_msg = 0
 
         cursor.execute(
-            '''insert into observations (station_id, temperature, wind, wind_direction, datetime) 
-                    values (?, ?, ?, ?, ?)''',
-                    (str(station_id), temperature, wind, wind_direction, str(date_str))
+            '''insert into observations (station_id, temperature, wind, wind_direction, datetime, error_msg) 
+                    values (?, ?, ?, ?, ?, ?)''',
+                    (str(station_id), temperature, wind, wind_direction, str(date_str), error_msg)
                 )
 
         self._connection.commit()

@@ -130,6 +130,7 @@ class StationListView:
         self._initialize_continue_to_settings()
 
     def _handle_clear_click(self):
+
         station_service.delete_selected()
         self._error_variable = None
         self._initialize_error_msg()

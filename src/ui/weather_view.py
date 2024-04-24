@@ -24,6 +24,7 @@ class WeatherView:
         self.station_temp = 0
         self.station_wind = 0
         self.station_wind_direction = 0
+        self.station_error = 0
         self.station_name_label = ttk.Label(master=self._frame)
         self.station_temp_label = ttk.Label(master=self._frame)
         self.station_wind_label = ttk.Label(master=self._frame)
@@ -56,7 +57,8 @@ class WeatherView:
             self.station_wind = o.wind
             self.station_wind_direction = o.wind_direction
             self.station_date = o.datetime
-        
+            self.station_error = o.error_msg
+
         self.station_temp_label.destroy()
         self.station_temp_label = ttk.Label(master=self._frame, text=f"{self.station_temp}°C",
                                           font=('Arial', 42, 'bold'))
@@ -71,7 +73,12 @@ class WeatherView:
         self.station_wind_label.grid(column=0, row=4, padx=10, pady=10, sticky=constants.W)
 
         self.station_date_label.destroy()
-        self.station_date_label = ttk.Label(master=self._frame, text=f"Observations collected: {self.station_date}",
+        if self.station_error == 1:
+            date_label = f"Unable to retrieve data at: {self.station_date}"
+        else:
+            date_label = f"Observations collected: {self.station_date}"
+
+        self.station_date_label = ttk.Label(master=self._frame, text=date_label,
                                           font=('Arial', 12, 'bold'))
         self.station_date_label.grid(column=0, row=5, padx=10, pady=10, sticky=constants.W)
 

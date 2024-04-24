@@ -80,6 +80,7 @@ def create_tables(connection):
         temperature text,
         wind text,
         wind_direction text,
+        error_msg integer DEFAULT 0,
         PRIMARY KEY (observation_id)
     );
     """)

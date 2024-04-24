@@ -10,7 +10,7 @@ class Observation:
     """
 
     def __init__(self, station_id=None, temperature=None, wind=None, wind_direction=None,
-                 datetime=None):
+                 datetime=None, error_msg=None):
         """Class constructor, creates a new observation.
 
         Args:
@@ -22,3 +22,4 @@ class Observation:
         self.wind = wind
         self.wind_direction = wind_direction
         self.datetime = datetime
+        self.error_msg = error_msg
