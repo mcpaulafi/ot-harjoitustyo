@@ -70,13 +70,18 @@ class StationRepository:
         return row[0]
 
     def delete_selected_stations_from_database(self):
-        """ Removes content from the selected_stations table."""
+        """ Removes content from the selected_stations and observations table."""
 
-        cursor = self._connection.cursor()
+        cursor1 = self._connection.cursor()
 
-        cursor.execute("delete from selected_stations")
+        cursor1.execute("delete from selected_stations")
+
+        cursor2 = self._connection.cursor()
+
+        cursor2.execute("delete from observations")
 
         self._connection.commit()
+
 
     def save_selected_station_to_database(self, station_id):
         """ Saves selected station to the database.
