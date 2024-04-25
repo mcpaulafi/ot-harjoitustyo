@@ -34,6 +34,9 @@ class StationService:
     def get_nickname(self, station_id):
         return self._station_repository.find_nickname(station_id)
 
+    def get_error(self, station_id):
+        return self._station_repository.find_error(station_id)
+
     def delete_selected(self):
         # TODO remove obs
         self._station_repository.delete_selected_stations_from_database()
