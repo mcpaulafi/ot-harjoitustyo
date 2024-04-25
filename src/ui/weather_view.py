@@ -1,6 +1,7 @@
 from tkinter import ttk, constants
 from services.station_service import station_service
 from services.observation_service import observation_service
+from services.observation_scheduler import Scheduler
 
 class WeatherView:
     """Weather from the station view."""
@@ -17,6 +18,8 @@ class WeatherView:
         self._frame = None
         self._show_stationlist_view = show_stationlist_view
         self._show_station_view = show_station_view
+        self._scheduler = Scheduler()
+
         self._error_variable = None
         self.station_loop = {}
         for sl in station_service.get_selected():
@@ -32,8 +35,7 @@ class WeatherView:
         self.station_wind_label = ttk.Label(master=self._frame)
         self.station_date_label = ttk.Label(master=self._frame)
         self.station_date = ""
-
-#        self.stations = station_service.get_stations()
+        self.station_update = []
 
         self._initialize()
 
@@ -66,16 +68,16 @@ class WeatherView:
         self.station_name_label = ttk.Label(master=self._frame,
                             text=name_var,
                             font=('Arial', 24, 'bold'))
-        self.station_name_label.grid(column=0, row=2, padx=10, pady=20, sticky=constants.W)
+        self.station_name_label.grid(column=0, row=2, columnspan=2, padx=10, pady=20, sticky=constants.W)
 
     def _initialize_observations(self):
 
-        for o in observation_service.get_observation(self.station_id):
-            self.station_temp = o.temperature
-            self.station_wind = o.wind
-            self.station_wind_direction = o.wind_direction
-            self.station_date = o.datetime
-            self.station_error = o.error_msg
+        o = observation_service.get_observation(self.station_id)
+        self.station_temp = o.temperature
+        self.station_wind = o.wind
+        self.station_wind_direction = o.wind_direction
+        self.station_date = o.datetime
+        self.station_error = o.error_msg
 
         self.station_temp_label.destroy()
         temp_text = f"{self.station_temp}°C"
@@ -103,11 +105,14 @@ class WeatherView:
             self._error_variable = "No current observations from the station"
             date_label = f"Unable to retrieve data at: {self.station_date}"
         else:
-            date_label = f"Observations time: {self.station_date}"
+            date_label = f"Observation time: {self.station_date}"
 
         self.station_date_label = ttk.Label(master=self._frame, text=date_label,
                                           font=('Arial', 12, 'bold'))
         self.station_date_label.grid(column=0, row=5, padx=10, pady=10, sticky=constants.W)
+
+        # Trigger if new data needs to be retrieved
+        self._scheduler.scheduled_observation_update()
 
     def _update_view(self):
         # Set previous station as viewed True
