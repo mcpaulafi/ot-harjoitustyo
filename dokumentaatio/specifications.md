@@ -26,15 +26,15 @@ User can rename selected stations. (TEHTY)
 
 User can select layout for weather view. 
 
-Settings are saved to the database. Settings can be changed anytime. 
+Settings are saved to the database. Settings can be changed anytime. (TEHTY)
 
 ### Weather view (TEHTY)
 
 Selected information is displayed on the view.
 
-### Data updates 
+### Data updates (TEHTY)
 
-Latest measurement data is retrieved every hour (or 15min?) and saved on the database. 
+Latest measurement data is retrieved every 10-20 minutes and saved on the database.
 
 ### Database (TEHTY)
 
@@ -48,9 +48,9 @@ SQLite database contains 4 tables
 Stations are uploaded to the database from a csv-file. 
 
 ## Known bugs
-- Not much error handling yet
+- Not enough error handling yet
 - Listbox mixes some station ID:s
-- Some CSV station names have errors
+- Not all stations deliver data for temperature and/or wind
 
 ## Development ideas / todos
 - User defines what measurement data (temperature, wind) is retrieved from the selected stations. (Not enough time to finnish in the course schedule)

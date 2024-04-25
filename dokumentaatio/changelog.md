@@ -36,3 +36,6 @@
 - Added error handling if station is not found from FMI
 - Stationlist view: handling of the first 0 row, layout fixing
 - Station view: User can save nicknames to selected stations, additions to service, repository, db, weather_view
+- Weather view: Missing data handling, button back to Settings
+- Observations repository: fixed get to return one object
+- Added services/observations_scheduler.py which checks for new observation data in every 10-20 minutes

@@ -78,7 +78,6 @@ SQLite database tables are following
     class Stations {
         station_id
         name
-        nickname
         original_id
         lat
         lon
@@ -86,6 +85,7 @@ SQLite database tables are following
     }
     class Selected_stations {
         station_id
+        nickname
         temperature
         wind
         datetime
@@ -97,6 +97,7 @@ SQLite database tables are following
         temperature
         wind
         wind_direction
+        error_msg
     }
     class Settings {
         layout
@@ -174,6 +175,7 @@ sequenceDiagram
     participant StationRepository
     participant ObservationService
     participant ObservationRepository
+    participant Scheduler
 
     UI->>StationService: get_selected()
     StationService->>StationRepository: find_selected()
@@ -191,11 +193,23 @@ sequenceDiagram
     ObservationRepository-->>ObservationService: temperature, wind, wind_direction, datetime
     ObservationService-->>UI: temperature, wind, wind_direction, datetime
     UI->>UI: temperature, wind, wind_direction, datetime
-
+    UI->>Scheduler: scheduled_observation_update()
+    UI->>UI: switch station
 ```
 
 
 
 
-## Data update from FMI
-TBD!
+## Data update from FMI TBD
+```mermaid
+sequenceDiagram
+    participant Scheduler
+    participant ObservationService
+    participant ObservationRepository
+    
+    Scheduler->>ObservationService: init Selected stations
+    ObservationService->>ObservationRepository: get selected()
+    ObservationRepository-->>ObservationService: Stations
+    ObservationService-->>Scheduler: Stations
+
+```
