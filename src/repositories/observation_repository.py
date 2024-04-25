@@ -12,7 +12,7 @@ def get_observation_by_row(row):
                    datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
 
 class ObservationRepository:
-    """Class for Observation  oPperations.
+    """Class for Observation operations.
     """
 
     def __init__(self, connection):
@@ -120,7 +120,8 @@ class ObservationRepository:
             error_msg = 0
 
         cursor.execute(
-            '''insert into observations (station_id, temperature, wind, wind_direction, datetime, error_msg) 
+            '''insert into observations (station_id, temperature, \
+                wind, wind_direction, datetime, error_msg) 
                     values (?, ?, ?, ?, ?, ?)''',
                     (str(station_id), temperature, wind, wind_direction, str(date_str), error_msg)
                 )
@@ -140,9 +141,10 @@ class ObservationRepository:
         cursor.execute("select * from observations where station_id=? \
                        ORDER BY observation_id DESC LIMIT 1", (str(station_id),))
 
-        rows = cursor.fetchall()
+        row = cursor.fetchone()
+        self._connection.commit()
 
-        return list(map(get_observation_by_row, rows))
+        return get_observation_by_row(row)
 
     def delete_all(self):
         """Removes all observations from observations table.
