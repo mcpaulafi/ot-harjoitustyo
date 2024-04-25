@@ -20,7 +20,7 @@ class StationListView:
         self._frame = None
         self._list_label = None
         self._button_select = None
-        self._error_variable = " Place holder for error messages "
+        self._error_variable = None
         self.stations = station_service.get_stations()
         self._error_label = ttk.Label(master=self._frame)
         self.selected_label = ttk.Label(master=self._frame)
@@ -197,8 +197,9 @@ class StationListView:
                              padx=10, pady=10, sticky=constants.W)
 
         # Title of right field
-        self.note2_label = ttk.Label(master=self._frame, text="Selected stations (max 5)                    ",
-                               font=('Arial', 12, 'bold'))
+        self.note2_label = ttk.Label(master=self._frame, \
+                    text="Selected stations (max 5)                    ",\
+                    font=('Arial', 12, 'bold'))
         self.note2_label.grid(column=3, row=2, columnspan=2,
                              padx=10, pady=10, sticky=constants.W)
 
