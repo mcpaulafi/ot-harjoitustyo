@@ -9,10 +9,6 @@ def get_station_by_row(row):
                    name=row["name"], lat=row["lat"],
                    lon=row["lon"], source=row["source"]) if row else None
 
-def get_selected_obs_by_row(row):
-    return (row["station_id"], row["temperature"], row["wind"])
-
-
 class StationRepository:
     """Class for Weather Station list operations.
     """
@@ -96,7 +92,8 @@ class StationRepository:
 
         # Check if station is already saved
         try:
-            cursor1.execute("SELECT station_id from selected_stations where station_id=?", (str(station_id),))
+            cursor1.execute("SELECT station_id from selected_stations \
+                            where station_id=?", (str(station_id),))
             row1 = cursor1.fetchone()
             self._connection.commit()
             if row1[0] == station_id:
@@ -157,21 +154,6 @@ class StationRepository:
         row = cursor.fetchall()
 
         return list(map(get_station_by_row, row))
-
-    def find_selected_obs(self, station_id):
-        """ Returns observation settings for a station from the database.
-        Returns:
-            station_id, temperature and wind values in a tuple."""
-
-        cursor = self._connection.cursor()
-
-        cursor.execute("SELECT station_id, temperature, wind \
-                       from selected_stations \
-                       where station_id=?", (str(station_id),))
-
-        row = cursor.fetchall()
-
-        return list(map(get_selected_obs_by_row, row))
 
 
     def find_station(self, station_id):
