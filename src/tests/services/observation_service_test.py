@@ -10,6 +10,7 @@ def get_observation_by_row(row):
 
 # Copied 28.4.2024 from real
 
+
 class FakeObservationRepository:
     def __init__(self, connection=1):
         self._connection = connection
@@ -30,7 +31,7 @@ class FakeObservationRepository:
         return False
 
     def find_observation(self, station_id):
-        if station_id==1:
+        if station_id == 1:
             # Fake output from database
             test_row = []
             test_row1 = {}
@@ -49,21 +50,24 @@ class FakeObservationRepository:
 
 # Testing begins
 
+
 class TestObservationService(unittest.TestCase):
     def setUp(self):
-        #observation_service.delete_observations_from_database()
+        # observation_service.delete_observations_from_database()
         self._observation_repository = FakeObservationRepository()
         self.wind = 0
         self.station_id = 1
 
     def test_update_observation(self):
-        test_save = self._observation_repository.save_observation(self.station_id)
+        test_save = self._observation_repository.save_observation(
+            self.station_id)
         return self.assertEqual(test_save, True)
 
     def test_get_observation(self):
-        test_result = self._observation_repository.find_observation(self.station_id)
-        #Why ERROR here?
-        wind_result  = int(test_result.wind)
+        test_result = self._observation_repository.find_observation(
+            self.station_id)
+        # Why ERROR here?
+        wind_result = int(test_result.wind)
         return self.assertEqual(wind_result, 5)
 
     def test_delete_observations_from_database(self):
