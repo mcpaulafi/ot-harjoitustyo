@@ -4,7 +4,6 @@ from database_connection import get_database_connection
 
 
 def get_station_by_row(row):
-    # print("ROW", row["station_id"], row["name"])
     return Station(station_id=row["station_id"], original_id=row["original_id"],
                    name=row["name"], lat=row["lat"],
                    lon=row["lon"], source=row["source"]) if row else None
@@ -41,7 +40,6 @@ class StationRepository:
         Returns:
             Station objects.
         """
-
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT s1.station_id, \
@@ -80,7 +78,7 @@ class StationRepository:
         cursor2.execute("delete from observations")
 
         self._connection.commit()
-
+        return True
 
     def save_selected_station_to_database(self, station_id):
         """ Saves selected station to the database.
@@ -97,7 +95,7 @@ class StationRepository:
             row1 = cursor1.fetchone()
             self._connection.commit()
             if row1[0] == station_id:
-                return
+                return True
         except TypeError:
             pass
         cursor = self._connection.cursor()
@@ -106,9 +104,10 @@ class StationRepository:
         cursor.execute(
             '''insert into selected_stations (station_id, temperature, wind, datetime) 
                 values (?, ?, ?, ?)''',
-                (str(station_id), 1, 1, str(date_str))
-            )
+            (str(station_id), 1, 1, str(date_str))
+        )
         self._connection.commit()
+        return True
 
     def save_nickname_to_database(self, station_id, nickname):
         """ Saves selected nickname of the selected station to the database.
@@ -126,7 +125,7 @@ class StationRepository:
             row1 = cursor1.fetchone()
             self._connection.commit()
             if row1[0] != station_id:
-                return
+                return True
         except TypeError:
             return
 
@@ -135,9 +134,10 @@ class StationRepository:
         cursor.execute(
             '''UPDATE selected_stations SET nickname=?
                 WHERE station_id=?''',
-                (str(nickname), str(station_id))
-            )
+            (str(nickname), str(station_id))
+        )
         self._connection.commit()
+        return True
 
     def find_selected(self):
         """ Returns selected station from the database.
@@ -154,7 +154,6 @@ class StationRepository:
         row = cursor.fetchall()
 
         return list(map(get_station_by_row, row))
-
 
     def find_station(self, station_id):
         """ Returns the object of the station.
@@ -196,6 +195,33 @@ class StationRepository:
 
         station = list(map(get_station_by_row, row1))[0]
         station.set_nickname(nick)
+        return station
+
+    def find_error(self, station_id):
+        """ Returns the errorstate of the station.
+        Args:
+        station_id: id of the station"""
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("SELECT error_msg \
+                       from selected_stations \
+                       where station_id=?", (str(station_id),))
+
+        row = cursor.fetchone()
+
+        error_msg = row[0]
+
+        cursor1 = self._connection.cursor()
+
+        cursor1.execute("SELECT s1.station_id, s1.original_id, s1.name,\
+                       s1.lat, s1.lon, s1.source \
+                       from stations as s1 where s1.station_id=?", (str(station_id),))
+
+        row1 = cursor1.fetchall()
+
+        station = list(map(get_station_by_row, row1))[0]
+        station.set_error_msg(error_msg)
         return station
 
     def delete_all(self):
