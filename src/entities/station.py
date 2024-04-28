@@ -27,7 +27,11 @@ class Station:
         self.source = source
 
     def set_nickname(self, nickname):
+        """Method to set nickname.
+        Args: 
+        nickname"""
         self.nickname = nickname
 
     def get_nickname(self):
+        """Method to get nickname."""
         return self.nickname

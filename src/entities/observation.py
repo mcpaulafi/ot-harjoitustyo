@@ -7,6 +7,7 @@ class Observation:
         wind: String for wind m/s.
         wind_direction: String for wind direction in degrees.
         datetime: time of the observation
+        error_msg: 1 = Station not found. No data retrieved.
     """
 
     def __init__(self, station_id=None, temperature=None, wind=None, wind_direction=None,
