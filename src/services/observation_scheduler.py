@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from services.station_service import station_service
 from services.observation_service import observation_service
 
+
 class Scheduler:
     """Weather from the station view."""
 
@@ -28,23 +29,26 @@ class Scheduler:
             except AttributeError:
                 return
 
-            datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+            datetime_object = datetime.strptime(
+                datetime_str, '%Y-%m-%d %H:%M:%S')
 
-            now_minus = datetime.now() - timedelta(minutes = timevalue)
+            now_minus = datetime.now() - timedelta(minutes=timevalue)
 
-            if datetime_object<now_minus:
+            if datetime_object < now_minus:
                 # Get new data
                 observation_service.update_observation(station_id)
 
                 # Check new data arrived
-                o2_datetime_str = observation_service.get_observation(station_id).datetime
-                o2_datetime_object = datetime.strptime(o2_datetime_str, '%Y-%m-%d %H:%M:%S')
+                o2_datetime_str = observation_service.get_observation(
+                    station_id).datetime
+                o2_datetime_object = datetime.strptime(
+                    o2_datetime_str, '%Y-%m-%d %H:%M:%S')
 
                 # Slow down checking interval
                 if o2_datetime_object >= now_minus:
                     self.station_time[station_id] = self.interval_minutes
                     continue
-                if timevalue<self.interval_minutes*2:
+                if timevalue < self.interval_minutes*2:
                     self.station_time[station_id] += 2
                     continue
 
