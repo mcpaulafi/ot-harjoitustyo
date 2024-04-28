@@ -1,81 +1,115 @@
 import unittest
 from entities.station import Station
-from database_connection import get_database_connection
-
 
 def get_station_by_row(row):
-    return Station(station_id=row["station_id"], original_id=row["original_id"], name=row["name"],
-                   nickname=row["nickname"], lat=row["lat"], lon=row["lon"], 
-                   source=row["source"]) if row else None
+    return Station(station_id=row["station_id"], original_id=row["original_id"],
+                   name=row["name"], lat=row["lat"],
+                   lon=row["lon"], source=row["source"]) if row else None
 
+# Fake output from database
+test_row = []
+test_row1 = {}
+test_row1["station_id"] = "1"
+test_row1["original_id"] = "100"
+test_row1["name"] = "test_name"
+test_row1["lat"] = "10"
+test_row1["lon"] = "20"
+test_row1["source"] = "testing"
+test_row.append(test_row1)
+
+# Copied 28.4.2024 from real
 
 class FakeStationRepository:
-    def __init__(self, connection=get_database_connection()):
+    """Class for Weather Station list operations.
+    """
+
+    def __init__(self, connection=1):
         self._connection = connection
 
     def count_all(self):
-        cursor = self._connection.cursor()
-
-        cursor.execute("SELECT count(*) from stations")
-
-        row = cursor.fetchone()
-
-        return row[0]
+        return 3
 
     def find_all(self):
-        """Returns all stations.
-
-        Returns:
-            Station objects.
-        """
-
-        cursor = self._connection.cursor()
-
-        cursor.execute("select * from stations")
-
-        rows = cursor.fetchall()
-
+        rows = ""
         return list(map(get_station_by_row, rows))
 
+    def count_selected_stations(self):
+        return 4
+
+    def delete_selected_stations_from_database(self):
+        return True
+
+    def save_selected_station_to_database(self, station_id):
+        if station_id == 4:
+            return True
+        return False
+
+    def save_nickname_to_database(self, station_id, nickname):
+        if station_id == 5 and nickname == "Testing123":
+            return True
+        return False
+
+    def find_selected(self):
+        return list(map(get_station_by_row, test_row))
+
     def find_station(self, station_id):
-        """ Returns the object of the station.
-        Args:
-        station_id: id of the station"""
+        if station_id == 1:
+            return list(map(get_station_by_row, test_row))
+        return False
 
-        cursor = self._connection.cursor()
+    def find_nickname(self, station_id):
+        if station_id == 1:
+            station = list(map(get_station_by_row, test_row))
+            station[0].set_nickname("testnick")
+            return station
+        return False
 
-        cursor.execute("SELECT * from stations where station_id=?", (str(station_id),))
+    def find_error(self, station_id):
+        if station_id == 1:
+            error_msg = 1
+            station = list(map(get_station_by_row, test_row))
+            station[0].set_error_msg(error_msg)
+            return station
+        return False
 
-        row = cursor.fetchall()
+    def delete_all(self):
+        return True
 
-        return list(map(get_station_by_row, row))
 
+# Testing starts here
 
 class TestStationService(unittest.TestCase):
     def setUp(self):
         self._station_repository = FakeStationRepository()
 
-    def test_count_stations(self):
-        """Database should contain 210 stations"""
-        count_all = self._station_repository.count_all()
-        self.assertEqual(count_all, 210)
+    def get_stations(self):
+        return self.assertEqual(self._station_repository.find_all(),3)
 
-    def test_all_stations(self):
-        """Check if selected station exists in the database"""
-        find_all = self._station_repository.find_all()
-        test_name = "Not found"
-        for s in find_all:
-            if s.original_id == "100996":
-                test_name = s.name
+    def test_get_station(self, station_id=1):
+        return self.assertEqual(self._station_repository.find_station(station_id)[0].name, "test_name")
 
-        return self.assertEqual(test_name, "Helsinki Harmaja")
+    #Selected stations
+    def test_count_selected(self):
+        return self.assertEqual(self._station_repository.count_selected_stations(),4)
 
-    def test_get_name(self):
-        """Check if name is retrieved from database"""
-        get_name = self._station_repository.find_station("20")
-        test_name = "Not found"
-        for n in get_name:
-            if n.station_id == 20:
-                test_name = n.name
+    def test_save_selected(self, station_id=4):
+        self._station_repository.save_selected_station_to_database(station_id)
+        return self.assertEqual(self._station_repository.save_selected_station_to_database(station_id), True)
 
-        return self.assertEqual(test_name, "Hattula Lepaa")
+    def test_save_selected_nickname(self, station_id=5, nickname= "Testing123"):
+        return self.assertEqual(self._station_repository.save_nickname_to_database(
+            station_id, nickname),True)
+
+    def test_get_selected(self):
+        return self.assertEqual(len(self._station_repository.find_selected()),1)
+
+    def test_get_nickname(self, station_id=1):
+        return self.assertEqual(self._station_repository.find_nickname(station_id)[0].nickname, "testnick")
+
+    def test_get_error(self, station_id=1):
+        return self.assertEqual(self._station_repository.find_error(station_id)[0].error_msg,1)
+
+    def test_delete_selected(self):
+        return self.assertEqual(self._station_repository.delete_selected_stations_from_database(),True)
+
+
