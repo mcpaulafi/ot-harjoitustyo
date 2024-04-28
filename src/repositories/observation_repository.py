@@ -6,10 +6,12 @@ from services.station_service import station_service
 from entities.observation import Observation
 from database_connection import get_database_connection
 
+
 def get_observation_by_row(row):
     return Observation(station_id=row["station_id"], temperature=row["temperature"],
                        wind=row["wind"], wind_direction=row["wind_direction"],
                        datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
+
 
 class ObservationRepository:
     """Class for Observation operations.
@@ -31,6 +33,9 @@ class ObservationRepository:
         Returns:
             tuple (temperature, wind, wind_direction)
         """
+        if not station_service.get_station(station_id):
+            return False
+
         station_lat = 0
         station_lon = 0
         station_name = ""
@@ -102,6 +107,8 @@ class ObservationRepository:
             Args:
             station_id: id of the selected station
             connection: Connection-object for the database"""
+        if not station_service.get_station(station_id):
+            return False
 
         cursor = self._connection.cursor()
 #        date = dt.datetime.now()
@@ -128,6 +135,7 @@ class ObservationRepository:
         )
 
         self._connection.commit()
+        return True
 
     def find_observation(self, station_id):
         """Returns latest observations for a station.
@@ -135,6 +143,8 @@ class ObservationRepository:
             Returns:
                 Observation objects.
             """
+        if not station_service.get_station(station_id):
+            return False
 
         cursor = self._connection.cursor()
 
@@ -155,6 +165,7 @@ class ObservationRepository:
         cursor.execute("delete from observations")
 
         self._connection.commit()
+        return True
 
 
 observation_repository = ObservationRepository(get_database_connection())
