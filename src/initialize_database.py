@@ -16,6 +16,7 @@ def ensure_file_exists():
         return True
     return False
 
+
 def drop_tables(connection):
     """Remove databases.
 
@@ -39,6 +40,7 @@ def drop_tables(connection):
     """)
     connection.commit()
     return True
+
 
 def create_tables(connection):
     """Create tables on the database.
