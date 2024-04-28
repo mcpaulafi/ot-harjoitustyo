@@ -19,7 +19,7 @@ class ObservationService:
 
     def get_observation(self, station_id):
         """Returns Observation object.
-            
+
             Returns:
             Observation object.
         """
@@ -27,7 +27,7 @@ class ObservationService:
 
     def update_observation(self, station_id):
         """Updates latest observations to the database.
-            
+
             Returns:
             Observation object.
         """
@@ -35,6 +35,7 @@ class ObservationService:
 
     def delete_observations_from_database(self):
         self._observation_repository.delete_all()
+
 
 observation_service = ObservationService()
 
