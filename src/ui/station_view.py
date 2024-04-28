@@ -66,36 +66,36 @@ class StationView:
 
         for s in station_service.get_selected():
 
-            #Save station_id and row for error messages
+            # Save station_id and row for error messages
             self.station_row_list[s.station_id] = self.row
 
             self.selected_label = ttk.Label(master=self._frame, text=s.name,
                                             font=('Arial', 12, 'bold'))
             self.selected_label.grid(column=0, row=self.row, columnspan=2,
-                                      padx=10, pady=2, sticky=constants.NW)
-            self.row +=1
+                                     padx=10, pady=2, sticky=constants.NW)
+            self.row += 1
 
             self.nick_label = ttk.Label(master=self._frame, text="Nickname",
-                                            font=('Arial', 12, 'normal'))
+                                        font=('Arial', 12, 'normal'))
             self.nick_label.grid(column=0, row=self.row, columnspan=1,
-                                      padx=10, pady=0, sticky=constants.NW)
+                                 padx=10, pady=0, sticky=constants.NW)
 
             nick = StringVar()
-            #If Nickname is already saved
+            # If Nickname is already saved
             nick = station_service.get_nickname(s.station_id).nickname
 
             self.nick_entry = ttk.Entry(master=self._frame,
-                                            font=('Arial', 12, 'normal'))
+                                        font=('Arial', 12, 'normal'))
             # Insert saved nickname on the field
             if nick is not None:
                 self.nick_entry.insert(0, nick)
             self.nick_entry.grid(column=1, row=self.row, columnspan=1,
-                                      padx=10, pady=0, sticky=constants.NW)
+                                 padx=10, pady=0, sticky=constants.NW)
 
             # Save station_id and its nickname to make sure they match on save
             self.nick_entry_list[s.station_id] = self.nick_entry
 
-            self.row+=1
+            self.row += 1
 
     def _set_error_row(self, erow):
         """"Marks the row of a station with * if there is an error.
@@ -104,9 +104,9 @@ class StationView:
         Note: only one row is processed at the time """
 
         self._error_row_label = ttk.Label(master=self._frame,
-                        text="*",
-                        foreground="red"
-                        )
+                                          text="*",
+                                          foreground="red"
+                                          )
         self._error_row_label.grid(column=2, row=erow+1, padx=10, pady=5,
                                    columnspan=1, sticky=constants.NW)
 
@@ -117,7 +117,7 @@ class StationView:
             nick_input = nick.get()
 
             # Checks maximum length of the name
-            if len(nick_input)>20:
+            if len(nick_input) > 20:
                 self._error_variable = "Too long nickname."
                 self._error_key = key
                 self._initialize_error_msg()
@@ -164,9 +164,9 @@ class StationView:
         self._initialize_error_msg()
 
         note_label = ttk.Label(master=self._frame, text="You can rename stations. Nickname can contain max 20 characters.",
-                                  font=('Arial', 12, 'normal'))
+                               font=('Arial', 12, 'normal'))
         note_label.grid(column=0, row=2, columnspan=3,
-                           padx=5, pady=10, sticky=constants.W)
+                        padx=5, pady=10, sticky=constants.W)
 
         self.row = 3
 
@@ -179,7 +179,7 @@ class StationView:
         )
 
         select_button1.grid(column=2, row=self.row+1, padx=10, pady=20,
-                           rowspan=1, sticky=constants.EW)
+                            rowspan=1, sticky=constants.EW)
 
         select_button1 = ttk.Button(
             master=self._frame,
@@ -188,8 +188,7 @@ class StationView:
         )
 
         select_button1.grid(column=1, row=self.row+1, padx=10, pady=20,
-                           rowspan=1, sticky=constants.EW)
-
+                            rowspan=1, sticky=constants.EW)
 
         self._frame.grid_columnconfigure(0, weight=3, minsize=100)
         self._frame.grid_columnconfigure(1, weight=1, minsize=50)

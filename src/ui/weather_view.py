@@ -3,6 +3,7 @@ from services.station_service import station_service
 from services.observation_service import observation_service
 from services.observation_scheduler import Scheduler
 
+
 class WeatherView:
     """Weather from the station view."""
 
@@ -56,19 +57,21 @@ class WeatherView:
             foreground="red"
         )
 
-        self._error_label.grid(column=0, row=1, padx=10, pady=10, sticky=constants.W)
+        self._error_label.grid(column=0, row=1, padx=10,
+                               pady=10, sticky=constants.W)
 
     def _initialize_name(self):
         self.station_name_label.destroy()
         nick_var = station_service.get_nickname(self.station_id).get_nickname()
-        name_var = station_service.get_name(self.station_id)[0].name
-        if len(nick_var)>0:
+        name_var = station_service.get_station(self.station_id)[0].name
+        if len(nick_var) > 0:
             name_var = nick_var
 
         self.station_name_label = ttk.Label(master=self._frame,
-                            text=name_var,
-                            font=('Arial', 24, 'bold'))
-        self.station_name_label.grid(column=0, row=2, columnspan=2, padx=10, pady=20, sticky=constants.W)
+                                            text=name_var,
+                                            font=('Arial', 24, 'bold'))
+        self.station_name_label.grid(
+            column=0, row=2, columnspan=2, padx=10, pady=20, sticky=constants.W)
 
     def _initialize_observations(self):
 
@@ -85,7 +88,7 @@ class WeatherView:
             temp_text = "No data available"
 
         self.station_temp_label = ttk.Label(master=self._frame, text=temp_text,
-                                          font=('Arial', 42, 'bold'))
+                                            font=('Arial', 42, 'bold'))
         self.station_temp_label.grid(column=0, row=3, columnspan=2,
                                      padx=10, pady=10)
 
@@ -96,9 +99,10 @@ class WeatherView:
             wind_text = "Wind: No data available"
 
         self.station_wind_label = ttk.Label(master=self._frame,
-             text=wind_text,
-                font=('Arial', 14, 'bold'))
-        self.station_wind_label.grid(column=0, row=4, padx=10, pady=10, sticky=constants.W)
+                                            text=wind_text,
+                                            font=('Arial', 14, 'bold'))
+        self.station_wind_label.grid(
+            column=0, row=4, padx=10, pady=10, sticky=constants.W)
 
         self.station_date_label.destroy()
         if self.station_error == 1:
@@ -108,8 +112,9 @@ class WeatherView:
             date_label = f"Observation time: {self.station_date}"
 
         self.station_date_label = ttk.Label(master=self._frame, text=date_label,
-                                          font=('Arial', 12, 'bold'))
-        self.station_date_label.grid(column=0, row=5, padx=10, pady=10, sticky=constants.W)
+                                            font=('Arial', 12, 'bold'))
+        self.station_date_label.grid(
+            column=0, row=5, padx=10, pady=10, sticky=constants.W)
 
         # Trigger if new data needs to be retrieved
         self._scheduler.scheduled_observation_update()
@@ -126,7 +131,7 @@ class WeatherView:
                 self.station_id = key_id
                 break
             else:
-                counter +=1
+                counter += 1
         # Set all stations from viewed (True) as unviewed (False)
         if counter == station_service.count_selected():
             for key in self.station_loop:
@@ -137,8 +142,6 @@ class WeatherView:
         self._initialize_observations()
         self._initialize_error()
         self._frame.after(10000, self._update_view)
-
-
 
     def _initialize(self):
         """Initializes the frame view"""
@@ -157,7 +160,8 @@ class WeatherView:
             command=self._show_stationlist_view
         )
 
-        select_button.grid(column=1, row=6, padx=10, pady=10, sticky=constants.EW)
+        select_button.grid(column=1, row=6, padx=10,
+                           pady=10, sticky=constants.EW)
 
         settings_button = ttk.Button(
             master=self._frame,
@@ -165,7 +169,8 @@ class WeatherView:
             command=self._show_station_view
         )
 
-        settings_button.grid(column=1, row=7, padx=10, pady=10, sticky=constants.EW)
+        settings_button.grid(column=1, row=7, padx=10,
+                             pady=10, sticky=constants.EW)
         self._frame.grid_columnconfigure(0, weight=1, minsize=100)
 
 

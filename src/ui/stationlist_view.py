@@ -37,7 +37,6 @@ class StationListView:
         """"Destroys the view."""
         self._frame.destroy()
 
-
     # Initialize fields and buttons
 
     def _initialize_error_msg(self):
@@ -55,7 +54,8 @@ class StationListView:
         self._list_label.destroy()
         stations_list = self.stations
 
-        self._list_label = Listbox(master=self._frame, selectmode="single", width=28)
+        self._list_label = Listbox(
+            master=self._frame, selectmode="single", width=28)
 
         # TODO without this line selected id:s are off +1 - WHY?
         self._list_label.insert(0, "")
@@ -72,16 +72,16 @@ class StationListView:
         self._vertscroll.config(command=self._list_label.yview)
         self._list_label.config(yscrollcommand=self._vertscroll.set)
         self._vertscroll.grid(column=1, row=3, columnspan=2, rowspan=2,
-                        sticky=constants.NS)
+                              sticky=constants.NS)
 
     def _check_selected_count(self):
-        if station_service.count_selected()>5:
+        if station_service.count_selected() > 5:
             self._error_variable = "At maximum 5 stations can be selected."
             self._initialize_error_msg()
             self.select_button.config(state="disabled")
             self.continue_button.config(state="disabled")
             return False
-        elif station_service.count_selected()<1:
+        elif station_service.count_selected() < 1:
             self._error_variable = "Select at least 1."
             self._initialize_error_msg()
             self.continue_button.config(state="disabled")
@@ -107,11 +107,10 @@ class StationListView:
             master=self._frame,
             text="Continue >",
             command=self._handle_continue_click
-            )
+        )
         self.continue_button.grid(column=4, row=5,
                                   padx=10, pady=20, sticky=constants.N)
         self._check_selected_count()
-
 
     # Handle button clicks
 
@@ -160,7 +159,7 @@ class StationListView:
         """Gets selected stations from the database and returns them as a list."""
         selected_list = ""
         for s in station_service.get_selected():
-            #print(f"Selected {str(s.name)}")
+            # print(f"Selected {str(s.name)}")
             selected_list += str(s.name) + "\n"
         return selected_list
 
@@ -173,7 +172,6 @@ class StationListView:
             stations_list.append((s.station_id, nimi))
         return stations_list
 
-
     # View
 
     def _initialize(self):
@@ -184,7 +182,7 @@ class StationListView:
 
         # Title of the window
         self.station_label = ttk.Label(master=self._frame, text="Select station",
-                                  font=('Arial', 24, 'bold'))
+                                       font=('Arial', 24, 'bold'))
         self.station_label.grid(column=0, row=0, columnspan=5,
                                 padx=10, pady=10, sticky=constants.NW)
         # Error message
@@ -192,16 +190,16 @@ class StationListView:
 
         # Title of left field
         self.note1_label = ttk.Label(master=self._frame, text="Select 1 station at the time",
-                               font=('Arial', 12, 'bold'))
+                                     font=('Arial', 12, 'bold'))
         self.note1_label.grid(column=0, row=2, columnspan=2,
-                             padx=10, pady=10, sticky=constants.W)
+                              padx=10, pady=10, sticky=constants.W)
 
         # Title of right field
-        self.note2_label = ttk.Label(master=self._frame, \
-                    text="Selected stations (max 5)                    ",\
-                    font=('Arial', 12, 'bold'))
+        self.note2_label = ttk.Label(master=self._frame,
+                                     text="Selected stations (max 5)                    ",
+                                     font=('Arial', 12, 'bold'))
         self.note2_label.grid(column=3, row=2, columnspan=2,
-                             padx=10, pady=10, sticky=constants.W)
+                              padx=10, pady=10, sticky=constants.W)
 
         # List of stations
         self._initialize_stations_list()
@@ -222,7 +220,7 @@ class StationListView:
             text="< Clear all",
             command=self._handle_clear_click
         )
-        self.clear_button.grid(column=2, row=4, 
+        self.clear_button.grid(column=2, row=4,
                                padx=10, pady=10, sticky=constants.N)
 
         # Selected list
@@ -231,12 +229,12 @@ class StationListView:
         # Button Continue to settings
         self._initialize_continue_to_settings()
 
-
         self._frame.grid_columnconfigure(0, weight=1, minsize=100)
         self._frame.grid_columnconfigure(1, weight=1, minsize=100)
         self._frame.grid_columnconfigure(2, weight=1, minsize=100)
         self._frame.grid_columnconfigure(3, weight=1, minsize=100)
         self._frame.grid_columnconfigure(4, weight=1, minsize=100)
         self._frame.grid_rowconfigure(0, weight=1, minsize=20)
+
 
 print("STATIONLIST VIEW\n")
