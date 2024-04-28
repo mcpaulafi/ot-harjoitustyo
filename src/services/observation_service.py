@@ -32,9 +32,11 @@ class ObservationService:
             Observation object.
         """
         self._observation_repository.save_observation(station_id)
+        return True
 
     def delete_observations_from_database(self):
         self._observation_repository.delete_all()
+        return True
 
 
 observation_service = ObservationService()
