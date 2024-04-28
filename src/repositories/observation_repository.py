@@ -8,8 +8,8 @@ from database_connection import get_database_connection
 
 def get_observation_by_row(row):
     return Observation(station_id=row["station_id"], temperature=row["temperature"],
-                   wind=row["wind"], wind_direction=row["wind_direction"],
-                   datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
+                       wind=row["wind"], wind_direction=row["wind_direction"],
+                       datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
 
 class ObservationRepository:
     """Class for Observation operations.
@@ -34,13 +34,12 @@ class ObservationRepository:
         station_lat = 0
         station_lon = 0
         station_name = ""
-        for s in station_service.get_name(station_id):
+        for s in station_service.get_station(station_id):
             station_lat = s.lat
             station_lon = s.lon
             station_name = s.name
         extra = 0.2
-        #ERROR Inari Seitalaassa, muitakin
-
+        # ERROR Inari Seitalaassa, muitakin
 
         # At FMI data is stored in a coordinate squares = bounding boxes.
         # Formula for an area in which the station is located.
@@ -60,8 +59,8 @@ class ObservationRepository:
 
         # Retrievind data for the box
         obs2 = download_stored_query("fmi::observations::weather::multipointcoverage",
-                                    args=[f"bbox={station_box}",
-                                        "timeseries=True"])
+                                     args=[f"bbox={station_box}",
+                                           "timeseries=True"])
         # All data
         # print(sorted(obs2.data.keys()))
 
@@ -75,8 +74,9 @@ class ObservationRepository:
             local_tz = pytz.timezone('Europe/Helsinki')
 
             utc_dt = dt.datetime.strptime(utc_datetime, utc_format)
-            local_dt = str(utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz))[:-6]
-            #print("UTC", utc_datetime, "Local", local_dt)
+            local_dt = str(utc_dt.replace(
+                tzinfo=pytz.utc).astimezone(local_tz))[:-6]
+            # print("UTC", utc_datetime, "Local", local_dt)
         except KeyError:
             print("Following station not found. No data retrieved.")
             utc_datetime = None
@@ -85,11 +85,11 @@ class ObservationRepository:
 
         if utc_datetime is not None:
             temperature = obs2.data[station_name]['Air temperature']['values'][-1]
-            #print("Temperature:", temperature)
+            # print("Temperature:", temperature)
 
             wind = obs2.data[station_name]['Wind speed']['values'][-1]
             wind_direction = obs2.data[station_name]['Wind direction']['values'][-1]
-            #print("Wind:", wind, "m/s direction:", wind_direction)
+            # print("Wind:", wind, "m/s direction:", wind_direction)
         else:
             temperature = None
             wind = None
@@ -123,11 +123,11 @@ class ObservationRepository:
             '''insert into observations (station_id, temperature, \
                 wind, wind_direction, datetime, error_msg) 
                     values (?, ?, ?, ?, ?, ?)''',
-                    (str(station_id), temperature, wind, wind_direction, str(date_str), error_msg)
-                )
+            (str(station_id), temperature, wind,
+             wind_direction, str(date_str), error_msg)
+        )
 
         self._connection.commit()
-
 
     def find_observation(self, station_id):
         """Returns latest observations for a station.
