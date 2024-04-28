@@ -1,5 +1,6 @@
 import unittest
 import datetime as dt
+from services.observation_service import ObservationService
 from entities.observation import Observation
 
 
@@ -48,25 +49,25 @@ class FakeObservationRepository:
     def delete_all(self):
         return True
 
-# Testing begins
 
+# Testing begins
 
 class TestObservationService(unittest.TestCase):
     def setUp(self):
-        # observation_service.delete_observations_from_database()
+        self._observation_service = ObservationService(FakeObservationRepository())
+        self._observation_service.delete_observations_from_database()
         self._observation_repository = FakeObservationRepository()
         self.wind = 0
         self.station_id = 1
 
     def test_update_observation(self):
-        test_save = self._observation_repository.save_observation(
+        test_save = self._observation_service.update_observation(
             self.station_id)
         return self.assertEqual(test_save, True)
 
     def test_get_observation(self):
-        test_result = self._observation_repository.find_observation(
+        test_result = self._observation_service.get_observation(
             self.station_id)
-        # Why ERROR here?
         wind_result = int(test_result.wind)
         return self.assertEqual(wind_result, 5)
 
