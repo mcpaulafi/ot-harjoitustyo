@@ -25,6 +25,7 @@ class Station:
         self.lat = lat
         self.lon = lon
         self.source = source
+        self.error_msg = 0
 
     def set_nickname(self, nickname):
         """Method to set nickname.
@@ -35,3 +36,13 @@ class Station:
     def get_nickname(self):
         """Method to get nickname."""
         return self.nickname
+
+    def set_error_msg(self, error_msg):
+        """Method to set nickname.
+        Args: 
+        nickname"""
+        self.error_msg = error_msg
+
+    def get_error_msg(self):
+        """Method to get nickname."""
+        return self.error_msg
