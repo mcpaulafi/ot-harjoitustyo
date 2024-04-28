@@ -83,33 +83,31 @@ class TestStationService(unittest.TestCase):
         self._station_repository = FakeStationRepository()
 
     def get_stations(self):
-        return self.assertEqual(self._station_repository.find_all(),3)
+        return self.assertEqual(self._station_repository.find_all(), 3)
 
     def test_get_station(self, station_id=1):
         return self.assertEqual(self._station_repository.find_station(station_id)[0].name, "test_name")
 
-    #Selected stations
+    # Selected stations
     def test_count_selected(self):
-        return self.assertEqual(self._station_repository.count_selected_stations(),4)
+        return self.assertEqual(self._station_repository.count_selected_stations(), 4)
 
     def test_save_selected(self, station_id=4):
         self._station_repository.save_selected_station_to_database(station_id)
         return self.assertEqual(self._station_repository.save_selected_station_to_database(station_id), True)
 
-    def test_save_selected_nickname(self, station_id=5, nickname= "Testing123"):
+    def test_save_selected_nickname(self, station_id=5, nickname="Testing123"):
         return self.assertEqual(self._station_repository.save_nickname_to_database(
-            station_id, nickname),True)
+            station_id, nickname), True)
 
     def test_get_selected(self):
-        return self.assertEqual(len(self._station_repository.find_selected()),1)
+        return self.assertEqual(len(self._station_repository.find_selected()), 1)
 
     def test_get_nickname(self, station_id=1):
         return self.assertEqual(self._station_repository.find_nickname(station_id)[0].nickname, "testnick")
 
     def test_get_error(self, station_id=1):
-        return self.assertEqual(self._station_repository.find_error(station_id)[0].error_msg,1)
+        return self.assertEqual(self._station_repository.find_error(station_id)[0].error_msg, 1)
 
     def test_delete_selected(self):
-        return self.assertEqual(self._station_repository.delete_selected_stations_from_database(),True)
-
-
+        return self.assertEqual(self._station_repository.delete_selected_stations_from_database(), True)
