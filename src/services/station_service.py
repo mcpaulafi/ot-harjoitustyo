@@ -25,25 +25,26 @@ class StationService:
         """
         return self._station_repository.find_all()
 
-    def save_selected(self, station_id):
-        self._station_repository.save_selected_station_to_database(station_id)
+    def get_station(self, station_id):
+        """Returns Station object.
 
-    def save_selected_nickname(self, station_id, nickname):
-        self._station_repository.save_nickname_to_database(station_id, nickname)
+        Returns:
+            Station object.
+        """
+        return self._station_repository.find_station(station_id)
 
-    def get_nickname(self, station_id):
-        return self._station_repository.find_nickname(station_id)
-
-    def get_error(self, station_id):
-        return self._station_repository.find_error(station_id)
-
-    def delete_selected(self):
-        # TODO remove obs
-        self._station_repository.delete_selected_stations_from_database()
-#        observation_service.delete_observations_from_database()
-
+    # Selected stations
     def count_selected(self):
         return self._station_repository.count_selected_stations()
+
+    def save_selected(self, station_id):
+        self._station_repository.save_selected_station_to_database(station_id)
+        return True
+
+    def save_selected_nickname(self, station_id, nickname):
+        self._station_repository.save_nickname_to_database(
+            station_id, nickname)
+        return True
 
     def get_selected(self):
         """Returns selected station(s).
@@ -53,21 +54,15 @@ class StationService:
         """
         return self._station_repository.find_selected()
 
-    def get_selected_obs(self, station_id):
-        """Returns measurement settings for selected station.
+    def get_nickname(self, station_id):
+        return self._station_repository.find_nickname(station_id)
 
-        Returns:
-            Duple.
-        """
-        return self._station_repository.find_selected_obs(station_id)
+    def get_error(self, station_id):
+        return self._station_repository.find_error(station_id)
 
-    def get_name(self, station_id):
-        """Returns Station object.
-
-        Returns:
-            Station object.
-        """
-        return self._station_repository.find_station(station_id)
+    def delete_selected(self):
+        self._station_repository.delete_selected_stations_from_database()
+        return True
 
 
 station_service = StationService()
