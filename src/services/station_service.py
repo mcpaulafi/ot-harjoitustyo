@@ -33,6 +33,18 @@ class StationService:
         """
         return self._station_repository.find_station(station_id)
 
+    def count_all(self):
+        """Returns number of Stations in database.
+
+        Returns:
+            Number as string.
+        """
+        return self._station_repository.count_all_db()
+
+    def delete_all(self):
+        self._station_repository.delete_all_db()
+        return True
+
     # Selected stations
     def count_selected(self):
         return self._station_repository.count_selected_stations()
@@ -63,6 +75,5 @@ class StationService:
     def delete_selected(self):
         self._station_repository.delete_selected_stations_from_database()
         return True
-
 
 station_service = StationService()
