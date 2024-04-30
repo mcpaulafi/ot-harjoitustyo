@@ -32,6 +32,7 @@ class Station:
         Args: 
         nickname"""
         self.nickname = nickname
+        return True
 
     def get_nickname(self):
         """Method to get nickname."""
@@ -42,6 +43,7 @@ class Station:
         Args: 
         nickname"""
         self.error_msg = error_msg
+        return True
 
     def get_error_msg(self):
         """Method to get nickname."""
