@@ -20,7 +20,7 @@ class StationRepository:
         """
         self._connection = connection
 
-    def count_all(self):
+    def count_all_db(self):
         """ Counts how many stations are in the database.
         Returns: 
             Amount of stations
@@ -51,6 +51,16 @@ class StationRepository:
 
         return list(map(get_station_by_row, rows))
 
+    def delete_all_db(self):
+        """Removes all stations from stations table.
+        """
+
+        cursor = self._connection.cursor()
+
+        cursor.execute("delete from stations")
+
+        self._connection.commit()
+        return True
 
     def count_selected_stations(self):
         """ Counts how many selected stations are in the database.
@@ -223,16 +233,6 @@ class StationRepository:
         station = list(map(get_station_by_row, row1))[0]
         station.set_error_msg(error_msg)
         return station
-
-    def delete_all(self):
-        """Removes all stations from stations table.
-        """
-
-        cursor = self._connection.cursor()
-
-        cursor.execute("delete from stations")
-
-        self._connection.commit()
 
 
 station_repository = StationRepository(get_database_connection())
