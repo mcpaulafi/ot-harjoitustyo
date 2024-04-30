@@ -22,5 +22,5 @@
 | 25.4  | 5    | Handling none data, Scheduler to check new obs data in intervals   (64)|
 | 28.4  | 4    | Remade station_service_test and observation_service_test. Code cleanups. (68) | 
 | 29.4  | 1    | observation_scheduler_test debuging (69) |
-| 30.4  | 5    | Tests and learning about tests, User manual (74)|
-| Total| 74    |     |
+| 30.4  | 7    | Tests and learning about tests, User manual, documentation updates (76)|
+| Total | 76    |     |

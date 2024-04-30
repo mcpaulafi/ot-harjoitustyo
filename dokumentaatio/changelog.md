@@ -42,4 +42,4 @@
 - Made again entire station_service_test and observation_service_test
 - Asked ChatGPT to explain user_repository in the referenceapp, and to help with obs_scheduler_test debugging and how to use MagicMock
 - Added new tests to classes Station, ObservationService, ObservationRepository
-- User manual added to documentation
+- User manual added to documentation, updated also architecture, specs
