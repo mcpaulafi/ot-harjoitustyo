@@ -53,6 +53,7 @@ Stations are uploaded to the database from a csv-file.
 - Not all stations deliver data for temperature and/or wind
 
 ## Development ideas / todos
+- Create child object SelectedStations whose parent is Station
 - User defines what measurement data (temperature, wind) is retrieved from the selected stations. (Not enough time to finnish in the course schedule)
 - Split database table Observations per measurement
 - More measurement data eg. rain

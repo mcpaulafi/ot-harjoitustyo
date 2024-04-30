@@ -13,7 +13,7 @@ flowchart LR
 
 - **Ui**: user interphase
 - **Services**: app logic
-- **Repositories**: data storage
+- **Repositories**: data storage, retrieving data from API
 - **Entities**: class objects
 
 
@@ -29,24 +29,68 @@ Views are implemented as classes. Only one view is visible at the time to the us
 ## Application logic
 
 Data model of the application is constructed by classes Station and Observation which model weather stations and their observation data. 
+```mermaid
+ classDiagram
+    Stations <--> Observations
+    class Stations {
+        station_id
+        original_id
+        name
+        nickname
+        lat
+        lon
+        source
+        error_msg
+    }
+    class Observations {
+        station_id
+        temperature
+        wind
+        wind_direction
+        datetime
+        error_msg
+    }
+```
 
-[INSERT IMAGE]
+Classes have following funcions.
 
-Functions are in the Service classes StationService and ObservationService. 
+**Station** class provides following methods
+- set_nickname(nickname)
+- get_nickname()
+- set_error_msg(error_msg)
+- get_error_msg()
 
 **StationService** class provides following methods
 - get_stations()
 - get_station()
-- save_selected()
+- count_all()
+- delete_all()
+- count_selected()
+- save_selected(station_id)
+- save_selected_nickname(station_id, nickname)
 - get_selected()
+- get_nickname(self, station_id)
+- get_error(self, station_id)
+- delete_selected()
 
-StationService has access to station data through StationRepository which is responsible of saving and retrieving data from the database.
+StationService has access to station data through StationRepository which is responsible of saving and retrieving data from the database. 
 
 Class and packing diagram for StationService and its dependencies to other application modules
 
 [INSERT IMAGE HERE]
 
-**ObservationService** class TBD.
+**Observation** class has no methods.
+
+**ObservationService** class procides following methods
+- get_observation(station_id)
+- update_observation(station_id)
+- delete_observations_from_database()
+
+ObservationService has access to the database through ObservationRepository.
+
+**ObservationScheduler** gets new observation data every 10-20 minutes. It is started by the WeatherWindow class. This class provides following method
+- scheduled_observation_update()
+
 
 
 ## Data storage
@@ -118,32 +162,33 @@ sequenceDiagram
     participant StationService
     participant StationRepository
 
-    User->> UI: click "Select" button
-    UI->>StationService: save_selected(station_id)
-    StationService->>StationRepository: delete_selected_stations_from_database()
-    StationService->>StationRepository: save_selected_stations_to_database(station_id)
+    rect rgb(66, 66, 66)
+    note right of UI: init
+    UI->>StationService :get_stations()
+    StationService-->>UI: list of Stations objects
+    end
 
+    loop 1-5 selections
+        User->> UI: click "Add to >" button
+        UI->>StationService: save_selected(station_id)
+        StationService->>StationRepository: save_selected_stations_to_database(station_id)
+
+        UI->>UI: _get_selected_list()
+        UI->>StationService: get_selected()
+        StationService-->>UI: list: station.name
+        UI->>UI: _check_selected_count()
+    end 
+
+    User->> UI: click "Continue >" button
     UI->>UI: switch view (station_view)
 
-    UI->>StationService: get_selected()
-    StationService->>StationRepository: find_selected()
-    StationRepository-->>StationService: station_id, temperature, wind
-    StationService-->>UI: station_id, temperature, wind
-
-    UI->>StationService: get_name(station_id)
-    StationService->>StationRepository: find_name(station_id)
-    StationRepository-->>StationService: Station
-    StationService-->>UI: Station
-    UI->>UI: Station.name
 ```
 
 ### Settings for selected station
 
-After the selection user can rename the station (give a nickname such as "Summer cabin"). TBD
+After the selection user can rename the station (give a nickname such as "Summer cabin"). 
 
-After the selection user can also select which observation data (temperature, wind) is retrieved from the station. TBD
-
-User can also select the layout for the weather view from some options. TBD
+TBD: User can also select the layout for the weather view from some options. 
 
 ```mermaid
 sequenceDiagram
@@ -151,12 +196,22 @@ sequenceDiagram
     participant UI
     participant StationService
     participant StationRepository
+    participant ObservationService
+    participant ObservationRepository
 
-    User->> UI: click "View" button
-    UI->>StationService: save_selected(station_id)
-    StationService->>StationRepository: delete_selected_stations_from_database()
-    StationService->>StationRepository: save_selected_stations_to_database(station_id, nickname)
-    StationService->>StationRepository: save_layout(layout_id)
+    UI->>UI: _initialize_stations
+    UI->>StationService : get_selected()
+    StationService-->>UI: list: Stations
+
+    loop User can input 0-5 nicknames
+        User->> UI: input entry: nickname
+    end
+    User->> UI: click "Save and view" button
+    UI->>StationService: save_selected_nickname(station_id, nickname)
+
+    StationService->>StationRepository: save_nickname_to_database(station_id, nickname)
+    StationService->>ObservationService: observation_service.update_observation(station_id)
+    ObservationService->>ObservationRepository: save_observation(station_id)
 
     UI->>UI: switch view (weather_view)
 
@@ -175,41 +230,63 @@ sequenceDiagram
     participant StationRepository
     participant ObservationService
     participant ObservationRepository
-    participant Scheduler
 
+    rect rgb(66, 66, 66)
+    note right of UI: init
     UI->>StationService: get_selected()
     StationService->>StationRepository: find_selected()
     StationRepository-->>StationService: station_id, temperature, wind
     StationService-->>UI: station_id, temperature, wind
+    end
 
+    UI->>UI: _update_view(), station_loop
+    UI->>StationService: get_nickname(station_id)
+    StationService->>StationRepository: find_nickname(station_id)
+    StationRepository-->>StationService: Station
+    StationService-->>UI: Station
     UI->>StationService: get_name(station_id)
     StationService->>StationRepository: find_name(station_id)
     StationRepository-->>StationService: Station
     StationService-->>UI: Station
-    UI->UI: Station.name
-    UI->>ObservationService: get_data(station_id)
-    ObservationService->>ObservationRepository: find_data(station_id)
-    ObservationRepository->>ObservationRepository: update_database()
-    ObservationRepository-->>ObservationService: temperature, wind, wind_direction, datetime
-    ObservationService-->>UI: temperature, wind, wind_direction, datetime
-    UI->>UI: temperature, wind, wind_direction, datetime
-    UI->>Scheduler: scheduled_observation_update()
-    UI->>UI: switch station
+    UI->>UI: Name label
+    UI->>ObservationService: get_observation(station_id)
+    ObservationService->>ObservationRepository: find_observation(station_id)
+    ObservationRepository-->>ObservationService: temperature, wind, wind_direction, datetime, error_msg
+    ObservationService-->>UI: temperature, wind, wind_direction, datetime, error_msg
+    UI->>UI: Data Labels
+    UI->>UI: After 10sec, update_view 
 ```
 
 
+## Data update from FMI
+If Weather View gets observation time that is older than 10 min, new data is requested from the Scheduler.
 
-
-## Data update from FMI TBD
 ```mermaid
 sequenceDiagram
     participant Scheduler
     participant ObservationService
     participant ObservationRepository
-    
+    participant FMIOpenData
+
+    rect rgb(66, 66, 66)
+    note right of Scheduler: init
     Scheduler->>ObservationService: init Selected stations
     ObservationService->>ObservationRepository: get selected()
     ObservationRepository-->>ObservationService: Stations
     ObservationService-->>Scheduler: Stations
+    end
+
+    UI->>Scheduler: scheduled_observation_update()
+    Scheduler->>ObservationService: get_observation(station_id)
+    ObservationService-->>Scheduler: Observation object
+    Scheduler->>ObservationService: update_observation(station_id)
+    ObservationService->>ObservationRepository: save_observation(station_id)
+    ObservationRepository->>StationService: get_station(station_id)
+    StationService-->>ObservationRepository: True
+    ObservationRepository->>ObservationRepository: get_data_from_fmi(station_id)
+    ObservationRepository->>FMIOpenData: download_stored_query()
+    FMIOpenData-->>ObservationRepository: data
+    ObservationRepository-->>ObservationService: True
+    ObservationService-->>Scheduler:True
 
 ```

@@ -1,12 +1,12 @@
 # My Weather Window application
 With this application the user can view latest measurements from selected weather stations. Measurement data is retrieved from the open data provided by The Finnish Meteorological Institute (FMI).
 
-Python interphase for FMI open data is from [opendata](https://github.com/pnuu/fmiopendata)
+Python interphase for FMI open data is from [fmiopendata](https://github.com/pnuu/fmiopendata)
 
 This application is made as a course work in the Software engineering course (Aineopintojen harjoitustyö: Ohjelmistotekniikka) as part of Computer Science studies in the University of Helsinki.
 
 ## Documentation
-- [User manual] TBD
+- [User manual](dokumentaatio/usermanual.md)
 - [Specifications](dokumentaatio/specifications.md)
 - [Architecture](dokumentaatio/architecture.md)
 - [Testing document] TBD
@@ -16,6 +16,7 @@ This application is made as a course work in the Software engineering course (Ai
 ## Releases
 
 - [Viikko5](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko5) 22.4.2024
+- [Viikko6]
 
 ## Installation
 
