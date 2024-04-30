@@ -1,15 +1,14 @@
 import unittest
+import repositories.station_repository
 from services.station_service import StationService
 from entities.station import Station
 
+
+# For simulation, Copied 28.4.2024 
 def get_station_by_row(row):
     return Station(station_id=row["station_id"], original_id=row["original_id"],
                    name=row["name"], lat=row["lat"],
                    lon=row["lon"], source=row["source"]) if row else None
-
-
-
-# Copied 28.4.2024 from real
 
 class FakeStationRepository:
     """Class for Weather Station list operations.
@@ -28,11 +27,14 @@ class FakeStationRepository:
         self.test_row1["source"] = "testing"
         self.test_row.append(self.test_row1)
 
-    def count_all(self):
-        return 3
-
     def find_all(self):
         return list(map(get_station_by_row, self.test_row))
+
+    def count_all_db(self):
+        return 3
+
+    def delete_all_db(self):
+        return True
 
     def count_selected_stations(self):
         return 4
@@ -60,21 +62,20 @@ class FakeStationRepository:
 
     def find_nickname(self, station_id):
         if station_id == 1:
-            station = list(map(get_station_by_row, self.test_row))
-            station[0].set_nickname("testnick")
+            station = list(map(get_station_by_row, self.test_row))[0]
+            station.set_nickname("testnick")
             return station
         return False
 
     def find_error(self, station_id):
         if station_id == 1:
             error_msg = 1
-            station = list(map(get_station_by_row, self.test_row))
-            station[0].set_error_msg(error_msg)
+            station = list(map(get_station_by_row, self.test_row))[0]
+            station.set_error_msg(error_msg)
             return station
         return False
 
-    def delete_all(self):
-        return True
+
 
 
 # Testing starts here
@@ -102,18 +103,30 @@ class TestStationService(unittest.TestCase):
         self._station_repository.save_selected_station_to_database(station_id)
         return self.assertEqual(self._station_service.save_selected(station_id), True)
 
+    def test_get_selected(self):
+        return self.assertEqual(len(self._station_service.get_selected()), 1)
+
     def test_save_selected_nickname(self, station_id=4, nickname="Testing123"):
         return self.assertEqual(self._station_service.save_selected_nickname(
             station_id, nickname), True)
 
-    def test_get_selected(self):
-        return self.assertEqual(len(self._station_service.get_selected()), 1)
-
     def test_get_nickname(self, station_id=1):
-        return self.assertEqual(self._station_service.get_nickname(station_id)[0].nickname, "testnick")
+        return self.assertEqual(self._station_service.get_nickname(station_id).nickname, "testnick")
 
     def test_get_error(self, station_id=1):
-        return self.assertEqual(self._station_service.get_error(station_id)[0].error_msg, 1)
+        return self.assertEqual(self._station_service.get_error(station_id).error_msg, 1)
 
     def test_delete_selected(self):
         return self.assertEqual(self._station_service.delete_selected(), True)
+
+    def test_delete_all(self):
+        return self.assertEqual(self._station_service.delete_all(), True)
+
+    def test_get_station_by_row(self):
+        test_row2 = { "station_id" : "3", "original_id" : "100",
+                          "name" : "test_name", "lat" : "10", "lon" : "20",
+                          "source" : "testing"}
+        return self.assertIsInstance(repositories.station_repository.get_station_by_row(test_row2), Station, "Not instance")
+
+    def test_count_all(self):
+        return self.assertEqual(self._station_service.count_all(), 3)
