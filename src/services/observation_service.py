@@ -29,10 +29,10 @@ class ObservationService:
         """Updates latest observations to the database.
 
             Returns:
-            Observation object.
+            True.
         """
-        self._observation_repository.save_observation(station_id)
-        return True
+        update_data = self._observation_repository.save_observation(station_id)
+        return update_data
 
     def delete_observations_from_database(self):
         self._observation_repository.delete_all()
