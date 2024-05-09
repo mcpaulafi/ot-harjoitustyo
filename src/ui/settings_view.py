@@ -139,11 +139,8 @@ class SettingsView:
 
         # Retrieves observations for the selected stations
         for s1 in station_service.get_selected():
-            get_obs = observation_service.get_observation(s1.station_id)
-            if not get_obs:
-                observation_service.update_observation(s1.station_id)
-            elif observation_service.check_obs_if_old(get_obs.datetime):
-                observation_service.update_observation(s1.station_id)
+            observation_service.update_observation(s1.station_id)
+
         self._handle_show_weather_view()
 
     def _handle_back_click(self):
