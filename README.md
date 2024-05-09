@@ -6,17 +6,18 @@ Python interphase for FMI open data is from [fmiopendata](https://github.com/pnu
 This application is made as a course work in the Software engineering course (Aineopintojen harjoitustyö: Ohjelmistotekniikka) as part of Computer Science studies in the University of Helsinki.
 
 ## Documentation
-- [User manual](dokumentaatio/usermanual.md)
-- [Specifications](dokumentaatio/specifications.md)
-- [Architecture](dokumentaatio/architecture.md)
-- [Testing document] TBD
-- [Time tracking](dokumentaatio/timetracking.md)
-- [Changelog](dokumentaatio/changelog.md)
+- [User manual](documentation/usermanual.md)
+- [Specifications](documentation/specifications.md)
+- [Architecture](documentation/architecture.md)
+- [Testing document](documentation/testing.md)
+- [Time tracking](documentation/timetracking.md)
+- [Changelog](documentation/changelog.md)
 
 ## Releases
 
 - [Viikko5](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko5) 22.4.2024
 - [Viikko6](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko6) 30.4.2024
+- [Viikko7]
 
 ## Installation
 
