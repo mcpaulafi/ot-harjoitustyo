@@ -43,3 +43,7 @@
 - Asked ChatGPT to explain user_repository in the referenceapp, and to help with obs_scheduler_test debugging and how to use MagicMock
 - Added new tests to classes Station, ObservationService, ObservationRepository
 - User manual added to documentation, updated also architecture, specs
+
+# Week 7
+- Testing documentation created
+- Changed folder name dokumentaatio -> documentation

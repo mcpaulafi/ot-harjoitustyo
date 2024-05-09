@@ -20,7 +20,8 @@
 | 22.4. | 5    | Enabling multiple selected stations, loop for their observations, grid setup (51) |
 | 24.4. | 8    | Nickname functions (59)|
 | 25.4  | 5    | Handling none data, Scheduler to check new obs data in intervals   (64)|
-| 28.4  | 4    | Remade station_service_test and observation_service_test. Code cleanups. (68) | 
+| 28.4  | 4    | Remade station_service_test and observation_service_test. Code cleanups. (68) |
 | 29.4  | 1    | observation_scheduler_test debuging (69) |
 | 30.4  | 7    | Tests and learning about tests, User manual, documentation updates (76)|
+| 9.5   | x    |  10.45-|
 | Total | 76    |     |

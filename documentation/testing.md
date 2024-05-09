@@ -46,11 +46,11 @@ System test is done manually.
 
 ### Installing and configuration
 
-Application has been downloaded and tested by following [the user manual](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/dokumentaatio/usermanual.md) in two different Linux environments. Tests did not check different configurations on  _.env_ file.
+Application has been downloaded and tested by following [the user manual](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/documentation/usermanual.md) in two different Linux environments. Tests did not check different configurations on  _.env_ file.
 
 ### Functionalities
 
-All [specifications](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/dokumentaatio/specifications.md) and functionalities listed on the user manual have been checked. Also attempts have been made to fill input fields with false values such as empty ones.
+All [specifications](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/documentation/specifications.md) and functionalities listed on the user manual have been checked. Also attempts have been made to fill input fields with false values such as empty ones.
 
 ## Remaining quality issues
 
