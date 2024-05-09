@@ -34,6 +34,17 @@ class ObservationService:
         update_data = self._observation_repository.save_observation(station_id)
         return update_data
 
+    def check_obs_if_old(self, given_date, timevalue=10):
+        """Checks if date is older timevalue minutes.
+        Args:
+            given_date as string
+            timevalue minutes as integer
+        Returns:
+            True if old.
+            False if new.
+        """
+        return self._observation_repository.check_if_old(given_date, timevalue)
+
     def delete_observations_from_database(self):
         self._observation_repository.delete_all()
         return True
@@ -41,4 +52,3 @@ class ObservationService:
 
 observation_service = ObservationService()
 
-print("OBS SERVICE\n")

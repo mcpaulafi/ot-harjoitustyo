@@ -23,8 +23,11 @@ class WeatherView:
 
         self._error_variable = None
         self.station_loop = {}
+        self.station_time = {}
+        self.interval_minutes = 10
         for sl in station_service.get_selected():
             self.station_loop[sl.station_id] = False
+            self.station_time[sl.station_id] = self.interval_minutes
         self.station_id = None
         self.station_temp = 0
         self.station_wind = 0
@@ -116,8 +119,27 @@ class WeatherView:
         self.station_date_label.grid(
             column=0, row=5, padx=10, pady=10, sticky=constants.W)
 
-        # Trigger if new data needs to be retrieved
-        self._scheduler.scheduled_observation_update()
+        self.initialize_obs_update()
+
+    def initialize_obs_update(self):
+        """Function checks if datetime of the observation
+        is not older than stations interval minutes.
+        If older, runs observation update. 
+        If update is unsuccessful slows down checks by adding 
+        2 and 10 minutes to the interval time.
+        When successful returns interval time to global settings.
+        """
+        if observation_service.check_obs_if_old(self.station_date,
+                                                self.station_time[self.station_id]):
+            if not self._scheduler.scheduled_observation_update(self.station_id,
+                                                self.station_time[self.station_id]):
+                if self.station_time[self.station_id]<20:
+                    self.station_time[self.station_id] += 2
+                elif self.station_time[self.station_id]<60:
+                    self.station_time[self.station_id] += 10
+            else:
+                self.station_time[self.station_id] = self.interval_minutes
+        return
 
     def _update_view(self):
         # Set previous station as viewed True
@@ -151,7 +173,7 @@ class WeatherView:
                                   font=('Arial', 24, 'bold'))
         weather_label.grid(column=0, row=0, columnspan=2,
                            padx=10, pady=10, sticky=constants.W)
-        self._error_variable = "TEST: Stations are on 10 sec loop"
+        self._error_variable = "Stations are on 10 sec loop"
         self._update_view()
 
         select_button = ttk.Button(
