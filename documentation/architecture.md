@@ -162,7 +162,7 @@ sequenceDiagram
     participant StationService
     participant StationRepository
 
-    rect rgb(66, 66, 66)
+    rect rgb(102, 102, 102)
     note right of UI: init
     UI->>StationService :get_stations()
     StationService-->>UI: list of Stations objects
@@ -231,7 +231,7 @@ sequenceDiagram
     participant ObservationService
     participant ObservationRepository
 
-    rect rgb(66, 66, 66)
+    rect rgb(102, 102, 102)
     note right of UI: init
     UI->>StationService: get_selected()
     StationService->>StationRepository: find_selected()
@@ -268,7 +268,7 @@ sequenceDiagram
     participant ObservationRepository
     participant FMIOpenData
 
-    rect rgb(66, 66, 66)
+    rect rgb(102, 102, 102)
     note right of Scheduler: init
     Scheduler->>ObservationService: init Selected stations
     ObservationService->>ObservationRepository: get selected()
