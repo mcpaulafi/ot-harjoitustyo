@@ -3,9 +3,7 @@ import re
 from services.station_service import station_service
 from services.observation_service import observation_service
 
-
-# rename this to settings?
-class StationView:
+class SettingsView:
     """Settings view."""
 
     def __init__(self, root, handle_show_weather_view, handle_show_stationlist_view):

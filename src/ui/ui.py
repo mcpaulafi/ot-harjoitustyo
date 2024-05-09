@@ -1,5 +1,5 @@
 from ui.stationlist_view import StationListView
-from ui.station_view import StationView
+from ui.settings_view import SettingsView
 from ui.weather_view import WeatherView
 
 
@@ -31,15 +31,15 @@ class UI:
         self._hide_current_view()
 
         self._current_view = StationListView(
-            self._root, self._show_station_view
+            self._root, self._show_settings_view
         )
         self._current_view.pack()
 
-    def _show_station_view(self):
+    def _show_settings_view(self):
         """Shows selected station"""
         self._hide_current_view()
 
-        self._current_view = StationView(
+        self._current_view = SettingsView(
             self._root, self._show_weather_view,
             self._show_stationlist_view
         )
@@ -52,7 +52,7 @@ class UI:
 
         self._current_view = WeatherView(
             self._root, self._show_stationlist_view,
-            self._show_station_view
+            self._show_settings_view
         )
 
         self._current_view.pack()

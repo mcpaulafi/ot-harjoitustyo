@@ -5,7 +5,7 @@ from services.station_service import station_service
 class StationListView:
     """Station list view."""
 
-    def __init__(self, root, handle_show_station_view):
+    def __init__(self, root, handle_show_settings_view):
         """Class constructoimport Tkinter as tkr. Creates new view for stations.
 
         Args:
@@ -16,7 +16,7 @@ class StationListView:
         """
 
         self._root = root
-        self._handle_show_station_view = handle_show_station_view
+        self._handle_show_settings_view = handle_show_settings_view
         self._frame = None
         self._list_label = None
         self._button_select = None
@@ -149,7 +149,7 @@ class StationListView:
             Switches view to station settings.
         """
         if self._check_selected_count():
-            self._handle_show_station_view()
+            self._handle_show_settings_view()
         else:
             return
 

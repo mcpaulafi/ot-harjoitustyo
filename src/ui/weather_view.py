@@ -7,7 +7,7 @@ from services.observation_scheduler import Scheduler
 class WeatherView:
     """Weather from the station view."""
 
-    def __init__(self, root, show_stationlist_view, show_station_view):
+    def __init__(self, root, show_stationlist_view, show_settings_view):
         """Class constructor. Creates new view for weather data from station.
 
         Args:
@@ -18,7 +18,7 @@ class WeatherView:
         self._root = root
         self._frame = None
         self._show_stationlist_view = show_stationlist_view
-        self._show_station_view = show_station_view
+        self._show_settings_view = show_settings_view
         self._scheduler = Scheduler()
 
         self._error_variable = None
@@ -166,7 +166,7 @@ class WeatherView:
         settings_button = ttk.Button(
             master=self._frame,
             text="Settings",
-            command=self._show_station_view
+            command=self._show_settings_view
         )
 
         settings_button.grid(column=1, row=7, padx=10,
