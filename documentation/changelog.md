@@ -47,3 +47,6 @@
 # Week 7
 - Testing documentation created
 - Changed folder name dokumentaatio -> documentation
+- From settings to Weather view, if latest observations are in the database, do not get new
+- Check if observation datetime was old, made a function to observation repository, updated and modified dependent functionalities
+- Code cleanup and splitting functions to shorter ones
