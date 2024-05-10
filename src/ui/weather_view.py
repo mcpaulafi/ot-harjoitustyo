@@ -66,7 +66,7 @@ class WeatherView:
     def _initialize_name(self):
         self.station_name_label.destroy()
         nick_var = station_service.get_nickname(self.station_id).get_nickname()[0]
-        name_var = station_service.get_station(self.station_id).name[0]
+        name_var = station_service.get_station(self.station_id).name
         if len(nick_var) > 0:
             name_var = nick_var
 
@@ -163,7 +163,7 @@ class WeatherView:
         self._initialize_name()
         self._initialize_observations()
         self._initialize_error()
-        self._frame.after(10000, self._update_view)
+        self._frame.after(20000, self._update_view)
 
     def _initialize(self):
         """Initializes the frame view"""
@@ -173,7 +173,7 @@ class WeatherView:
                                   font=('Arial', 24, 'bold'))
         weather_label.grid(column=0, row=0, columnspan=2,
                            padx=10, pady=10, sticky=constants.W)
-        self._error_variable = "Stations are on 10 sec loop"
+        self._error_variable = ""
         self._update_view()
 
         select_button = ttk.Button(
