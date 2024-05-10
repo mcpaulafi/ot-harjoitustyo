@@ -1,7 +1,7 @@
 import unittest
 from entities.station import Station
 
-class TestStationService(unittest.TestCase):
+class TestStation(unittest.TestCase):
     def setUp(self):
         self._station = Station(station_id="4", original_id="444", name="Test4",
                  lat="14", lon="24", source="Source4")
