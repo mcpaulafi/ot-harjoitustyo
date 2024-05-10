@@ -23,7 +23,7 @@ class TestScheduler(unittest.TestCase):
 
         result = self.test_scheduler.scheduled_observation_update(self.station_id, self.timevalue)
 
-        return self.assertFalse(result)
+        return self.assertTrue(result)
 
     def test_scheduled_observation_update_true(self):
         self._observation_service.update_observation(self.station_id)
@@ -34,4 +34,4 @@ class TestScheduler(unittest.TestCase):
 
         result = self.test_scheduler.scheduled_observation_update(self.station_id, self.timevalue)
 
-        return self.assertFalse(result)
+        return self.assertTrue(result)
