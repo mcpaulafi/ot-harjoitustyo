@@ -1,100 +1,51 @@
 import unittest
-import datetime as dt
+from unittest.mock import MagicMock
 from services.observation_service import ObservationService
-from entities.station import Station
+from repositories.observation_repository import ObservationRepository
 from entities.observation import Observation
-
-
-def get_observation_by_row_fake(row):
-    return Observation(station_id=row["station_id"], temperature=row["temperature"],
-                       wind=row["wind"], wind_direction=row["wind_direction"],
-                       datetime=row["datetime"], error_msg=["error_msg"]) if row else None
-
-# Copied 28.4.2024 from real
-
-class FakeStationRepository:
-    def __init__(self, connection=1):
-        self._connection = connection
-
-    def find_station(self, station_id):
-        if station_id == 1:
-            test_obj = {"station_id" : str(station_id), "temperature":None, "wind":None, 
-                    "wind_direction":None, "datetime":None, "error_msg":None}
-            return Station(test_obj)
-        return False
-
-class FakeStationService:
-    def __init__(self,station_repository):
-        self._station_repository = station_repository
-
-    def get_station(self, station_id):
-        return self._station_repository.find_station(station_id)
-
-class FakeObservationRepository:
-    def __init__(self, connection=1):
-        self._connection = connection
-        self._station_service = FakeStationService(FakeStationRepository())
-
-    def get_data_from_fmi(self, station_id):
-        if not self._station_service.get_station(station_id):
-            return False
-
-        if station_id == 1:
-            get_error = 0
-            local_dt = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            temperature = 12
-            wind = 4
-            wind_direction = 200
-            return (temperature, wind, wind_direction, local_dt, get_error)
-        return False
-
-    def save_observation(self, station_id):
-        if station_id == 1:
-            return True
-        return False
-
-    def find_observation(self, station_id):
-        if station_id == 1:
-            # Fake output from database
-            test_row = []
-            test_row1 = {}
-            test_row1["station_id"] = "1"
-            test_row1["temperature"] = "10"
-            test_row1["wind"] = "5"
-            test_row1["wind_direction"] = "150"
-            test_row1["datetime"] = "2024-04-28 12:00:01"
-            test_row1["error_msg"] = 0
-            test_row.append(test_row1)
-            return get_observation_by_row_fake(test_row1)
-        return False
-
-    def delete_all(self):
-        return True
-
-
-# Testing begins
 
 class TestObservationService(unittest.TestCase):
     def setUp(self):
-        self._observation_service = ObservationService(FakeObservationRepository())
-        self._observation_repository = FakeObservationRepository()
-        self.wind = 0
-        self.station_id = 1
+        self.connection = MagicMock()
+        self._observation_repository = ObservationRepository(self.connection)
+        self._observation_service = ObservationService(self._observation_repository)
+        self.test_row = {"station_id":"3", "temperature":"20",
+                       "wind":"12", "wind_direction":"200",
+                       "datetime":"2024-05-10 12:00:00", "error_msg":"0"}
+        self.test_obs = Observation(station_id="1", temperature="10",
+                       wind="10", wind_direction="100",
+                       datetime="2024-05-10 12:10:00", error_msg="0")
+        self.test_date = "2024-05-10 12:00:00"
+        self.test_wind = 0
+        self.test_station_id = 1
+        self.fake_station_id = 999
 
     def test_update_observation(self):
-        test_save = self._observation_service.update_observation(
-            self.station_id)
-        return self.assertEqual(test_save, True)
+        result = self._observation_service.update_observation(
+            self.test_station_id)
+        self.assertEqual(result, True)
 
     def test_update_observation_no_station_id(self):
-        test_save = self._observation_service.update_observation(34444)
-        return self.assertEqual(test_save, False)
+        result = self._observation_service.update_observation(self.fake_station_id)
+        self.assertEqual(result, False)
 
     def test_get_observation(self):
-        test_result = self._observation_service.get_observation(
-            self.station_id)
-        wind_result = int(test_result.wind)
-        return self.assertEqual(wind_result, 5)
+        self._observation_repository.find_observation = MagicMock(return_value=self.test_obs)
+        result = self._observation_service.get_observation(self.test_station_id)
+        self.assertIsInstance(result, Observation)
+        self.assertEqual(result.wind, "10")
+
+    def test_check_obs_if_old(self):
+        self._observation_repository.check_if_old = MagicMock(return_value=True)
+        result = self._observation_service.check_obs_if_old(self.test_date, 10)
+        self.assertTrue(result)
+
+    def test_check_obs_if_not(self):
+        self._observation_repository.check_if_old = MagicMock(return_value=False)
+        result = self._observation_service.check_obs_if_old(self.test_date, 10)
+        self.assertFalse(result)
 
     def test_delete_observations_from_database(self):
-        return self.assertEqual(self._observation_repository.delete_all(), True)
+        self._observation_repository.delete_all = MagicMock(return_value=True)
+        result = self._observation_repository.delete_all()
+        self.assertEqual(result, True)
