@@ -10,35 +10,39 @@ The application logic in the following classes is tested as follows.
 
 - `StationService` class tests are on [TestStationService`](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/station_service_test.py)
 
-`StationService` object is installed so that it is injected with `FakeStationRepository` object which saves data in to memory instead of database.
+`StationService` object is injected with `StationRepository` which database connection and results are simulated with MagicMock.
 
 - `ObservationService` class tests are on [TestObservationService](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/observation_service_test.py)
 
-`ObservationService` object is installed so that it is injected with fake repository objects which save data in to memory and not in the database. For this use there are classes `FakeStationRepository`, `FakeStationService` and `FakeObservationRepository`.
+`ObservationService` object is installed so that it is injected with repository object `ObservationRepository` which database connection and results are simulated with MagicMock.
+
 
 - `Scheduler` class tests are on [TestObservationScheduler](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/observation_scheduler_test.py)
 
-`Scheduler` object is installed so that it is injected with fake repository objects which save data in to memory and not in the database. For this use there are classes
-`FakeObservationRepository` and `FakeObservationService`.
+`Scheduler` object is installed so that it is injected with repository objects `ObservationService` and `StationService` whose database connections and results are simulated with MagicMock.
 
 
 ### Repository classes
 
-- Repository class `ObservationRepository` is tested with [TestObservationRepository](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/repositories/observation_repository_test.py).
+- `StationRepository` class tests are on [TestStationRepository`](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/station_repository_test.py)
 
-Tests use mock and MagicMock libraries from unittest to simulate database.
+`StationRepository` object has database connection and results simulated with MagicMock.
+
+- `ObservationRepository` class tests are on [TestObservationRepository`](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/station_observation_test.py)
+
+`ObservationRepository` object has database connection and results simulated with MagicMock. It contains `FakeObs` class which simulates data results from FMI queries.
 
 ### Entity classes
 
-- Methods in the entity class `Station` are tested with [TestStation](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/entities/station_test.py)
+- `Station` class methods are tested on [TestStation`](https://github.com/mcpaulafi/ot-harjoitustyo/blob/main/src/tests/services/station_test.py)
 
 ### Test coverage
 
 Application test branch coverage is ?% excluding the layer of user interface.
 
-[INSERT IMAGE]
+![](./images/2024-05-10_coverage.png)
 
-[INSERT LIST OF WHAT IS NOT TESTED]
+Running build.py- ja initialize_database.py files from shell are tested manually.
 
 ## System tests
 

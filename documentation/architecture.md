@@ -188,7 +188,6 @@ sequenceDiagram
 
 After the selection user can rename the station (give a nickname such as "Summer cabin"). 
 
-TBD: User can also select the layout for the weather view from some options. 
 
 ```mermaid
 sequenceDiagram

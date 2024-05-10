@@ -45,7 +45,6 @@ On settings menu you can rename the selected stations if you like. You can use l
 
 Save your settings and continue to Weather View by clicking "Save and view >" button. Wait a bit, because it takes a few seconds while observation data is retrieved.
 
-TBD: You can select if observations are all on one window or if they are shown station by station on a loop.
 
 ![](./images/settings_1.png)
 
@@ -53,13 +52,13 @@ TBD: You can select if observations are all on one window or if they are shown s
 
 You can go back to Settings or to station selection from the buttons on the bottom right of the window.
 
-Observation data from the stations is retrieved and updated in every 10-20 minutes. 
+Observation data from the stations is retrieved and updated approximately in every 10 minutes. 
 
 ![](./images/weather_1.png)
 
 ### In case some observation data is missing
 
 - Stations and/or connection to the station can be occassionally broken
-- Not all stations measure wind and/or temperature
-- Stations usually send data every 10 minutes
-- App tries to get new data when observation time of a station is older than 10 minutes. If there is no new data, app will gradually slow down the frequency of asking up to 20 minutes
+- Not all stations measure wind and/or temperature, this app does not know which (yet)
+- Stations usually send new data every 10 minutes
+- App tries to get new data when observation time of a station is older than 10 minutes. If there is no new data, app will gradually slow down the frequency of queries up to 60 minutes
