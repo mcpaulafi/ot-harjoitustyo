@@ -24,4 +24,5 @@
 | 29.4  | 1    | observation_scheduler_test debuging (69) |
 | 30.4  | 7    | Tests and learning about tests, User manual, documentation updates (76)|
 | 9.5   | 6,5  | Code cleanup, checking dates (82,5)|
-| Total | 82,5   |     |
+| 10.5  | 6,5  | More unittests (89)|
+| Total | 89   |     |
