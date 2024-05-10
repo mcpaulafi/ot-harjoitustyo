@@ -80,7 +80,7 @@ class SettingsView:
 
             nick = StringVar()
             # If Nickname is already saved
-            nick = station_service.get_nickname(s.station_id).nickname
+            nick = station_service.get_nickname(s.station_id).nickname[0]
 
             self.nick_entry = ttk.Entry(master=self._frame,
                                         font=('Arial', 12, 'normal'))

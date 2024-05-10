@@ -65,8 +65,8 @@ class WeatherView:
 
     def _initialize_name(self):
         self.station_name_label.destroy()
-        nick_var = station_service.get_nickname(self.station_id).get_nickname()
-        name_var = station_service.get_station(self.station_id).name
+        nick_var = station_service.get_nickname(self.station_id).get_nickname()[0]
+        name_var = station_service.get_station(self.station_id).name[0]
         if len(nick_var) > 0:
             name_var = nick_var
 

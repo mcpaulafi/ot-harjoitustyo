@@ -75,13 +75,13 @@ class StationListView:
                               sticky=constants.NS)
 
     def _check_selected_count(self):
-        if station_service.count_selected() > 5:
+        if station_service.count_selected()[0] > 4:
             self._error_variable = "At maximum 5 stations can be selected."
             self._initialize_error_msg()
             self.select_button.config(state="disabled")
             self.continue_button.config(state="disabled")
             return False
-        elif station_service.count_selected() < 1:
+        elif station_service.count_selected()[0] < 1:
             self._error_variable = "Select at least 1."
             self._initialize_error_msg()
             self.continue_button.config(state="disabled")
