@@ -41,9 +41,12 @@ class StationRepository:
         cursor.execute("SELECT count(*) from stations")
 
         row = cursor.fetchone()
-        self._connection.commit()
 
-        return row[0]
+        if row:
+            number = row
+            self._connection.commit()
+            return number
+        return None
 
     def find_all(self):
         """Returns all stations from the database.
@@ -127,7 +130,11 @@ class StationRepository:
 
         row = cursor.fetchone()
 
-        return row[0]
+        if row:
+            number = row
+            self._connection.commit()
+            return number
+        return None
 
     def delete_selected_stations_from_database(self):
         """ Removes content from the selected_stations and observations table.
@@ -214,7 +221,7 @@ class StationRepository:
                        where s1.station_id=s2.station_id")
 
         row = cursor.fetchall()
-
+        self._connection.commit()
         return list(map(get_station_by_row, row))
 
     def find_station(self, station_id):
@@ -235,45 +242,44 @@ class StationRepository:
                        from stations as s1 where s1.station_id=?", (str(station_id),))
 
         row = cursor.fetchone()
-
+        self._connection.commit()
         return get_station_by_row(row)
 
-    def find_nickname(self, station_id):
+    def get_nickname(self, station_id):
         """ Returns the nickname of the station.
         Args:
-        station_id: id of the station"""
-
-        # TODO not found
+        station_id: id of the station
+        Returns:
+            nickname as a string"""
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT nickname \
                        from selected_stations \
                        where station_id=?", (str(station_id),))
-
         row = cursor.fetchone()
+        if row:
+            nickname = row
+            self._connection.commit()
+            return nickname
+        return None
 
-        nick = row[0]
-
-        cursor1 = self._connection.cursor()
-
-        cursor1.execute("SELECT s1.station_id, s1.original_id, s1.name,\
-                       s1.lat, s1.lon, s1.source \
-                       from stations as s1 where s1.station_id=?", (str(station_id),))
-
-        row1 = cursor1.fetchall()
-
-        station = list(map(get_station_by_row, row1))[0]
-        station.set_nickname(nick)
-        return station
-
-    def find_error(self, station_id):
-        """ Returns the errorstate of the station.
+    def find_nickname(self, station_id):
+        """ Returns Station object with a nickname.
         Args:
         station_id: id of the station
         Returns:
             Station object"""
+        nick = self.get_nickname(station_id)
+        station = self.find_station(station_id)
+        station.set_nickname(nick)
+        return station
 
-        #TODO station not found
+    def get_error(self, station_id):
+        """ Returns the error state of the station.
+        Args:
+        station_id: id of the station
+        Returns:
+            Error as a string"""
 
         cursor = self._connection.cursor()
 
@@ -283,7 +289,20 @@ class StationRepository:
 
         row = cursor.fetchone()
 
-        error_msg = row[0]
+        if row:
+            error_msg = row
+            self._connection.commit()
+            return error_msg
+        return None
+
+    def find_error(self, station_id):
+        """ Returns the Station object with an error state.
+        Args:
+        station_id: id of the station
+        Returns:
+            Station object"""
+
+        error_msg = self.get_error(station_id)
 
         cursor1 = self._connection.cursor()
 
@@ -291,9 +310,9 @@ class StationRepository:
                        s1.lat, s1.lon, s1.source \
                        from stations as s1 where s1.station_id=?", (str(station_id),))
 
-        row1 = cursor1.fetchall()
+        row1 = cursor1.fetchone()
 
-        station = list(map(get_station_by_row, row1))[0]
+        station = get_station_by_row(row1)
         station.set_error_msg(error_msg)
         return station
 
