@@ -41,6 +41,7 @@ class TestStationRepository(unittest.TestCase):
                                      Station, "Not instance")
 
     def test_count_all_db(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = 3
@@ -49,6 +50,7 @@ class TestStationRepository(unittest.TestCase):
         self.assertEqual(result, 3)
 
     def test_find_all(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchall.return_value = self.test_rows
         result = self._station_repository.find_all()
@@ -58,6 +60,7 @@ class TestStationRepository(unittest.TestCase):
             self.assertEqual(station.station_id, self.test_stations[i].station_id)
 
     def test_check_if_station_in_database(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = True
@@ -65,6 +68,7 @@ class TestStationRepository(unittest.TestCase):
         self.assertEqual(result, True)
 
     def test_check_if_station_in_database_not(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = None
@@ -73,6 +77,7 @@ class TestStationRepository(unittest.TestCase):
 
 
     def test_check_if_selected_in_database(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = True
@@ -80,6 +85,7 @@ class TestStationRepository(unittest.TestCase):
         self.assertEqual(result, True)
 
     def test_check_if_selected_in_database_not(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = None
@@ -91,38 +97,45 @@ class TestStationRepository(unittest.TestCase):
         self.assertTrue(result)
 
     def test_count_selected_stations(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = 3
         result = self._station_repository.count_selected_stations()
         self.assertEqual(result, 3)
 
     def test_delete_selected_stations_from_database(self):
+        self._station_repository.delete_all_db()
         result = self._station_repository.delete_selected_stations_from_database()
         self.assertTrue(result)
 
     def test_save_selected_station_to_database(self):
+        self._station_repository.delete_all_db()
         self._station_repository.check_if_station_in_database = MagicMock(return_value=True)
         self._station_repository.check_if_selected_in_database = MagicMock(return_value=False)
         result = self._station_repository.save_selected_station_to_database(self.station_id)
         self.assertTrue(result)
 
     def test_save_selected_station_to_database_not(self):
+        self._station_repository.delete_all_db()
         self._station_repository.check_if_station_in_database = MagicMock(return_value=False)
         self._station_repository.check_if_selected_in_database = MagicMock(return_value=False)
         result = self._station_repository.save_selected_station_to_database(self.station_id)
         self.assertFalse(result)
 
     def test_save_nickname_to_database(self):
+        self._station_repository.delete_all_db()
         self._station_repository.check_if_selected_in_database = MagicMock(return_value=True)
         result = self._station_repository.save_nickname_to_database(self.station_id, self.nickname)
         self.assertTrue(result)
 
     def test_save_nickname_to_database_not(self):
+        self._station_repository.delete_all_db()
         self._station_repository.check_if_selected_in_database = MagicMock(return_value=False)
         result = self._station_repository.save_nickname_to_database(self.station_id, self.nickname)
         self.assertFalse(result)
 
     def test_find_selected(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchall.return_value = self.test_rows
         result = self._station_repository.find_selected()
@@ -132,6 +145,7 @@ class TestStationRepository(unittest.TestCase):
             self.assertEqual(station.station_id, self.test_stations[i].station_id)
 
     def test_find_station(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = self.test_row1
@@ -140,18 +154,21 @@ class TestStationRepository(unittest.TestCase):
         self.assertEqual(result.station_id, "3")
 
     def test_get_nickname(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = self.nickname
         result = self._station_repository.get_nickname(self.station_id)
         self.assertEqual(result, "NickStation")
 
     def test_get_nickname_not(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = None
         result = self._station_repository.get_nickname(self.station_id)
         self.assertFalse(result)
 
     def test_find_nickname(self):
+        self._station_repository.delete_all_db()
         self._station_repository.get_nickname = MagicMock(return_value=self.nickname)
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = self.test_row1
@@ -159,18 +176,21 @@ class TestStationRepository(unittest.TestCase):
         self.assertEqual(result.nickname, "NickStation")
 
     def test_get_error_not(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = None
         result = self._station_repository.get_error(self.station_id)
         self.assertFalse(result)
 
     def test_get_error(self):
+        self._station_repository.delete_all_db()
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = "1"
         result = self._station_repository.get_error(self.station_id)
         self.assertEqual(result, "1")
 
     def test_find_error(self):
+        self._station_repository.delete_all_db()
         self._station_repository.get_error = MagicMock(return_value="1")
         cursor = self.connection.cursor.return_value
         cursor.fetchone.return_value = self.test_row1

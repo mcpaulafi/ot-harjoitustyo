@@ -46,11 +46,13 @@ class TestObservationRepository(unittest.TestCase):
 #    def get_data_from_fmi(self, station_id):
 
     def test_check_data_from_fmi(self):
+        self._observation_repository.delete_all()
         self._observation_repository.utc_datetime = MagicMock(return_value='2023-04-05 12:30:45')
         result = self._observation_repository.check_data_from_fmi(self._test_obs, self.station_name)
         self.assertEqual(result[0], 30)
 
     def test_check_data_with_utc_datetime_none(self):
+        self._observation_repository.delete_all()
         self._observation_repository.utc_datetime = MagicMock(return_value=None)
         result = self._observation_repository.check_data_from_fmi(self._test_obs, self._fake_station_name)
         self.assertIsNone(result[0])
@@ -59,17 +61,20 @@ class TestObservationRepository(unittest.TestCase):
 # def check_if_same_date(self, first_date, second_date):
 
     def test_save_observation(self):
+        self._observation_repository.delete_all()
         cursor = self.connection2.cursor.return_value
         cursor.execute.return_value = None
         result = self._observation_repository.save_observation(self.station_id)
         self.assertEqual(result, True)
 
     def test_save_observation_station_not_exists(self):
+        self._observation_repository.delete_all()
         self.mock_station_service.get_station.return_value = False
         result = self._observation_repository.save_observation(self._fake_station_id)
         self.assertFalse(result)
 
     def test_find_observation(self):
+        self._observation_repository.delete_all()
         cursor = self.connection2.cursor.return_value
         cursor.execute.return_value = None
         cursor.fetchone.return_value = self._test_row
@@ -78,6 +83,7 @@ class TestObservationRepository(unittest.TestCase):
         self.assertEqual(result.station_id, "4")
 
     def test_find_observation_station_not_exists(self):
+        self._observation_repository.delete_all()
         self.mock_station_service.get_station.return_value = False
         result = self._observation_repository.find_observation(self._fake_station_id)
         self.assertFalse(result)
