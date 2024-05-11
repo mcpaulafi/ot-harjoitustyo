@@ -21,13 +21,14 @@ class UI:
         self._show_stationlist_view()
 
     def _hide_current_view(self):
+        """Hides current view."""
         if self._current_view:
             self._current_view.destroy()
 
         self._current_view = None
 
     def _show_stationlist_view(self):
-        """Shows station selection view"""
+        """Shows Station selection view"""
         self._hide_current_view()
 
         self._current_view = StationListView(
@@ -36,7 +37,7 @@ class UI:
         self._current_view.pack()
 
     def _show_settings_view(self):
-        """Shows selected station"""
+        """Shows Settings view"""
         self._hide_current_view()
 
         self._current_view = SettingsView(
@@ -56,6 +57,3 @@ class UI:
         )
 
         self._current_view.pack()
-
-
-print("UI\n")
