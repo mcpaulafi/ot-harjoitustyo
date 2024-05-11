@@ -65,6 +65,17 @@ class StationService:
             List of Station objects.
         """
         return self._station_repository.find_selected()
+    
+    def get_selected_names(self):
+        """Returns names of selected stations.
+
+        Returns:
+            String of names.
+        """
+        selected_list = ""
+        for s in self._station_repository.find_selected():
+            selected_list += str(s.name) + "\n"
+        return selected_list
 
     def get_nickname(self, station_id):
         return self._station_repository.find_nickname(station_id)
