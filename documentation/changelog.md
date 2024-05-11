@@ -51,3 +51,6 @@
 - Check if observation datetime was old, made a function to observation repository, updated and modified dependent functionalities
 - Code cleanup and splitting functions to shorter ones
 - Made new tests and implemented MagicMock to unittests, learned and debugged with ChatGPT
+- Added better graphics on layout and gave up on alternative weather view layout
+- Code cleanup documentation to all python files
+- Fixed bugs on selecting limit and last station running twice on the loop

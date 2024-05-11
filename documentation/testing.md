@@ -38,7 +38,7 @@ The application logic in the following classes is tested as follows.
 
 ### Test coverage
 
-Application test branch coverage is ?% excluding the layer of user interface.
+Application test branch coverage is 93% excluding the layer of user interface.
 
 ![](./images/2024-05-10_coverage.png)
 
