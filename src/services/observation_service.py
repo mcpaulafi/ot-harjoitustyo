@@ -18,7 +18,7 @@ class ObservationService:
         self._observation_repository = observation_repository
 
     def get_observation(self, station_id):
-        """Returns Observation object.
+        """Gets Observation data and returns object.
 
             Returns:
             Observation object.
@@ -26,13 +26,12 @@ class ObservationService:
         return self._observation_repository.find_observation(station_id)
 
     def update_observation(self, station_id):
-        """Updates latest observations to the database.
+        """Gets and updates latest observations to the database.
 
             Returns:
             True.
         """
-        update_data = self._observation_repository.save_observation(station_id)
-        return update_data
+        return self._observation_repository.save_observation(station_id)
 
     def check_obs_if_old(self, given_date, timevalue=10):
         """Checks if date is older timevalue minutes.
@@ -46,6 +45,10 @@ class ObservationService:
         return self._observation_repository.check_if_old(given_date, timevalue)
 
     def delete_observations_from_database(self):
+        """Deletes all observations on the database.
+        Returns:
+            True.
+        """
         self._observation_repository.delete_all()
         return True
 
