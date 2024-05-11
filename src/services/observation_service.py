@@ -49,6 +49,4 @@ class ObservationService:
         self._observation_repository.delete_all()
         return True
 
-
 observation_service = ObservationService()
-

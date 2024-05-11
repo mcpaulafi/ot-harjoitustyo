@@ -65,7 +65,7 @@ class StationService:
             List of Station objects.
         """
         return self._station_repository.find_selected()
-    
+
     def get_selected_names(self):
         """Returns names of selected stations.
 

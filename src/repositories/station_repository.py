@@ -2,7 +2,6 @@ from datetime import datetime
 from entities.station import Station
 from database_connection import get_database_connection
 
-# TODO add if_station
 
 def get_station_by_row(row):
     """Funtion returns Station objects from database result.
@@ -235,7 +234,6 @@ class StationRepository:
             """
 
         cursor = self._connection.cursor()
-        # TODO station not found
 
         cursor.execute("SELECT s1.station_id, s1.original_id, s1.name,\
                        s1.lat, s1.lon, s1.source \
@@ -243,6 +241,8 @@ class StationRepository:
 
         row = cursor.fetchone()
         self._connection.commit()
+        if not row:
+            return False
         return get_station_by_row(row)
 
     def get_nickname(self, station_id):

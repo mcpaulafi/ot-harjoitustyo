@@ -14,7 +14,7 @@ def get_observation_by_row(row):
         row: contains a library for object attributes
     Returns:
         Observation object"""
-    
+
     return Observation(station_id=row["station_id"], temperature=row["temperature"],
                        wind=row["wind"], wind_direction=row["wind_direction"],
                        datetime=row["datetime"], error_msg=row["error_msg"]) if row else None
