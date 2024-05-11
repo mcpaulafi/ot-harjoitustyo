@@ -15,8 +15,6 @@ class StationListView:
             handle_show_settings_view:
                 next frame where settings are made
 
-            handle_button_click:
-                Save selection to the database and change to station settigns view
             self.stations: Gets list of all stations as objects
             Bases for the Labels, buttons, image on the frame
         """
@@ -50,7 +48,7 @@ class StationListView:
         self._frame.destroy()
 
 
-    # Content fields
+    # Content labels
 
     def _initialize_error_msg(self):
         """"Initializes Label for error message."""
@@ -95,7 +93,6 @@ class StationListView:
                                         font=('Arial', 12, 'normal'))
         self.selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
                                  padx=10, pady=10, sticky=constants.NW)
-        self._check_selected_count()
 
 
     # Buttons
@@ -112,6 +109,9 @@ class StationListView:
         )
         self.select_button.grid(column=2, row=3,
                                 padx=10, pady=10, sticky=constants.S)
+
+        if station_service.count_selected()[0] >= 5:
+            self.select_button.config(state="disabled")
 
         self.clear_button = ttk.Button(
             master=self._frame, text="< Clear all", style='Dodger.TButton',
@@ -130,7 +130,6 @@ class StationListView:
         )
         self.continue_button.grid(column=4, row=7,
                                   padx=10, pady=20, sticky=constants.N)
-        self._check_selected_count()
 
 
     # Handle button clicks
@@ -142,7 +141,7 @@ class StationListView:
             Continue button is disabled if number < 1
             Initializes error message on these events."""
 
-        if station_service.count_selected()[0] > 4:
+        if station_service.count_selected()[0] >= 5:
             self._error_variable = "At maximum 5 stations can be selected."
             self._initialize_error_msg()
             self.select_button.config(state="disabled")
@@ -163,6 +162,7 @@ class StationListView:
             Adds selected value on a list.
             Saves selected station to the database with station service.
             Clears and prints new selected list.
+            Checks count of selected stations.
             Re-initializes Continue-button.
         """
 
@@ -175,6 +175,7 @@ class StationListView:
         if len(selected_values)>0:
             station_service.save_selected(selected_values[0])
 
+        self._check_selected_count()
         self._initialize_selected()
         self._initialize_continue_to_settings()
 
@@ -198,7 +199,7 @@ class StationListView:
             Checks selected count.
             Switches view to Settings.
         """
-        if self._check_selected_count():
+        if self._check_selected_count()<6:
             self._handle_show_settings_view()
         else:
             return
@@ -206,12 +207,18 @@ class StationListView:
 
     # Layout image and colors
 
-    def load_colors_and_image(self, style):
-        """Loads theme, background and button colors. 
-        Sets Label for top image'.
+    def _load_colors_and_image(self, style):
+        """Adds style configurations for layout.
+        Actions:
+            Configures theme
+            Configures background color for frame and labels.
+            Configures colors for buttons. 
+            Opens image file.
+            Sets Label for the image.
         """
+
         style.theme_use("clam")
-        style.configure('TFrame', background='white') 
+        style.configure('TFrame', background='white')
         style.configure('TLabel', background='white')
         style.configure('Dodger.TButton', foreground='black', background='dodger blue')
 
@@ -225,11 +232,14 @@ class StationListView:
 
     def _initialize(self):
         """Initializes the frame view.
-        Sets titles and text fields
+        Sets titles:
+            title_label: Select stations
+            note1_label: Left column instructions
+            note2_label: Right column instructions
         Actions:
             load_colors_and_image: Loads colors and image on layout
             _initialize_error_msg: Label for error message
-            _initialize_stations_list: List of all stations
+            _initialize_stations_list: Loads all stations Listbox
             _initialize_select_clear_buttons: Buttons Add to> and <Clear all
             _initialize_selected: List of selected stations
             _initialize_continue_to_settings: Button Continue>
@@ -239,23 +249,21 @@ class StationListView:
 
         self._frame = ttk.Frame(master=self._root)
         style = ttk.Style(self._frame)
-        self.load_colors_and_image(style)
+        self._load_colors_and_image(style)
 
-        # Title of the window
-        self.station_label = ttk.Label(master=self._frame, text="Select station",
-                                       font=('Arial', 24, 'bold'))
-        self.station_label.grid(column=0, row=1, columnspan=5,
-                                padx=10, pady=10, sticky=constants.NW)
+        title_label = ttk.Label(master=self._frame,
+                            text="   Select stations ",
+                            font=('Arial', 24, 'bold'))
+        title_label.grid(column=0, row=0, columnspan=5,
+                            padx=10, pady=0, sticky=constants.W)
 
         self._initialize_error_msg()
 
-        # Title of left field
         self.note1_label = ttk.Label(master=self._frame, text="Select 1 station at the time",
                                      font=('Arial', 12, 'bold'))
         self.note1_label.grid(column=0, row=3, columnspan=2,
                               padx=10, pady=10, sticky=constants.W)
 
-        # Title of right field
         self.note2_label = ttk.Label(master=self._frame,
                                      text="Selected stations (max 5)                    ",
                                      font=('Arial', 12, 'bold'))
@@ -267,7 +275,7 @@ class StationListView:
         self._initialize_selected()
         self._initialize_continue_to_settings()
 
-        self._frame.grid_columnconfigure(0, weight=1, minsize=100)
+        self._frame.grid_columnconfigure(0, weight=1, minsize=50)
         self._frame.grid_columnconfigure(1, weight=1, minsize=100)
         self._frame.grid_columnconfigure(2, weight=1, minsize=100)
         self._frame.grid_columnconfigure(3, weight=1, minsize=100)
