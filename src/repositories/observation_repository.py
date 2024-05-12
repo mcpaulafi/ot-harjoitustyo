@@ -65,8 +65,11 @@ class ObservationRepository:
         station_box = f"{str(float(station_lon)-extra)},{str(float(station_lat)-extra)},\
         {str(float(station_lon)+extra)},{str(float(station_lat)+extra)}"
 
-        obs2 = download_stored_query("fmi::observations::weather::multipointcoverage",
+        try:
+            obs2 = download_stored_query("fmi::observations::weather::multipointcoverage",
                               args=[f"bbox={station_box}","timeseries=True"])
+        except Exception:
+            return False
 
         return self.check_data_from_fmi(obs2, station_name)
 
@@ -80,7 +83,7 @@ class ObservationRepository:
             station_name as string
 
         Reply is filtered with:
-            latest timestamp
+            last value in results
             station name
 
         Returns:
@@ -147,9 +150,10 @@ class ObservationRepository:
     def save_observation(self, station_id):
         """Function retrieves new data from FMI and
         saves observation to the database.
-        Checks if station_id is valid in the database.
-        Does nothing if retrieved date already is in the database.
-
+        Actions:
+            station_service.get_station: Checks if station_id is valid in the database.
+            Does nothing if retrieved date already is in the database.
+            If API breaks, saves None values to the database.
         Args:
             station_id: id of the selected station
         Returns:
@@ -161,17 +165,23 @@ class ObservationRepository:
         cursor = self._connection.cursor()
 
         obs = self.get_data_from_fmi(station_id)
-
-        temperature = obs[0]
-        wind = obs[1]
-        wind_direction = obs[2]
-        date_str = obs[3]
-        error_msg = obs[4]
-
-        if error_msg:
+        if not obs:
+            temperature = None
+            wind = None
+            wind_direction = None
+            date_str = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             error_msg = 1
         else:
-            error_msg = 0
+            temperature = obs[0]
+            wind = obs[1]
+            wind_direction = obs[2]
+            date_str = obs[3]
+            error_msg = obs[4]
+
+            if error_msg:
+                error_msg = 1
+            else:
+                error_msg = 0
 
         db_obs = self.find_observation(station_id)
 
