@@ -17,7 +17,7 @@ This application is made as a course work in the Software engineering course (Ai
 
 - [Viikko5](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko5) 22.4.2024
 - [Viikko6](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko6) 30.4.2024
-- [Viikko7](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko6) 12.5.2024
+- [Loppupalautus](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko7) 12.5.2024
 
 ## Report of ChatGPT usage
 
