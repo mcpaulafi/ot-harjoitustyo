@@ -15,16 +15,16 @@ class SettingsView:
                 TKinter element, in which view is installed.
             handle_show_weather_view: Change to Weather view
             handle_show_stationlist_view: Change to Select stations view
-            self.stations : list of Station objects
-            self.row: keeps count of grid row number
+            self._stations : list of Station objects
+            self._row: keeps count of grid row number
         """
 
         self._root = root
         self._handle_show_weather_view = handle_show_weather_view
         self._handle_show_stationlist_view = handle_show_stationlist_view
-        self.stations = station_service.get_stations()
+#        self._stations = station_service.get_stations()
         self._frame = None
-        self.row = 0
+        self._row = 0
 
         self._list_label = None
         self._button_select = None
@@ -32,17 +32,14 @@ class SettingsView:
         self._error_label = None
         self._error_key = None
         self._error_label = ttk.Label(master=self._frame)
-        self.name_label = ttk.Label(master=self._frame)
+        self._name_label = ttk.Label(master=self._frame)
         self._error_row_label = ttk.Label(master=self._frame)
-        self.bg_image = None
-        self.label_img = None
-        self.nick_label = None
-        self.nick_entry = None
-        self.nick_entry_list = {}
-        self.station_row_list = {}
-        self.station_id = None
-        self.station_temp = None
-        self.station_wind = None
+        self._bg_image = None
+        self._label_img = None
+        self._nick_label = None
+        self._nick_entry = None
+        self._nick_entry_list = {}
+        self._station_row_list = {}
 
         self._initialize()
 
@@ -81,22 +78,22 @@ class SettingsView:
             master=self._frame, text="Save and view>", style='Dodger.TButton',
             command=self._handle_save_click
         )
-        select_button1.grid(column=2, row=self.row+1, padx=10, pady=10,
+        select_button1.grid(column=2, row=self._row+1, padx=10, pady=10,
                             rowspan=1, sticky=constants.EW)
 
         select_button1 = ttk.Button(
             master=self._frame, text="<Select stations", style='Dodger.TButton',
             command=self._handle_back_click
         )
-        select_button1.grid(column=1, row=self.row+1, padx=10, pady=10,
+        select_button1.grid(column=1, row=self._row+1, padx=10, pady=10,
                             rowspan=1, sticky=constants.EW)
 
     def _initialize_stations(self):
         """Initializes station labels and input entry for nickname.
         Actions:
-            self.station_row_list[s.station_id]: Saves station_id and row for error messages
-            name_label: Official station name
-            nick_label: Nickname title
+            _station_row_list[s.station_id]: Saves station_id and row for error messages
+            _name_label: Official station name
+            _nick_label: Nickname title
             station_service.get_nickname: Gets nickname from database 
                 if it is already saved
             nick_entry: Entry for nickname input
@@ -105,31 +102,31 @@ class SettingsView:
         """
 
         for s in station_service.get_selected():
-            self.station_row_list[s.station_id] = self.row
+            self._station_row_list[s.station_id] = self._row
 
-            self.name_label = ttk.Label(master=self._frame, 
+            self._name_label = ttk.Label(master=self._frame, 
                     text=s.name, font=('Arial', 12, 'bold'))
-            self.name_label.grid(column=0, row=self.row, columnspan=2,
+            self._name_label.grid(column=0, row=self._row, columnspan=2,
                     padx=10, pady=2, sticky=constants.NW)
-            self.row += 1
+            self._row += 1
 
-            self.nick_label = ttk.Label(master=self._frame, 
+            self._nick_label = ttk.Label(master=self._frame, 
                     text="Nickname", font=('Arial', 12, 'normal'))
-            self.nick_label.grid(column=0, row=self.row, columnspan=1,
+            self._nick_label.grid(column=0, row=self._row, columnspan=1,
                     padx=10, pady=0, sticky=constants.NW)
 
             nick = StringVar()
             nick = station_service.get_nickname(s.station_id).nickname[0]
 
-            self.nick_entry = ttk.Entry(master=self._frame,
+            self._nick_entry = ttk.Entry(master=self._frame,
                                         font=('Arial', 12, 'normal'))
             if nick is not None:
-                self.nick_entry.insert(0, nick)
-            self.nick_entry.grid(column=1, row=self.row, columnspan=1,
+                self._nick_entry.insert(0, nick)
+            self._nick_entry.grid(column=1, row=self._row, columnspan=1,
                                  padx=10, pady=0, sticky=constants.NW)
 
-            self.nick_entry_list[s.station_id] = self.nick_entry
-            self.row += 1
+            self._nick_entry_list[s.station_id] = self._nick_entry
+            self._row += 1
 
     def _set_error_row(self, erow):
         """"Marks the row of a station with * if there is an error.
@@ -165,7 +162,7 @@ class SettingsView:
             _set_error_row: Initializes action that shows the row of error
         """
 
-        for key, nick in self.nick_entry_list.items():
+        for key, nick in self._nick_entry_list.items():
             nick_input = nick.get()
 
             if len(nick_input) > 20:
@@ -173,7 +170,7 @@ class SettingsView:
                 self._error_variable = "Too long nickname."
                 self._error_key = key
                 self._initialize_error_msg()
-                self._set_error_row(self.station_row_list[key])
+                self._set_error_row(self._station_row_list[key])
                 return
 
             if len(nick_input) == 0 or re.match(r"^[åäöa-zÅÄÖA-Z0-9\s-]+$", nick_input):
@@ -183,7 +180,7 @@ class SettingsView:
                 self._error_key = key
                 self._error_variable = "Nickname has unallowed characters."
                 self._initialize_error_msg()
-                self._set_error_row(self.station_row_list[key])
+                self._set_error_row(self._station_row_list[key])
                 return
 
             station_service.save_selected_nickname(key, nick_input)
@@ -219,10 +216,10 @@ class SettingsView:
         style.configure('Dodger.TButton', foreground='black', background='dodger blue')
 
         image = Image.open("./src/ui/background.png")
-        self.bg_image = ImageTk.PhotoImage(image)
+        self._bg_image = ImageTk.PhotoImage(image)
 
-        self.label_img = ttk.Label(self._frame, image=self.bg_image)
-        self.label_img.grid(column=0, row=0, columnspan=5)
+        self._label_img = ttk.Label(self._frame, image=self._bg_image)
+        self._label_img.grid(column=0, row=0, columnspan=5)
 
 
     #Frame
@@ -257,7 +254,7 @@ class SettingsView:
                 font=('Arial', 12, 'normal'))
         note_label.grid(column=0, row=2, columnspan=3,
                         padx=5, pady=10, sticky=constants.W)
-        self.row = 3
+        self._row = 3
 
         self._initialize_stations()
         self._initialize_buttons()

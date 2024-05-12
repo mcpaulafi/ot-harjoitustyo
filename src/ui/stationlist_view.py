@@ -21,21 +21,21 @@ class StationListView:
 
         self._root = root
         self._handle_show_settings_view = handle_show_settings_view
-        self.stations = station_service.get_stations()
+        self._stations = station_service.get_stations()
         self._frame = None
 
         self._list_label = None
         self._button_select = None
         self._error_variable = None
         self._error_label = ttk.Label(master=self._frame)
-        self.selected_label = ttk.Label(master=self._frame)
+        self._selected_label = ttk.Label(master=self._frame)
         self._list_label = Listbox(master=self._frame)
         self._vertscroll = Scrollbar(master=self._frame)
-        self.continue_button = ttk.Button(master=self._frame)
-        self.bg_image = None
-        self.label_img = None
-        self.select_button = None
-        self.clear_button = None
+        self._continue_button = ttk.Button(master=self._frame)
+        self._bg_image = None
+        self._label_img = None
+        self._select_button = None
+        self._clear_button = None
 
         self._initialize()
 
@@ -69,7 +69,7 @@ class StationListView:
         # Without this empty line station ids are +1 off
         self._list_label.insert(0, "")
 
-        for s in self.stations:
+        for s in self._stations:
             self._list_label.insert(s.station_id, s.name)
 
         self._list_label.grid(column=0, row=3, columnspan=2, rowspan=2,
@@ -87,11 +87,11 @@ class StationListView:
         """"Initializes Label for the string of selected stations.
         Checks also how many stations have been selected."""
 
-        self.selected_label.destroy()
+        self._selected_label.destroy()
         list_of_selected = station_service.get_selected_names()
-        self.selected_label = ttk.Label(master=self._frame, text=list_of_selected,
+        self._selected_label = ttk.Label(master=self._frame, text=list_of_selected,
                                         font=('Arial', 12, 'normal'))
-        self.selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
+        self._selected_label.grid(column=3, row=3, columnspan=2, rowspan=2,
                                  padx=10, pady=10, sticky=constants.NW)
 
 
@@ -102,33 +102,33 @@ class StationListView:
         Button '<Clear all' for clearing selected stations. 
         Located between station list and selected stations."""
 
-        self.select_button = ttk.Button(
+        self._select_button = ttk.Button(
             master=self._frame,
             text="Add to >", state="normal", style='Dodger.TButton',
             command=self._handle_select_click
         )
-        self.select_button.grid(column=2, row=3,
+        self._select_button.grid(column=2, row=3,
                                 padx=10, pady=10, sticky=constants.S)
 
         if station_service.count_selected()[0] >= 5:
-            self.select_button.config(state="disabled")
+            self._select_button.config(state="disabled")
 
-        self.clear_button = ttk.Button(
+        self._clear_button = ttk.Button(
             master=self._frame, text="< Clear all", style='Dodger.TButton',
             command=self._handle_clear_click
         )
-        self.clear_button.grid(column=2, row=4,
+        self._clear_button.grid(column=2, row=4,
                                padx=10, pady=10, sticky=constants.N)
 
     def _initialize_continue_to_settings(self):
         """"Initializes Button 'Continue>' for continuing forward to the weather view.
         Checks also how many stations have been selected."""
-        self.continue_button.destroy()
-        self.continue_button = ttk.Button(
+        self._continue_button.destroy()
+        self._continue_button = ttk.Button(
             master=self._frame, text="Continue >", style='Dodger.TButton',
             command=self._handle_continue_click
         )
-        self.continue_button.grid(column=4, row=7,
+        self._continue_button.grid(column=4, row=7,
                                   padx=10, pady=20, sticky=constants.N)
 
 
@@ -144,16 +144,16 @@ class StationListView:
         if station_service.count_selected()[0] >= 5:
             self._error_variable = "At maximum 5 stations can be selected."
             self._initialize_error_msg()
-            self.select_button.config(state="disabled")
-            self.continue_button.config(state="disabled")
+            self._select_button.config(state="disabled")
+            self._continue_button.config(state="disabled")
             return False
         elif station_service.count_selected()[0] < 1:
             self._error_variable = "Select at least 1."
             self._initialize_error_msg()
-            self.continue_button.config(state="disabled")
+            self._continue_button.config(state="disabled")
             return False
         else:
-            self.select_button.config(state="normal")
+            self._select_button.config(state="normal")
             return True
 
     def _handle_select_click(self):
@@ -189,9 +189,9 @@ class StationListView:
         """
         station_service.delete_selected()
         self._initialize_error_msg()
-        self.select_button.config(state="normal")
+        self._select_button.config(state="normal")
         self._initialize_selected()
-        self.continue_button.config(state="disabled")
+        self._continue_button.config(state="disabled")
 
     def _handle_continue_click(self):
         """Handles actions after button click 'Continue>'.
@@ -225,8 +225,8 @@ class StationListView:
         image = Image.open("./src/ui/background.png")
         self.bg_image = ImageTk.PhotoImage(image)
 
-        self.label_img = ttk.Label(self._frame, image=self.bg_image)
-        self.label_img.grid(column=0, row=0, columnspan=5)
+        self._label_img = ttk.Label(self._frame, image=self.bg_image)
+        self._label_img.grid(column=0, row=0, columnspan=5)
 
     # Frame
 

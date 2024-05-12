@@ -20,10 +20,10 @@ class WeatherView:
                 next frame where settings are made
             self._scheduler: Creates Scheduler instance
 
-            self.stations: Gets list of all stations as objects
+            self._stations: Gets list of all stations as objects
 
-            self.station_loop: keeps track which stations have been shown
-            self.station_time: keeps track station update interval time
+            self._station_loop: keeps track which stations have been shown
+            self._station_time: keeps track station update interval time
             station_service.get_selected()
 
             Bases for the Labels, buttons, image on the frame
@@ -35,30 +35,28 @@ class WeatherView:
         self._show_settings_view = show_settings_view
         self._scheduler = Scheduler()
 
-        self.station_loop = {}
-        self.station_time = {}
-        self.interval_minutes = 10
+        self._station_loop = {}
+        self._station_time = {}
+        self._interval_minutes = 10
         for sl in station_service.get_selected():
-            self.station_loop[sl.station_id] = False
-            self.station_time[sl.station_id] = self.interval_minutes
-
+            self._station_loop[sl.station_id] = False
+            self._station_time[sl.station_id] = self._interval_minutes
 
         self._error_variable = None
-        self.station_name_label = ttk.Label(master=self._frame)
+        self._station_name_label = ttk.Label(master=self._frame)
         self._error_label = ttk.Label(master=self._frame)
-        self.station_temp_label = ttk.Label(master=self._frame)
-        self.station_wind_label = ttk.Label(master=self._frame)
-        self.station_date_label = ttk.Label(master=self._frame)
-        self.bg_image = None
-        self.label_img = None
+        self._station_temp_label = ttk.Label(master=self._frame)
+        self._station_wind_label = ttk.Label(master=self._frame)
+        self._station_date_label = ttk.Label(master=self._frame)
+        self._bg_image = None
+        self._label_img = None
 
-        self.station_date = ""
-        self.station_update = []
-        self.station_id = None
-        self.station_temp = 0
-        self.station_wind = 0
-        self.station_wind_direction = 0
-        self.station_error = 0
+        self._station_date = ""
+        self._station_id = None
+        self._station_temp = 0
+        self._station_wind = 0
+        self._station_wind_direction = 0
+        self._station_error = 0
 
         self._initialize()
 
@@ -88,16 +86,16 @@ class WeatherView:
         """Initializes Label for the name of the station. If nickname is set, 
         shows it instead."""
 
-        self.station_name_label.destroy()
-        nick_var = station_service.get_nickname(self.station_id).get_nickname()[0]
-        name_var = station_service.get_station(self.station_id).name
+        self._station_name_label.destroy()
+        nick_var = station_service.get_nickname(self._station_id).get_nickname()[0]
+        name_var = station_service.get_station(self._station_id).name
 
         if len(nick_var) > 0:
             name_var = nick_var
 
-        self.station_name_label = ttk.Label(master=self._frame,
+        self._station_name_label = ttk.Label(master=self._frame,
                 text=name_var, font=('Arial', 24, 'bold'))
-        self.station_name_label.grid(
+        self._station_name_label.grid(
             column=0, row=1, columnspan=3, padx=10, pady=10, sticky=constants.W)
 
     def _initialize_observations(self):
@@ -111,47 +109,57 @@ class WeatherView:
             self.initialize_obs_update: runs check if data needs update
         """
 
-        o = observation_service.get_observation(self.station_id)
-        self.station_temp = o.temperature
-        self.station_wind = o.wind
-        self.station_wind_direction = o.wind_direction
-        self.station_date = o.datetime
-        self.station_error = o.error_msg
+        self._error_variable = None
+        self._initialize_error_msg()
 
-        self.station_temp_label.destroy()
-        temp_text = f"{self.station_temp}°C"
-        if self.station_temp is None:
-            temp_text = "No data available"
+        o = observation_service.get_observation(self._station_id)
+        self._station_temp = o.temperature
+        self._station_wind = o.wind
+        self._station_wind_direction = o.wind_direction
+        self._station_date = o.datetime
+        self._station_error = o.error_msg
+        none_error = 0
 
-        self.station_temp_label = ttk.Label(master=self._frame, text=temp_text,
+        self._station_temp_label.destroy()
+        temp_text = f"{self._station_temp}°C"
+        if self._station_temp is None:
+            temp_text = "-"
+            none_error = 1
+
+        self._station_temp_label = ttk.Label(master=self._frame, text=temp_text,
                                             font=('Arial', 42, 'bold'))
-        self.station_temp_label.grid(column=0, row=2, columnspan=3,
+        self._station_temp_label.grid(column=0, row=2, columnspan=3,
                                      padx=10, pady=10)
 
-        self.station_wind_label.destroy()
-        wind_text = f"Wind: {self.station_wind} m/s    \
-                Direction: {self.station_wind_direction}°"
-        if self.station_wind is None:
-            wind_text = "Wind: No data available"
+        self._station_wind_label.destroy()
+        wind_text = f"Wind: {self._station_wind} m/s    \
+                Direction: {self._station_wind_direction}°"
+        if self._station_wind is None:
+            wind_text = "Wind: -"
+            none_error = 1
 
-        self.station_wind_label = ttk.Label(master=self._frame,
+        self._station_wind_label = ttk.Label(master=self._frame,
                                             text=wind_text,
                                             font=('Arial', 16, 'bold'))
-        self.station_wind_label.grid(
+        self._station_wind_label.grid(
             column=0, row=3, padx=10, pady=10, 
             columnspan=3, sticky=constants.N)
 
-        self.station_date_label.destroy()
-        if self.station_error == 1:
+        self._station_date_label.destroy()
+        if self._station_error == 1:
             self._error_variable = "No current observations from the station"
-            date_label = f"Unable to retrieve data at: {self.station_date}"
+            date_label = f"Unable to retrieve data at: {self._station_date}"
         else:
-            date_label = f"Observation time: {self.station_date}"
+            date_label = f"Observation time: {self._station_date}"
 
-        self.station_date_label = ttk.Label(master=self._frame, text=date_label,
+        self._station_date_label = ttk.Label(master=self._frame, text=date_label,
                                             font=('Arial', 12, 'bold'))
-        self.station_date_label.grid(
+        self._station_date_label.grid(
             column=0, row=4, padx=10, pady=10, sticky=constants.W)
+
+        if none_error>0:
+            self._error_variable = "Some requested data was not available"
+            self._initialize_error_msg()
 
         self.initialize_obs_update()
 
@@ -196,16 +204,16 @@ class WeatherView:
             to the interval time.
         If new data is recieved: returns interval time to global settings.
         """
-        if observation_service.check_obs_if_old(self.station_date,
-                                                self.station_time[self.station_id]):
-            if not self._scheduler.scheduled_observation_update(self.station_id,
-                                                self.station_time[self.station_id]):
-                if self.station_time[self.station_id]<20:
-                    self.station_time[self.station_id] += 2
-                elif self.station_time[self.station_id]<60:
-                    self.station_time[self.station_id] += 10
+        if observation_service.check_obs_if_old(self._station_date,
+                                                self._station_time[self._station_id]):
+            if not self._scheduler.scheduled_observation_update(self._station_id,
+                                                self._station_time[self._station_id]):
+                if self._station_time[self._station_id]<20:
+                    self._station_time[self._station_id] += 2
+                elif self._station_time[self._station_id]<60:
+                    self._station_time[self._station_id] += 10
             else:
-                self.station_time[self.station_id] = self.interval_minutes
+                self._station_time[self._station_id] = self._interval_minutes
         return
 
 
@@ -214,8 +222,8 @@ class WeatherView:
     def _update_view(self):
         """Update view switches view to next station in every 20 sec.
 
-        self.station_loop[self.station_id]: Set previous station as viewed True
-        self.station_loop: Find next unviewed (False) station
+        self._station_loop[self._station_id]: Set previous station as viewed True
+        self._station_loop: Find next unviewed (False) station
         counter: If all station_loops are viewed ->
             Set all stations from viewed (True) as unviewed (False)
         self._initialize_name: initializes station name/nickname
@@ -224,21 +232,21 @@ class WeatherView:
         self._frame.after: waits 20 sec until runs again
         """
 
-        if self.station_id is not None:
-            self.station_loop[self.station_id] = True
+        if self._station_id is not None:
+            self._station_loop[self._station_id] = True
 
         counter = 0
-        for key_id, status in self.station_loop.items():
+        for key_id, status in self._station_loop.items():
             if status is False:
-                self.station_id = key_id
+                self._station_id = key_id
                 break
             else:
                 counter += 1
 
         if counter == station_service.count_selected()[0]:
-            for key in self.station_loop:
-                self.station_loop[key] = False
-            self.station_id = next(iter(self.station_loop))
+            for key in self._station_loop:
+                self._station_loop[key] = False
+            self._station_id = next(iter(self._station_loop))
 
         self._initialize_name()
         self._initialize_observations()
@@ -264,10 +272,10 @@ class WeatherView:
         style.configure('Dodger.TButton', foreground='black', background='dodger blue')
 
         image = Image.open("./src/ui/background.png")
-        self.bg_image = ImageTk.PhotoImage(image)
+        self._bg_image = ImageTk.PhotoImage(image)
 
-        self.label_img = ttk.Label(self._frame, image=self.bg_image)
-        self.label_img.grid(column=0, row=0, columnspan=5)
+        self._label_img = ttk.Label(self._frame, image=self._bg_image)
+        self._label_img.grid(column=0, row=0, columnspan=5)
 
 
     # Frame
