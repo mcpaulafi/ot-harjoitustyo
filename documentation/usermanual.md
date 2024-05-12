@@ -50,6 +50,8 @@ Save your settings and continue to Weather View by clicking "Save and view >" bu
 
 ### Weather View
 
+Application shows your selected stations in a loop. After 20 seconds the station is switched to next.
+
 You can go back to Settings or to station selection from the buttons on the bottom right of the window.
 
 Observation data from the stations is retrieved and updated approximately in every 10 minutes. 
