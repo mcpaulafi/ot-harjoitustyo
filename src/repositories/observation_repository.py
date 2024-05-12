@@ -78,8 +78,7 @@ class ObservationRepository:
             value_float = float(value)
             if -80.0 <= value_float <= 361.0:
                 return value
-            else:
-                return None
+            return None
         except ValueError:
             return None
 
@@ -121,7 +120,8 @@ class ObservationRepository:
         if utc_datetime is not None:
             temperature = self.check_value(obs2.data[station_name]['Air temperature']['values'][-1])
             wind = self.check_value(obs2.data[station_name]['Wind speed']['values'][-1])
-            wind_direction = self.check_value(obs2.data[station_name]['Wind direction']['values'][-1])
+            wind_direction = \
+            self.check_value(obs2.data[station_name]['Wind direction']['values'][-1])
         else:
             temperature = None
             wind = None
@@ -176,9 +176,8 @@ class ObservationRepository:
         if not station_service.get_station(station_id):
             return False
 
-        cursor = self._connection.cursor()
-
         obs = self.get_data_from_fmi(station_id)
+
         if not obs:
             temperature = None
             wind = None
@@ -192,14 +191,13 @@ class ObservationRepository:
             date_str = obs[3]
             error_msg = obs[4]
 
-            if error_msg:
-                error_msg = 1
-            else:
+            if not error_msg:
                 error_msg = 0
 
         db_obs = self.find_observation(station_id)
 
         if not db_obs or not self.check_if_same_date(date_str, db_obs.datetime):
+            cursor = self._connection.cursor()
 
             cursor.execute(
                 '''insert into observations (station_id, temperature, \
