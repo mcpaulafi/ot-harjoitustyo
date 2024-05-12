@@ -68,10 +68,20 @@ class ObservationRepository:
         try:
             obs2 = download_stored_query("fmi::observations::weather::multipointcoverage",
                               args=[f"bbox={station_box}","timeseries=True"])
-        except Exception:
+        except ConnectionError:
             return False
 
         return self.check_data_from_fmi(obs2, station_name)
+
+    def check_value(self, value):
+        try:
+            value_float = float(value)
+            if -80.0 <= value_float <= 361.0:
+                return value
+            else:
+                return None
+        except ValueError:
+            return None
 
     def check_data_from_fmi(self, obs2, station_name):
         """Function which checks data received from FMI.
@@ -82,9 +92,14 @@ class ObservationRepository:
             obs2: result of query from FMI
             station_name as string
 
-        Reply is filtered with:
-            last value in results
+        Actions:
+            utc_dt: date convertion to UTC 
+            local_dt: date convertion to local time and to string
+            self.check_value: checks that received data is number within limits
+
+        Data is filtered with:
             station name
+            [-1] last value in results
 
         Returns:
             tuple (temperature, wind, wind_direction, date, error_message)
@@ -103,11 +118,10 @@ class ObservationRepository:
             local_dt = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             get_error = 1
 
-        # TODO check data
         if utc_datetime is not None:
-            temperature = obs2.data[station_name]['Air temperature']['values'][-1]
-            wind = obs2.data[station_name]['Wind speed']['values'][-1]
-            wind_direction = obs2.data[station_name]['Wind direction']['values'][-1]
+            temperature = self.check_value(obs2.data[station_name]['Air temperature']['values'][-1])
+            wind = self.check_value(obs2.data[station_name]['Wind speed']['values'][-1])
+            wind_direction = self.check_value(obs2.data[station_name]['Wind direction']['values'][-1])
         else:
             temperature = None
             wind = None
@@ -235,6 +249,5 @@ class ObservationRepository:
 
         self._connection.commit()
         return True
-
 
 observation_repository = ObservationRepository(get_database_connection())
