@@ -26,6 +26,6 @@
 | 9.5   | 6,5  | Code cleanup, checking dates (82,5)|
 | 10.5  | 7,5  | More unittests and documentation (90)|
 | 11.5  | 7    | Tests, cleanup and layout on views (97)|
-| 12.5  | 2    | Error handling, code cleanup, documentation updates (99)|
-| Total | 99   |     |
+| 12.5  | 3    | Error handling, code cleanup, documentation updates, testing on another computer, loppupalautus (100)|
+| Total | 100  |     |
 
