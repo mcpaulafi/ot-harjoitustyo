@@ -33,9 +33,6 @@ def drop_tables(connection):
         drop table if exists selected_stations;
     """)
     cursor.execute("""
-        drop table if exists settings;
-    """)
-    cursor.execute("""
         drop table if exists observations;
     """)
     connection.commit()
@@ -69,11 +66,6 @@ def create_tables(connection):
         wind text integer DEFAULT 0 NOT NULL,
         datetime text,
         PRIMARY KEY (station_id)
-    );
-    """)
-    cursor.execute("""
-        create table settings (
-        layout integer DEFAULT 1 NOT NULL
     );
     """)
     cursor.execute("""

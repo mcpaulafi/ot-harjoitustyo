@@ -37,9 +37,8 @@ Latest measurement data is retrieved every 10-60 minutes and saved on the databa
 
 ### Database
 
-SQLite database contains 4 tables 
+SQLite database contains 3 tables 
 - Stations
-- Settings
 - Selected_stations
 - Observations
 

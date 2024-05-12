@@ -143,9 +143,7 @@ SQLite database tables are following
         wind_direction
         error_msg
     }
-    class Settings {
-        layout
-    }
+
 ```
 
 ## Main functions
@@ -162,7 +160,7 @@ sequenceDiagram
     participant StationService
     participant StationRepository
 
-    rect rgb(102, 102, 102)
+    rect rgb(156, 156, 156)
     note right of UI: init
     UI->>StationService :get_stations()
     StationService-->>UI: list of Stations objects
@@ -205,10 +203,14 @@ sequenceDiagram
     loop User can input 0-5 nicknames
         User->> UI: input entry: nickname
     end
-    User->> UI: click "Save and view" button
-    UI->>StationService: save_selected_nickname(station_id, nickname)
 
+    User->> UI: click "Save and view" button
+
+    loop all selected stations
+    UI->>StationService: save_selected_nickname(station_id, nickname)
     StationService->>StationRepository: save_nickname_to_database(station_id, nickname)
+    end
+
     StationService->>ObservationService: observation_service.update_observation(station_id)
     ObservationService->>ObservationRepository: save_observation(station_id)
 
@@ -230,7 +232,7 @@ sequenceDiagram
     participant ObservationService
     participant ObservationRepository
 
-    rect rgb(102, 102, 102)
+    rect rgb(156, 156, 156)
     note right of UI: init
     UI->>StationService: get_selected()
     StationService->>StationRepository: find_selected()
