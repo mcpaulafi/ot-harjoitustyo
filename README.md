@@ -17,7 +17,11 @@ This application is made as a course work in the Software engineering course (Ai
 
 - [Viikko5](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko5) 22.4.2024
 - [Viikko6](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko6) 30.4.2024
-- [Viikko7]
+- [Viikko7](https://github.com/mcpaulafi/ot-harjoitustyo/releases/tag/viikko6) 12.5.2024
+
+## Report of ChatGPT usage
+
+ChatGPT has been used to explain how to use MagicMock on the unittests and to help debugging of the tests. Also ChatGPT was used to explain the functions on user_repository in the referenceapp.
 
 ## Installation
 

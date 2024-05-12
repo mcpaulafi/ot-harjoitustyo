@@ -38,9 +38,9 @@ The application logic in the following classes is tested as follows.
 
 ### Test coverage
 
-Application test branch coverage is 93% excluding the layer of user interface.
+Application test branch coverage is 90% excluding the layer of user interface.
 
-![](./images/2024-05-10_coverage.png)
+![](./images/2024-05-12_coverage.png)
 
 Running build.py- ja initialize_database.py files from shell are tested manually.
 

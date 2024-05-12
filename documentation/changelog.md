@@ -54,3 +54,5 @@
 - Added better graphics on layout and gave up on alternative weather view layout
 - Code cleanup documentation to all python files
 - Fixed bugs on selecting limit and last station running twice on the loop
+- Error handling to received data
+- Updated documentation

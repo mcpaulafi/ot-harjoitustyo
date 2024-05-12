@@ -31,7 +31,7 @@ Views are implemented as classes. Only one view is visible at the time to the us
 Data model of the application is constructed by classes Station and Observation which model weather stations and their observation data. 
 ```mermaid
  classDiagram
-    Stations <--> Observations
+    Stations <--> Observations:Selected stations
     class Stations {
         station_id
         original_id
@@ -69,6 +69,7 @@ Classes have following funcions.
 - save_selected(station_id)
 - save_selected_nickname(station_id, nickname)
 - get_selected()
+- get_selected_names()
 - get_nickname(self, station_id)
 - get_error(self, station_id)
 - delete_selected()
@@ -77,20 +78,21 @@ StationService has access to station data through StationRepository which is res
 
 Class and packing diagram for StationService and its dependencies to other application modules
 
-[INSERT IMAGE HERE]
+![](images/arkkitehtuuri-pakkaus-luokat.png)
+
 
 **Observation** class has no methods.
 
 **ObservationService** class procides following methods
 - get_observation(station_id)
 - update_observation(station_id)
+- check_obs_if_old(given_date, timevalue)
 - delete_observations_from_database()
 
 ObservationService has access to the database through ObservationRepository.
 
 **ObservationScheduler** gets new observation data every 10-20 minutes. It is started by the WeatherWindow class. This class provides following method
 - scheduled_observation_update()
-
 
 
 ## Data storage
@@ -171,13 +173,14 @@ sequenceDiagram
         UI->>StationService: save_selected(station_id)
         StationService->>StationRepository: save_selected_stations_to_database(station_id)
 
+        UI->>UI: _check_selected_count()
         UI->>UI: _get_selected_list()
         UI->>StationService: get_selected()
         StationService-->>UI: list: station.name
-        UI->>UI: _check_selected_count()
     end 
 
     User->> UI: click "Continue >" button
+    UI->>UI: _check_selected_count()
     UI->>UI: switch view (station_view)
 
 ```

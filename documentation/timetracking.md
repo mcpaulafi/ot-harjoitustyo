@@ -26,9 +26,6 @@
 | 9.5   | 6,5  | Code cleanup, checking dates (82,5)|
 | 10.5  | 7,5  | More unittests and documentation (90)|
 | 11.5  | 7    | Tests, cleanup and layout on views (97)|
-| 12.5  | c    |  |
-| Total | 97   |     |
+| 12.5  | 2    | Error handling, code cleanup, documentation updates (99)|
+| Total | 99   |     |
 
-## Report of ChatGPT usage
-
-ChatGPT has been used to explain how to use MagicMock on the unittests and to help debugging of the tests. Also ChatGPT was used to explain the functions on user_repository in the referenceapp.
